@@ -1,0 +1,17 @@
+# Sprint 1
+
+## Objetivo
+
+Conseguir que un usuario pueda registrarse.
+
+## Completado
+
+- React
+- Vite
+- Router
+- Supabase
+- Tablas principales
+
+## Próximo objetivo
+
+Registro con Supabase Auth.
