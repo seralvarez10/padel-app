@@ -1,0 +1,41 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  width: fit-content;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: var(--transition);
+}
+
+.open {
+  background: rgba(34, 197, 94, .12);
+  color: var(--color-success);
+}
+
+.almostFull {
+  background: rgba(245, 158, 11, .12);
+  color: var(--color-warning);
+}
+
+.full {
+  background: rgba(239, 68, 68, .12);
+  color: var(--color-danger);
+}
+
+.cancelled {
+  background: rgba(107, 114, 128, .12);
+  color: var(--color-text-secondary);
+}
+
+.finished {
+  background: rgba(59, 130, 246, .12);
+  color: #3B82F6;
+}

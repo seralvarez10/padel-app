@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 16px;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--radius-lg);
+
+  transition: var(--transition);
+}
+
+.container:focus-within {
+  border-color: var(--color-primary);
+}
+
+.container svg {
+  color: var(--color-text-secondary);
+}
+
+.input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-size: 15px;
+}
+
+.input::placeholder {
+  color: var(--color-text-secondary);
+}

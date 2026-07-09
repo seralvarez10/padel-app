@@ -1,6 +1,7 @@
 export const MATCH_STATUS = {
-    OPEN: "open",
-    FULL: "full",
-    FINISHED: "finished",
-    CANCELLED: "cancelled"
+  OPEN: "open",
+  ALMOST_FULL: "almost_full",
+  FULL: "full",
+  CANCELLED: "cancelled",
+  FINISHED: "finished",
 };
