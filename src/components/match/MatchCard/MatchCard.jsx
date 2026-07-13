@@ -1,15 +1,7 @@
 import PropTypes from "prop-types";
-import {
-  Calendar,
-  MapPin,
-  Trophy,
-  Users,
-} from "lucide-react";
+import { MapPin, CalendarDays, Users, Star } from "lucide-react";
 
-import Button from "@/components/common/Button";
-import MatchStatus from "@/components/match/MatchStatus";
-
-import { MATCH_STATUS } from "@/constants/matchStatus";
+import MatchStatus from "../MatchStatus";
 
 import styles from "./MatchCard.module.css";
 
@@ -21,46 +13,39 @@ export default function MatchCard({
   level,
   currentPlayers,
   maxPlayers,
-  status = MATCH_STATUS.OPEN,
-  onClick,
+  status,
 }) {
   return (
     <article className={styles.card}>
-      <div className={styles.header}>
+      <div className={styles.top}>
         <MatchStatus status={status} />
       </div>
 
-      <h3 className={styles.title}>{title}</h3>
+      <h3>{title}</h3>
 
       <div className={styles.info}>
-
-        <div className={styles.row}>
-          <MapPin size={18} />
-          <span>{location}</span>
-        </div>
-
-        <div className={styles.row}>
-          <Calendar size={18} />
-          <span>{date} · {time}</span>
-        </div>
-
-        <div className={styles.row}>
-          <Trophy size={18} />
-          <span>Nivel {level}</span>
-        </div>
-
-        <div className={styles.row}>
-          <Users size={18} />
-          <span>
-            {currentPlayers}/{maxPlayers} jugadores
-          </span>
-        </div>
-
+        <MapPin size={16} />
+        <span>{location}</span>
       </div>
 
-      <Button onClick={onClick}>
-        Ver partido
-      </Button>
+      <div className={styles.info}>
+        <CalendarDays size={16} />
+        <span>
+          {date} · {time}
+        </span>
+      </div>
+
+      <div className={styles.bottom}>
+        <div className={styles.level}>
+          <Star size={16} />
+          Nivel {level}
+        </div>
+
+        <div className={styles.players}>
+          <Users size={16} />
+          {currentPlayers}/{maxPlayers}
+        </div>
+      </div>
     </article>
   );
 }
@@ -73,6 +58,5 @@ MatchCard.propTypes = {
   level: PropTypes.number.isRequired,
   currentPlayers: PropTypes.number.isRequired,
   maxPlayers: PropTypes.number.isRequired,
-  status: PropTypes.oneOf(Object.values(MATCH_STATUS)),
-  onClick: PropTypes.func,
+  status: PropTypes.string.isRequired,
 };

@@ -6,23 +6,64 @@
     box-sizing: border-box;
 }
 
+html {
+
+    scroll-behavior: smooth;
+
+}
+
 body {
+
     font-family: Inter, sans-serif;
+
     background: var(--color-background);
+
     color: var(--color-text);
+
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
 }
 
 button {
+
     font: inherit;
+
     border: none;
+
     cursor: pointer;
+
+    background: none;
+
 }
 
 input {
+
     font: inherit;
+
+    outline: none;
+
 }
 
 a {
+
     text-decoration: none;
+
     color: inherit;
+
+}
+
+ul{
+
+    list-style:none;
+
 }

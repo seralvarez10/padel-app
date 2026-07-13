@@ -3,39 +3,35 @@
   align-items: center;
   gap: 6px;
 
-  width: fit-content;
-
-  padding: 6px 12px;
+  padding: 6px 10px;
 
   border-radius: 999px;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-
-  transition: var(--transition);
 }
 
 .open {
-  background: rgba(34, 197, 94, .12);
-  color: var(--color-success);
+  background: #dcfce7;
+  color: #15803d;
 }
 
 .almostFull {
-  background: rgba(245, 158, 11, .12);
-  color: var(--color-warning);
+  background: #fef3c7;
+  color: #b45309;
 }
 
 .full {
-  background: rgba(239, 68, 68, .12);
-  color: var(--color-danger);
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .cancelled {
-  background: rgba(107, 114, 128, .12);
-  color: var(--color-text-secondary);
+  background: #f3f4f6;
+  color: #6b7280;
 }
 
 .finished {
-  background: rgba(59, 130, 246, .12);
-  color: #3B82F6;
+  background: #e5e7eb;
+  color: #4b5563;
 }

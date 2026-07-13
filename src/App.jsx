@@ -1,23 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import CreateMatch from "./pages/CreateMatch";
+import HomePage from "./pages/HomePage/HomePage";
 
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/create-match" element={<CreateMatch />} />
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

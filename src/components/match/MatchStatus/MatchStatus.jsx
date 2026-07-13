@@ -1,63 +1,58 @@
 import PropTypes from "prop-types";
 import {
-  CircleAlert,
   CircleCheck,
-  CircleDashed,
+  CircleAlert,
   CircleX,
+  CircleDashed,
 } from "lucide-react";
-
-import { MATCH_STATUS } from "@/constants/matchStatus";
 
 import styles from "./MatchStatus.module.css";
 
-
 const STATUS_CONFIG = {
-  [MATCH_STATUS.OPEN]: {
+  open: {
     label: "Abierto",
     icon: CircleCheck,
     className: "open",
   },
 
-  [MATCH_STATUS.ALMOST_FULL]: {
+  almost_full: {
     label: "Últimas plazas",
     icon: CircleAlert,
     className: "almostFull",
   },
 
-  [MATCH_STATUS.FULL]: {
+  full: {
     label: "Completo",
     icon: CircleX,
     className: "full",
   },
 
-  [MATCH_STATUS.CANCELLED]: {
+  cancelled: {
     label: "Cancelado",
     icon: CircleX,
     className: "cancelled",
   },
 
-  [MATCH_STATUS.FINISHED]: {
+  finished: {
     label: "Finalizado",
     icon: CircleDashed,
     className: "finished",
   },
 };
 
-export default function MatchStatus({
-    status = MATCH_STATUS.OPEN
-}) {
-  const config = STATUS_CONFIG[status] || STATUS_CONFIG[MATCH_STATUS.OPEN];
+export default function MatchStatus({ status }) {
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG.open;
 
   const Icon = config.icon;
 
   return (
     <div className={`${styles.status} ${styles[config.className]}`}>
-      <Icon size={16} strokeWidth={2.3} />
+      <Icon size={15} />
       <span>{config.label}</span>
     </div>
   );
 }
 
 MatchStatus.propTypes = {
-  status: PropTypes.oneOf(Object.values(MATCH_STATUS)),
+  status: PropTypes.string.isRequired,
 };
