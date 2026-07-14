@@ -36,5 +36,34 @@ export async function getMatches() {
     .order("match_date", { ascending: true });
 
   if (error) throw error;
-  return data;
+
+  return data.map((match) => ({
+    id: match.id,
+
+    title: match.title || "Partido de pádel",
+
+    location: match.location,
+
+    date: match.match_date,
+
+    time: match.match_time?.slice(0, 5),
+
+    level: Number(match.level_min ?? 0),
+
+    currentPlayers: match.occupied_slots ?? 0,
+
+    maxPlayers: match.max_players ?? 4,
+
+    status: (match.status || "pending").toLowerCase(),
+
+    type: match.match_type || "Libre",
+
+    court: match.court_type || "Indoor",
+
+    duration: match.duration
+      ? `${match.duration} min`
+      : "90 min",
+
+    distance: match.city || "",
+  }));
 }

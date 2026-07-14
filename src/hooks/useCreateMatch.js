@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createMatch } from "../services/matchService";
+import { createMatch } from "../../services/matchService";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateMatch() {

@@ -1,0 +1,22 @@
+.chip {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: white;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.chip:hover {
+  background: #f8fafc;
+}
+
+.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
