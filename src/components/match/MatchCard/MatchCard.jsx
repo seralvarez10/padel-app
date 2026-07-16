@@ -8,11 +8,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
+
 import MatchStatus from "../MatchStatus";
+import Card from "../../ui/Card";
 
 import styles from "./MatchCard.module.css";
 
 export default function MatchCard({
+  id,
   title,
   location,
   date,
@@ -26,8 +30,13 @@ export default function MatchCard({
   court,
   duration,
 }) {
+  const navigate = useNavigate();
+
   return (
-    <article className={styles.card} role="button">
+    <Card
+      className={styles.card}
+      onClick={() => navigate(`/matches/${id}`)}
+    >
       <div className={styles.header}>
         <MatchStatus status={status} />
 
@@ -36,10 +45,13 @@ export default function MatchCard({
         </span>
       </div>
 
-      <h3 className={styles.title}>{title}</h3>
+      <h3 className={styles.title}>
+        {title}
+      </h3>
 
       <div className={styles.location}>
         <MapPin size={16} />
+
         <span>
           {location} · {distance}
         </span>
@@ -48,6 +60,7 @@ export default function MatchCard({
       <div className={styles.details}>
         <div className={styles.detail}>
           <CalendarDays size={16} />
+
           <span>
             {date} · {time}
           </span>
@@ -61,12 +74,18 @@ export default function MatchCard({
 
         <div className={styles.detail}>
           <Clock3 size={16} />
-          <span>{duration}</span>
+
+          <span>
+            {duration}
+          </span>
         </div>
 
         <div className={styles.detail}>
           <Star size={16} />
-          <span>Nivel {level}</span>
+
+          <span>
+            Nivel {level}
+          </span>
         </div>
       </div>
 
@@ -83,21 +102,30 @@ export default function MatchCard({
 
         <div className={styles.playersCount}>
           <Users size={16} />
+
           <span>
             {currentPlayers}/{maxPlayers}
           </span>
         </div>
       </div>
 
-      <button className={styles.joinButton}>
+      <button
+        className={styles.joinButton}
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/matches/${id}`);
+        }}
+      >
         <span>Unirme</span>
+
         <ArrowRight size={18} />
       </button>
-    </article>
+    </Card>
   );
 }
 
 MatchCard.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,

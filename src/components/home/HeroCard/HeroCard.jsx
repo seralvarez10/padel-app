@@ -1,9 +1,10 @@
 import { CalendarDays } from "lucide-react";
 import styles from "./HeroCard.module.css";
+import Card from "../../ui/Card";
 
 export default function HeroCard() {
   return (
-    <section className={styles.hero}>
+    <Card className={styles.hero}>
       <div>
         <span className={styles.badge}>
           Hoy
@@ -26,6 +27,6 @@ export default function HeroCard() {
         size={70}
         strokeWidth={1.5}
       />
-    </section>
+    </Card>
   );
 }

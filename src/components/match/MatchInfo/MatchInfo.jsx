@@ -1,0 +1,78 @@
+import PropTypes from "prop-types";
+import {
+  MapPin,
+  CalendarDays,
+  Clock3,
+  Star,
+  Users,
+  Building2,
+} from "lucide-react";
+
+import MatchStatus from "../MatchStatus";
+
+import styles from "./MatchInfo.module.css";
+
+export default function MatchInfo({ match }) {
+  return (
+    <section className={styles.container}>
+      <div className={styles.header}>
+        <MatchStatus status={match.status} />
+      </div>
+
+      <h1 className={styles.title}>
+        {match.title}
+      </h1>
+
+      <div className={styles.info}>
+        <MapPin size={18} />
+        <span>
+          {match.location} · {match.city}
+        </span>
+      </div>
+
+      <div className={styles.info}>
+        <CalendarDays size={18} />
+        <span>
+          {match.match_date} · {match.match_time}
+        </span>
+      </div>
+
+      <div className={styles.grid}>
+
+        <div className={styles.card}>
+          <Building2 size={18} />
+          <span>{match.court_type}</span>
+        </div>
+
+        <div className={styles.card}>
+          🎾 {match.match_type}
+        </div>
+
+        <div className={styles.card}>
+          <Clock3 size={18} />
+          <span>{match.duration} min</span>
+        </div>
+
+        <div className={styles.card}>
+          <Star size={18} />
+          <span>
+            {match.level_min} - {match.level_max}
+          </span>
+        </div>
+
+      </div>
+
+      <div className={styles.players}>
+        <Users size={18} />
+
+        <span>
+          {match.occupied_slots}/{match.max_players} jugadores
+        </span>
+      </div>
+    </section>
+  );
+}
+
+MatchInfo.propTypes = {
+  match: PropTypes.object.isRequired,
+};

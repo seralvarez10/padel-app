@@ -67,3 +67,15 @@ export async function getMatches() {
     distance: match.city || "",
   }));
 }
+export async function getMatchById(id) {
+
+  const { data, error } = await supabase
+    .from("matches")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
