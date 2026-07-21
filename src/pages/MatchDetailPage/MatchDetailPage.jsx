@@ -3,10 +3,13 @@ import { useParams } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import BottomNavigation from "../../components/layout/BottomNavigation";
 
+import MatchInfo from "../../components/match/MatchInfo";
+import MatchPlayers from "../../components/match/MatchPlayers";
+import JoinMatchButton from "../../components/match/JoinMatchButton";
+
 import useMatch from "../../hooks/useMatch";
 
 import styles from "./MatchDetailPage.module.css";
-import MatchInfo from "../../components/match/MatchInfo";
 
 export default function MatchDetailPage() {
   const { id } = useParams();
@@ -19,42 +22,48 @@ export default function MatchDetailPage() {
 
   if (loading) {
     return (
-      <Layout>
-        <p>Cargando partido...</p>
-      </Layout>
+      <>
+        <Layout>
+          <p>Cargando partido...</p>
+        </Layout>
+
+        <BottomNavigation />
+      </>
     );
   }
 
   if (error) {
     return (
-      <Layout>
-        <p>Error al cargar el partido.</p>
-      </Layout>
+      <>
+        <Layout>
+          <p>Error al cargar el partido.</p>
+        </Layout>
+
+        <BottomNavigation />
+      </>
     );
   }
 
   return (
     <>
-      <Layout>
-        <h1 className={styles.title}>
-          {match.title}
-        </h1>
+      <Layout className={styles.container}>
 
-        <p>{match.location}</p>
+        <MatchInfo match={match} />
 
-        <p>
-          {match.match_date} · {match.match_time}
-        </p>
+        <MatchPlayers
+          matchId={match.id}
+          maxPlayers={match.max_players}
+        />
 
-        <p>
-          Nivel {match.level_min} - {match.level_max}
-        </p>
+        {/* MatchDescription */}
 
-        <p>
-          {match.occupied_slots}/{match.max_players} jugadores
-        </p>
+        <JoinMatchButton
+          matchId={match.id}
+          onJoined={() => {
+            reload();
+          }}
+        />
 
-        <p>{match.description}</p>
       </Layout>
 
       <BottomNavigation />

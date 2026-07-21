@@ -1,122 +1,56 @@
 import { useState } from "react";
-import { createMatch } from "../../services/matchService";
-import { useNavigate } from "react-router-dom";
+import { createMatch } from "../services/matchService";
 
-export default function CreateMatch() {
-  const navigate = useNavigate();
-
+export default function useCreateMatch() {
   const [form, setForm] = useState({
-    match_date: "",
-    match_time: "",
+    title: "",
     location: "",
     city: "",
+    match_date: "",
+    match_time: "",
     level_min: 2,
     level_max: 4,
     occupied_slots: 1,
+    match_type: "Libre",
+    court_type: "Indoor",
+    duration: 90,
+    description: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   function handleChange(e) {
-    setForm({
-      ...form,
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function submit() {
+    try {
+      setLoading(true);
+      setError(null);
 
-    const { error } = await createMatch(form);
+      const { error } = await createMatch(form);
 
-    if (error) {
-      alert(error.message);
-      return;
+      if (error) throw error;
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+      return false;
+    } finally {
+      setLoading(false);
     }
-
-    alert("Partido creado correctamente");
-
-    navigate("/dashboard");
   }
 
-  return (
-    <div style={{ padding: 40 }}>
-      <h1>Crear Partido</h1>
-
-      <form onSubmit={handleSubmit}>
-
-        <p>Fecha</p>
-
-        <input
-          type="date"
-          name="match_date"
-          value={form.match_date}
-          onChange={handleChange}
-        />
-
-        <p>Hora</p>
-
-        <input
-          type="time"
-          name="match_time"
-          value={form.match_time}
-          onChange={handleChange}
-        />
-
-        <p>Club</p>
-
-        <input
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-        />
-
-        <p>Ciudad</p>
-
-        <input
-          name="city"
-          value={form.city}
-          onChange={handleChange}
-        />
-
-        <p>Nivel mínimo</p>
-
-        <input
-          type="number"
-          step="0.5"
-          name="level_min"
-          value={form.level_min}
-          onChange={handleChange}
-        />
-
-        <p>Nivel máximo</p>
-
-        <input
-          type="number"
-          step="0.5"
-          name="level_max"
-          value={form.level_max}
-          onChange={handleChange}
-        />
-
-        <p>¿Cuántos venís?</p>
-
-        <select
-          name="occupied_slots"
-          value={form.occupied_slots}
-          onChange={handleChange}
-        >
-          <option value="1">Voy solo</option>
-          <option value="2">Ya somos dos</option>
-          <option value="3">Ya somos tres</option>
-        </select>
-
-        <br />
-        <br />
-
-        <button type="submit">
-          Crear Partido
-        </button>
-
-      </form>
-    </div>
-  );
+  return {
+    form,
+    loading,
+    error,
+    handleChange,
+    submit,
+  };
 }

@@ -4,6 +4,7 @@ import MatchCard from "../../components/match/MatchCard";
 import BottomNavigation from "../../components/layout/BottomNavigation";
 import Layout from "../../components/layout/Layout";
 import HeroCard from "../../components/home/HeroCard";
+import { useAuth } from "../../contexts/AuthContext";
 
 
 import { currentUser } from "../../mocks/currentUser";
@@ -11,6 +12,9 @@ import useMatches from "../../hooks/useMatches";
 import styles from "./HomePage.module.css";
 
 export default function HomePage() {
+  const { user } = useAuth();
+
+  console.log(user);
   const {
     matches,
     loading,
