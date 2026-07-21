@@ -17,7 +17,7 @@ export async function createMatch(matchData) {
     throw new Error("Debes iniciar sesión");
   }
 
-  // 1. Crear el partido
+  // Crear el partido
   const { data: match, error: matchError } = await supabase
     .from("matches")
     .insert({
@@ -41,69 +41,77 @@ export async function createMatch(matchData) {
 
   if (matchError) throw matchError;
 
-  // 2. Añadir automáticamente al creador
+  // Añadir automáticamente al creador como primer jugador
   const { error: playerError } = await supabase
     .from("match_players")
     .insert({
       match_id: match.id,
       player_id: user.id,
-      role: "CREATOR",
+      role: "PLAYER",
     });
+  console.log("MATCH", match);
+  if (playerError) {
+    alert(JSON.stringify(playerError, null, 2));
+    throw playerError;
+  }
 
   if (playerError) throw playerError;
 
   return match;
 }
+
 export async function getMatches() {
   const { data, error } = await supabase
     .from("matches")
-    .select("*")
+    .select(`
+      *,
+      match_players (
+        id
+      )
+    `)
     .order("match_date", { ascending: true });
 
   if (error) throw error;
 
   return data.map((match) => ({
     id: match.id,
-
     title: match.title || "Partido de pádel",
-
     location: match.location,
-
     date: match.match_date,
-
     time: match.match_time?.slice(0, 5),
-
     level: Number(match.level_min ?? 0),
-
-    currentPlayers: match.occupied_slots ?? 0,
-
+    currentPlayers: match.match_players.length,
     maxPlayers: match.max_players ?? 4,
-
-    status: (match.status || "pending").toLowerCase(),
-
+    status: (match.status || "PENDING").toLowerCase(),
     type: match.match_type || "Libre",
-
     court: match.court_type || "Indoor",
-
     duration: match.duration
       ? `${match.duration} min`
       : "90 min",
-
     distance: match.city || "",
   }));
 }
-export async function getMatchById(id) {
 
+export async function getMatchById(id) {
   const { data, error } = await supabase
     .from("matches")
-    .select("*")
+    .select(`
+      *,
+      match_players (
+        id
+      )
+    `)
     .eq("id", id)
     .single();
 
   if (error) throw error;
 
-  return data;
+  return {
+    ...data,
+    currentPlayers: data.match_players.length,
+  };
 }
+
 export async function getMatchPlayers(matchId) {
   const { data, error } = await supabase
     .from("match_players")
@@ -125,6 +133,7 @@ export async function getMatchPlayers(matchId) {
 
   return data;
 }
+
 export async function joinMatch(matchId) {
   const {
     data: { user },
@@ -134,18 +143,16 @@ export async function joinMatch(matchId) {
     throw new Error("Debes iniciar sesión");
   }
 
+  // Obtener el partido
   const { data: match, error: matchError } = await supabase
     .from("matches")
-    .select("occupied_slots,max_players")
+    .select("max_players")
     .eq("id", matchId)
     .single();
 
   if (matchError) throw matchError;
 
-  if (match.occupied_slots >= match.max_players) {
-    throw new Error("El partido está completo");
-  }
-
+  // Comprobar si ya está apuntado
   const { data: existing } = await supabase
     .from("match_players")
     .select("id")
@@ -157,21 +164,28 @@ export async function joinMatch(matchId) {
     throw new Error("Ya estás apuntado");
   }
 
+  // Contar jugadores actuales
+  const { count, error: countError } = await supabase
+    .from("match_players")
+    .select("*", { count: "exact", head: true })
+    .eq("match_id", matchId);
+
+  if (countError) throw countError;
+
+  if (count >= match.max_players) {
+    throw new Error("El partido está completo");
+  }
+
+  // Añadir jugador
   const { error } = await supabase
     .from("match_players")
     .insert({
       match_id: matchId,
       player_id: user.id,
+      role: "PLAYER",
     });
 
   if (error) throw error;
-
-  await supabase
-    .from("matches")
-    .update({
-      occupied_slots: match.occupied_slots + 1,
-    })
-    .eq("id", matchId);
 
   return true;
 }

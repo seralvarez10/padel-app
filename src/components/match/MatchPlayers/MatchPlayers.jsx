@@ -17,7 +17,19 @@ export default function MatchPlayers({
   if (loading) {
     return <p>Cargando jugadores...</p>;
   }
+  function getInitials(player) {
+    const name =
+      player.profiles.full_name ||
+      player.profiles.username?.split("@")[0] ||
+      "";
 
+    return name
+      .split(" ")
+      .map(word => word[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  }
   return (
     <section className={styles.container}>
 
@@ -30,19 +42,23 @@ export default function MatchPlayers({
           className={styles.player}
         >
           <div className={styles.avatar}>
-            <UserRound size={18} />
+            {getInitials(player)}
           </div>
 
           <div>
-
             <strong>
-              {player.profiles.full_name || player.profiles.username}
+              player.profiles.full_name ||
+              player.profiles.username?.split("@")[0]
             </strong>
 
             <p>
               Nivel {player.profiles.level_current}
             </p>
-
+            {player.role === "CREATOR" && (
+              <span className={styles.creator}>
+                Organizador
+              </span>
+            )}
           </div>
 
         </div>

@@ -91,13 +91,23 @@ export default function MatchCard({
 
       <div className={styles.footer}>
         <div className={styles.players}>
-          <div className={styles.avatar}>SA</div>
-          <div className={styles.avatar}>AM</div>
-          <div className={styles.avatar}>JR</div>
+          {Array.from({ length: currentPlayers }).map((_, index) => (
+            <div
+              key={index}
+              className={styles.avatar}
+            >
+              👤
+            </div>
+          ))}
 
-          {currentPlayers < maxPlayers && (
-            <div className={styles.emptyAvatar}>+</div>
-          )}
+          {Array.from({ length: maxPlayers - currentPlayers }).map((_, index) => (
+            <div
+              key={`empty-${index}`}
+              className={styles.emptyAvatar}
+            >
+              +
+            </div>
+          ))}
         </div>
 
         <div className={styles.playersCount}>

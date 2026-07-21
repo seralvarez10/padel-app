@@ -14,7 +14,8 @@ export default function useMatchPlayers(matchId) {
       setLoading(true);
 
       const data = await getMatchPlayers(matchId);
-
+      console.table(data);
+      console.log(data[0]);
       setPlayers(data);
     } finally {
       setLoading(false);
@@ -25,5 +26,6 @@ export default function useMatchPlayers(matchId) {
     players,
     loading,
     reload: loadPlayers,
+    totalPlayers: players.length,
   };
 }

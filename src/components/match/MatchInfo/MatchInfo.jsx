@@ -12,7 +12,10 @@ import MatchStatus from "../MatchStatus";
 
 import styles from "./MatchInfo.module.css";
 
-export default function MatchInfo({ match }) {
+export default function MatchInfo({
+  match,
+  totalPlayers,
+}) {
   return (
     <section className={styles.container}>
       <div className={styles.header}>
@@ -26,32 +29,40 @@ export default function MatchInfo({ match }) {
       <div className={styles.info}>
         <MapPin size={18} />
         <span>
-          {match.location} · {match.city}
+          {match.city
+            ? `${match.location} · ${match.city}`
+            : match.location}
         </span>
       </div>
 
       <div className={styles.info}>
         <CalendarDays size={18} />
         <span>
-          {match.match_date} · {match.match_time}
+          {match.match_date} · {match.match_time?.slice(0, 5)}
         </span>
       </div>
 
       <div className={styles.grid}>
 
-        <div className={styles.card}>
-          <Building2 size={18} />
-          <span>{match.court_type}</span>
-        </div>
+        {match.court_type && (
+          <div className={styles.card}>
+            <Building2 size={18} />
+            <span>{match.court_type}</span>
+          </div>
+        )}
 
-        <div className={styles.card}>
-          🎾 {match.match_type}
-        </div>
+        {match.match_type && (
+          <div className={styles.card}>
+            🎾 {match.match_type}
+          </div>
+        )}
 
-        <div className={styles.card}>
-          <Clock3 size={18} />
-          <span>{match.duration} min</span>
-        </div>
+        {match.duration && (
+          <div className={styles.card}>
+            <Clock3 size={18} />
+            <span>{match.duration} min</span>
+          </div>
+        )}
 
         <div className={styles.card}>
           <Star size={18} />
@@ -66,7 +77,7 @@ export default function MatchInfo({ match }) {
         <Users size={18} />
 
         <span>
-          {match.occupied_slots}/{match.max_players} jugadores
+          {totalPlayers}/{match.max_players} jugadores
         </span>
       </div>
     </section>
@@ -75,4 +86,5 @@ export default function MatchInfo({ match }) {
 
 MatchInfo.propTypes = {
   match: PropTypes.object.isRequired,
+  totalPlayers: PropTypes.number.isRequired,
 };

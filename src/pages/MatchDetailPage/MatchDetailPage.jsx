@@ -8,6 +8,7 @@ import MatchPlayers from "../../components/match/MatchPlayers";
 import JoinMatchButton from "../../components/match/JoinMatchButton";
 
 import useMatch from "../../hooks/useMatch";
+import useMatchPlayers from "../../hooks/useMatchPlayers";
 
 import styles from "./MatchDetailPage.module.css";
 
@@ -18,9 +19,17 @@ export default function MatchDetailPage() {
     match,
     loading,
     error,
+    reload,
   } = useMatch(id);
 
-  if (loading) {
+  const {
+    players,
+    loading: playersLoading,
+    reload: reloadPlayers,
+    totalPlayers,
+  } = useMatchPlayers(match?.id);
+
+  if (loading || playersLoading) {
     return (
       <>
         <Layout>
@@ -48,19 +57,21 @@ export default function MatchDetailPage() {
     <>
       <Layout className={styles.container}>
 
-        <MatchInfo match={match} />
+        <MatchInfo
+          match={match}
+          totalPlayers={totalPlayers}
+        />
 
         <MatchPlayers
           matchId={match.id}
           maxPlayers={match.max_players}
         />
 
-        {/* MatchDescription */}
-
         <JoinMatchButton
           matchId={match.id}
           onJoined={() => {
             reload();
+            reloadPlayers();
           }}
         />
 
