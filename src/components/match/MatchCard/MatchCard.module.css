@@ -1,10 +1,23 @@
 .card {
-  margin-top: 20px;
+
+  margin-top: 18px;
+
+  transition:
+    transform .25s,
+    box-shadow .25s,
+    border-color .25s;
+
+  cursor: pointer;
+
 }
 
 .card:hover {
-  transform: translateY(-3px);
+
+  transform: translateY(-4px);
+
   box-shadow: var(--shadow-md);
+  border-color:#22C55E;
+
 }
 
 .header {
@@ -14,41 +27,63 @@
 }
 
 .title {
-  margin: 18px 0 14px;
-  font-size: 20px;
+  margin: 10px 0 8px;
+  font-size: 22px;
   font-weight: 700;
+  color: var(--color-text);
 }
 
 .location {
   display: flex;
   align-items: center;
   gap: 8px;
+
+  margin-bottom: 14px;
+
   color: var(--color-text-secondary);
-  margin-bottom: 18px;
+
+  font-size: 15px;
 }
 
 .details {
+
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 22px;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+
+  margin: 14px 0;
+
 }
 
 .detail {
+
   display: flex;
+
   align-items: center;
+
   gap: 8px;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  background: #FAFAFA;
+
   color: var(--color-text-secondary);
+
   font-size: 14px;
+
 }
 
 .typeBadge {
   background: #EEF2FF;
   color: #4338CA;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .courtBadge {
@@ -60,37 +95,49 @@
   font-weight: 600;
 }
 
-.footer {
+
+
+
+
+.avatar,
+.emptyAvatar {
+
+  width: 34px;
+
+  height: 34px;
+
+  border-radius: 50%;
+
   display: flex;
-  justify-content: space-between;
+
+  justify-content: center;
+
   align-items: center;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
 }
 
 .players {
+
   display: flex;
-  gap: 8px;
+
 }
 
 .avatar,
 .emptyAvatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 11px;
-  font-weight: 700;
+
+  margin-left: -8px;
+
 }
 
-.avatar {
-  background: var(--color-primary);
-  color: white;
-}
+.avatar:first-child,
+.emptyAvatar:first-child {
 
-.emptyAvatar {
-  border: 2px dashed var(--color-border);
-  color: var(--color-text-secondary);
+  margin-left: 0;
+
 }
 
 .playersCount {
@@ -103,13 +150,12 @@
 .joinButton {
   width: 100%;
   margin-top: 22px;
-  height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-primary-dark)
-  );
+  height: 44px;
+  border-radius: 12px;
+  font-size: 15px;
+  background: linear-gradient(135deg,
+      var(--color-primary),
+      var(--color-primary-dark));
   color: white;
   font-weight: 700;
   display: flex;
@@ -126,4 +172,20 @@
 
 .joinButton:active {
   transform: scale(.98);
+}
+
+.footer {
+
+  margin-top: 22px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid var(--color-border);
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
 }

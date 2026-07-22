@@ -47,22 +47,22 @@ export default function MatchInfo({
         {match.court_type && (
           <div className={styles.card}>
             <Building2 size={18} />
-            <span>{match.court_type}</span>
+            <span>{match.court_type || "Indoor"}</span>
           </div>
         )}
 
         {match.match_type && (
           <div className={styles.card}>
-            🎾 {match.match_type}
+            🎾 {match.match_type || "Libre"}
           </div>
         )}
 
-        {match.duration && (
-          <div className={styles.card}>
-            <Clock3 size={18} />
-            <span>{match.duration} min</span>
-          </div>
-        )}
+        <div className={styles.card}>
+          <Clock3 size={18} />
+          <span>
+            {match.duration ?? 90} min
+          </span>
+        </div>
 
         <div className={styles.card}>
           <Star size={18} />

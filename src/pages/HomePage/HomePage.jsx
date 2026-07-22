@@ -45,14 +45,28 @@ export default function HomePage() {
         />
         <HeroCard />
 
-        <SearchBar />
+        <div className={styles.searchSection}>
+          <SearchBar />
+        </div>
 
         <div className={styles.sectionHeader}>
-          <h2>Partidos cerca de ti</h2>
 
-          <button>
+          <div>
+
+            <h2 className={styles.title}>
+              Partidos cerca de ti
+            </h2>
+
+            <p className={styles.subtitle}>
+              {matches.length} partidos disponibles
+            </p>
+
+          </div>
+
+          <button className={styles.link}>
             Ver todos
           </button>
+
         </div>
         {matches.map((match) => (
           <MatchCard

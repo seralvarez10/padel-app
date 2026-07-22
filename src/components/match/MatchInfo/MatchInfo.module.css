@@ -1,18 +1,20 @@
 .container{
     display:flex;
     flex-direction:column;
-    gap:18px;
+    gap:20px;
 }
 
 .header{
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .title{
     font-size:30px;
     font-weight:700;
     line-height:1.2;
+    color:var(--color-text);
 }
 
 .info{
@@ -20,13 +22,14 @@
     align-items:center;
     gap:10px;
     color:var(--color-text-secondary);
+    font-size:15px;
 }
 
 .grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    margin-top:10px;
+    gap:14px;
+    margin-top:6px;
 }
 
 .card{
@@ -35,23 +38,26 @@
     align-items:center;
     gap:8px;
 
-    padding:14px;
+    min-height:56px;
 
-    background:white;
+    background:var(--color-surface);
 
     border:1px solid var(--color-border);
 
-    border-radius:14px;
+    border-radius:16px;
 
     font-weight:600;
+
+    box-shadow:var(--shadow-sm);
 }
 
 .players{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:8px;
 
-    font-weight:600;
+    padding-top:8px;
 
-    margin-top:8px;
+    font-size:16px;
+    font-weight:700;
 }

@@ -12,10 +12,16 @@
   border-radius: var(--radius-lg);
 
   transition: var(--transition);
+
+  box-shadow:var(--shadow-sm);
 }
 
-.container:focus-within {
-  border-color: var(--color-primary);
+.container:focus-within{
+
+border-color:var(--color-primary);
+
+box-shadow:0 0 0 4px rgba(34,197,94,.12);
+
 }
 
 .container svg {

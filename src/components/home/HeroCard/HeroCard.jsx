@@ -23,10 +23,12 @@ export default function HeroCard() {
         </button>
       </div>
 
-      <CalendarDays
-        size={70}
-        strokeWidth={1.5}
-      />
+      <div className={styles.icon}>
+        <CalendarDays
+          size={90}
+          strokeWidth={1.3}
+        />
+      </div>
     </Card>
   );
 }

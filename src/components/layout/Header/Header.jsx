@@ -10,22 +10,28 @@ export default function Header({
   return (
     <header className={styles.header}>
 
-      <div>
+      <div className={styles.content}>
 
         <p className={styles.greeting}>
           Hola 👋
         </p>
 
-        <h2>
+        <h1 className={styles.name}>
           {name}
-        </h2>
+        </h1>
+
+        <p className={styles.subtitle}>
+          Encuentra tu próximo partido
+        </p>
 
       </div>
 
-      <Avatar
-        src={avatar}
-        size="md"
-      />
+      <div className={styles.avatar}>
+        <Avatar
+          src={avatar}
+          size="md"
+        />
+      </div>
 
     </header>
   );
@@ -33,5 +39,5 @@ export default function Header({
 
 Header.propTypes = {
   name: PropTypes.string.isRequired,
-  avatar: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
 };

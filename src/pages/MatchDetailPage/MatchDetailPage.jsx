@@ -27,7 +27,7 @@ export default function MatchDetailPage() {
     loading: playersLoading,
     reload: reloadPlayers,
     totalPlayers,
-  } = useMatchPlayers(match?.id);
+  } = useMatchPlayers(id);
 
   if (loading || playersLoading) {
     return (
@@ -63,17 +63,19 @@ export default function MatchDetailPage() {
         />
 
         <MatchPlayers
-          matchId={match.id}
+          players={players}
           maxPlayers={match.max_players}
         />
 
-        <JoinMatchButton
-          matchId={match.id}
-          onJoined={() => {
-            reload();
-            reloadPlayers();
-          }}
-        />
+        <div className={styles.joinContainer}>
+          <JoinMatchButton
+            matchId={match.id}
+            onJoined={() => {
+              reload();
+              reloadPlayers();
+            }}
+          />
+        </div>
 
       </Layout>
 

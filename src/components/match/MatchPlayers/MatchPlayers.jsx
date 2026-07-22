@@ -1,22 +1,13 @@
 import PropTypes from "prop-types";
-import { UserRound, Plus } from "lucide-react";
-
-import useMatchPlayers from "../../../hooks/useMatchPlayers";
+import { Plus } from "lucide-react";
 
 import styles from "./MatchPlayers.module.css";
 
 export default function MatchPlayers({
-  matchId,
+  players,
   maxPlayers,
 }) {
-  const {
-    players,
-    loading,
-  } = useMatchPlayers(matchId);
 
-  if (loading) {
-    return <p>Cargando jugadores...</p>;
-  }
   function getInitials(player) {
     const name =
       player.profiles.full_name ||
@@ -30,10 +21,13 @@ export default function MatchPlayers({
       .substring(0, 2)
       .toUpperCase();
   }
+
   return (
     <section className={styles.container}>
 
-      <h2>Jugadores</h2>
+      <h2 className={styles.title}>
+        Jugadores
+      </h2>
 
       {players.map((player) => (
 
@@ -41,24 +35,28 @@ export default function MatchPlayers({
           key={player.id}
           className={styles.player}
         >
+
           <div className={styles.avatar}>
             {getInitials(player)}
           </div>
 
-          <div>
+          <div className={styles.info}>
+
             <strong>
-              player.profiles.full_name ||
-              player.profiles.username?.split("@")[0]
+              {player.profiles.full_name ||
+                player.profiles.username?.split("@")[0]}
             </strong>
 
-            <p>
+            <span>
               Nivel {player.profiles.level_current}
-            </p>
+            </span>
+
             {player.role === "CREATOR" && (
               <span className={styles.creator}>
                 Organizador
               </span>
             )}
+
           </div>
 
         </div>
@@ -73,6 +71,7 @@ export default function MatchPlayers({
           key={index}
           className={styles.empty}
         >
+
           <Plus size={18} />
 
           <span>Plaza libre</span>
@@ -86,6 +85,6 @@ export default function MatchPlayers({
 }
 
 MatchPlayers.propTypes = {
-  matchId: PropTypes.string.isRequired,
+  players: PropTypes.array.isRequired,
   maxPlayers: PropTypes.number.isRequired,
 };

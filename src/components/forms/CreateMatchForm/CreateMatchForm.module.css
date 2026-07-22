@@ -3,17 +3,17 @@
     flex-direction:column;
     gap:22px;
 
-    max-width:700px;
+    width:100%;
 
-    margin:40px auto;
+    margin:0;
 
-    padding:32px;
+    padding:0;
 
-    background:white;
+    background:transparent;
 
-    border-radius:24px;
+    border-radius:0;
 
-    box-shadow:0 12px 30px rgba(0,0,0,.06);
+    box-shadow:none;
 }
 
 .form h1{
