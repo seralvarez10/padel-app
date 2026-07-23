@@ -1,0 +1,37 @@
+.section{
+
+    margin-top:32px;
+
+}
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    margin-bottom:18px;
+
+}
+
+.header h2{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:var(--color-text);
+
+}
+
+.header p{
+
+    margin-top:4px;
+
+    font-size:14px;
+
+    color:var(--color-text-secondary);
+
+}

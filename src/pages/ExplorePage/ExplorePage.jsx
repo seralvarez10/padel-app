@@ -5,12 +5,44 @@ import BottomNavigation from "../../components/layout/BottomNavigation";
 import MatchCard from "../../components/match/MatchCard";
 import FilterChip from "../../components/filters/FilterChip";
 
+import useMatches from "../../hooks/useMatches";
 import { currentUser } from "../../mocks/currentUser";
-import { matches } from "../../mocks/matches";
+import { useState } from "react";
 
 import styles from "./ExplorePage.module.css";
 
 export default function ExplorePage() {
+  const [search, setSearch] = useState("");
+  const {
+    matches,
+    loading,
+    error,
+  } = useMatches();
+  const filteredMatches = matches.filter((match) => {
+    const text = search.toLowerCase();
+
+    return (
+      match.title?.toLowerCase().includes(text) ||
+      match.location?.toLowerCase().includes(text) ||
+      match.city?.toLowerCase().includes(text) ||
+      match.match_type?.toLowerCase().includes(text)
+    );
+  });
+  if (loading) {
+    return (
+      <Layout>
+        <p>Cargando partidos...</p>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <p>Error al cargar los partidos.</p>
+      </Layout>
+    );
+  }
   return (
     <>
       <Layout>
@@ -19,7 +51,11 @@ export default function ExplorePage() {
           avatar={currentUser.avatar}
         />
 
-        <SearchBar placeholder="Buscar partidos..." />
+        <SearchBar
+          placeholder="Buscar partidos..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
         <div className={styles.filters}>
           <FilterChip label="Hoy" active />
@@ -32,13 +68,27 @@ export default function ExplorePage() {
 
         <div className={styles.resultsHeader}>
           <h2>Explorar partidos</h2>
-          <span>{matches.length} resultados</span>
+          <span>
+            {filteredMatches.length} {filteredMatches.length === 1 ? "partido" : "partidos"}
+          </span>
         </div>
 
-        {matches.map((match) => (
+        {filteredMatches.map((match) => (
           <MatchCard
             key={match.id}
-            {...match}
+            id={match.id}
+            title={match.title}
+            location={match.location}
+            date={match.match_date}
+            time={match.match_time}
+            level={match.level_min}
+            currentPlayers={match.occupied_slots}
+            maxPlayers={match.max_players}
+            status={match.status}
+            type={match.match_type}
+            distance={match.city}
+            court={match.court_type}
+            duration={`${match.duration} min`}
           />
         ))}
       </Layout>

@@ -5,6 +5,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import HomePage from "./pages/HomePage";
 import MatchDetailPage from "./pages/MatchDetailPage";
 import CreateMatchPage from "./pages/CreateMatchPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
           <Route
             path="/create"
             element={<CreateMatchPage />}
+          />
+          <Route
+            path="/profile"
+            element={<ProfilePage />}
           />
         </Routes>
       </BrowserRouter>

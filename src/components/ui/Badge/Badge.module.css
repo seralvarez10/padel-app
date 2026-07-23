@@ -1,0 +1,52 @@
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+.primary{
+
+    background:#EEF2FF;
+    color:#4338CA;
+
+}
+
+.success{
+
+    background:#ECFDF5;
+    color:#166534;
+
+}
+
+.warning{
+
+    background:#FEF3C7;
+    color:#92400E;
+
+}
+
+.danger{
+
+    background:#FEE2E2;
+    color:#991B1B;
+
+}
+
+.gray{
+
+    background:#F3F4F6;
+    color:#4B5563;
+
+}
