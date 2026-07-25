@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import MatchDetailPage from "./pages/MatchDetailPage";
 import CreateMatchPage from "./pages/CreateMatchPage";
 import ProfilePage from "./pages/ProfilePage";
+import ExplorePage from "./pages/ExplorePage";
 
 function App() {
   return (
@@ -29,6 +30,10 @@ function App() {
           <Route
             path="/profile"
             element={<ProfilePage />}
+          />
+          <Route
+            path="/explore"
+            element={<ExplorePage />}
           />
         </Routes>
       </BrowserRouter>

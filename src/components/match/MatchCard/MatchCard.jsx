@@ -30,6 +30,7 @@ export default function MatchCard({
   court,
   duration,
 }) {
+  
   const navigate = useNavigate();
 
   return (

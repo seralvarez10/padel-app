@@ -6,6 +6,7 @@ import BottomNavigation from "../../components/layout/BottomNavigation";
 import MatchInfo from "../../components/match/MatchInfo";
 import MatchPlayers from "../../components/match/MatchPlayers";
 import JoinMatchButton from "../../components/match/JoinMatchButton";
+import MatchOrganizer from "../../components/match/MatchOrganizer";
 
 import useMatch from "../../hooks/useMatch";
 import useMatchPlayers from "../../hooks/useMatchPlayers";
@@ -61,7 +62,9 @@ export default function MatchDetailPage() {
           match={match}
           totalPlayers={totalPlayers}
         />
-
+        <MatchOrganizer
+          organizer={match.profiles}
+        />
         <MatchPlayers
           players={players}
           maxPlayers={match.max_players}
@@ -70,6 +73,7 @@ export default function MatchDetailPage() {
         <div className={styles.joinContainer}>
           <JoinMatchButton
             matchId={match.id}
+            full={totalPlayers >= match.max_players}
             onJoined={() => {
               reload();
               reloadPlayers();

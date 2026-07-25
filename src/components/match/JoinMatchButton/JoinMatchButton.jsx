@@ -6,6 +6,7 @@ import useJoinMatch from "../../../hooks/useJoinMatch";
 
 export default function JoinMatchButton({
   matchId,
+  full,
   onJoined,
 }) {
   const {
@@ -24,11 +25,13 @@ export default function JoinMatchButton({
   return (
     <Button
       onClick={handleClick}
-      disabled={loading}
+      disabled={loading || full}
     >
       {loading
         ? "Uniéndose..."
-        : "Unirme al partido"}
+        : full
+          ? "Partido completo"
+          : "Unirme al partido"}
     </Button>
   );
 }
@@ -36,4 +39,5 @@ export default function JoinMatchButton({
 JoinMatchButton.propTypes = {
   matchId: PropTypes.string.isRequired,
   onJoined: PropTypes.func,
+  full: PropTypes.bool,
 };

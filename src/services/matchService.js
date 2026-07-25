@@ -73,23 +73,17 @@ export async function getMatches() {
 
   if (error) throw error;
 
-  return data.map((match) => ({
-    id: match.id,
-    title: match.title || "Partido de pádel",
-    location: match.location,
-    date: match.match_date,
-    time: match.match_time?.slice(0, 5),
-    level: Number(match.level_min ?? 0),
-    currentPlayers: match.match_players.length,
-    maxPlayers: match.max_players ?? 4,
-    status: (match.status || "PENDING").toLowerCase(),
-    type: match.match_type || "Libre",
-    court: match.court_type || "Indoor",
-    duration: match.duration
-      ? `${match.duration} min`
-      : "90 min",
-    distance: match.city || "",
-  }));
+  return data.map((match) => {
+    return {
+      ...match,
+
+      occupied_slots: match.match_players.length,
+
+      match_time: match.match_time?.slice(0, 5),
+
+      status: (match.status || "PENDING").toLowerCase(),
+    };
+  });
 }
 
 export async function getMatchById(id) {
@@ -97,7 +91,14 @@ export async function getMatchById(id) {
     .from("matches")
     .select(`
       *,
-      match_players (
+      profiles!matches_creator_id_fkey(
+        id,
+        username,
+        full_name,
+        avatar_url,
+        level_current
+      ),
+      match_players(
         id
       )
     `)

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import MatchStatus from "../MatchStatus";
+import { formatMatchDate } from "../../../utils/formatDate";
 
 import styles from "./MatchInfo.module.css";
 
@@ -38,7 +39,7 @@ export default function MatchInfo({
       <div className={styles.info}>
         <CalendarDays size={18} />
         <span>
-          {match.match_date} · {match.match_time?.slice(0, 5)}
+          {formatMatchDate(match.match_date)} · {match.match_time?.slice(0, 5)}
         </span>
       </div>
 
@@ -54,6 +55,14 @@ export default function MatchInfo({
         {match.match_type && (
           <div className={styles.card}>
             🎾 {match.match_type || "Libre"}
+          </div>
+        )}
+
+        {match.description && (
+          <div className={styles.description}>
+            <h3>Descripción</h3>
+
+            <p>{match.description}</p>
           </div>
         )}
 
