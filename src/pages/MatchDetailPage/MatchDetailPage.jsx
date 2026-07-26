@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 import Layout from "../../components/layout/Layout";
 import BottomNavigation from "../../components/layout/BottomNavigation";
@@ -15,6 +16,7 @@ import styles from "./MatchDetailPage.module.css";
 
 export default function MatchDetailPage() {
   const { id } = useParams();
+  const { user } = useAuth();
 
   const {
     match,
@@ -29,6 +31,13 @@ export default function MatchDetailPage() {
     reload: reloadPlayers,
     totalPlayers,
   } = useMatchPlayers(id);
+
+  const isJoined = players.some(
+    (player) => player.player_id === user?.id
+  );
+
+  const isOrganizer =
+    match?.creator_id === user?.id;
 
   if (loading || playersLoading) {
     return (
@@ -73,7 +82,9 @@ export default function MatchDetailPage() {
         <div className={styles.joinContainer}>
           <JoinMatchButton
             matchId={match.id}
+            joined={isJoined}
             full={totalPlayers >= match.max_players}
+            isOrganizer={isOrganizer}
             onJoined={() => {
               reload();
               reloadPlayers();

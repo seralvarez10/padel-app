@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 
 import Button from "../../ui/Button";
-
 import useJoinMatch from "../../../hooks/useJoinMatch";
 
 export default function JoinMatchButton({
   matchId,
+  joined,
   full,
+  isOrganizer,
   onJoined,
 }) {
   const {
@@ -22,22 +23,32 @@ export default function JoinMatchButton({
     }
   }
 
+  let buttonText = "Unirme al partido";
+
+  if (loading) {
+    buttonText = "Uniéndose...";
+  } else if (isOrganizer) {
+    buttonText = "👑 Eres el organizador";
+  } else if (joined) {
+    buttonText = "🚪 Salir del partido";
+  } else if (full) {
+    buttonText = "Partido completo";
+  }
+
   return (
     <Button
       onClick={handleClick}
-      disabled={loading || full}
+      disabled={loading || isOrganizer}
     >
-      {loading
-        ? "Uniéndose..."
-        : full
-          ? "Partido completo"
-          : "Unirme al partido"}
+      {buttonText}
     </Button>
   );
 }
 
 JoinMatchButton.propTypes = {
   matchId: PropTypes.string.isRequired,
+  joined: PropTypes.bool,
   onJoined: PropTypes.func,
   full: PropTypes.bool,
+  isOrganizer: PropTypes.bool,
 };

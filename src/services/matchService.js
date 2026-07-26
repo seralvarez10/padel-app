@@ -190,3 +190,38 @@ export async function joinMatch(matchId) {
 
   return true;
 }
+export async function leaveMatch(matchId) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+
+  const { error } = await supabase
+    .from("match_players")
+    .delete()
+    .eq("match_id", matchId)
+    .eq("player_id", user.id);
+
+  if (error) throw error;
+
+  return true;
+}
+export async function isUserInMatch(matchId) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return false;
+
+  const { data } = await supabase
+    .from("match_players")
+    .select("id")
+    .eq("match_id", matchId)
+    .eq("player_id", user.id)
+    .maybeSingle();
+
+  return !!data;
+}

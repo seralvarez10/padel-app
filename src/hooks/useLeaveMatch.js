@@ -1,21 +1,18 @@
 import { useState } from "react";
-import { joinMatch } from "../services/matchService";
+import { leaveMatch } from "../services/matchService";
 
-export default function useJoinMatch() {
+export default function useLeaveMatch() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  async function join(matchId) {
+  async function leave(matchId) {
     try {
       setLoading(true);
-      setError(null);
 
-      await joinMatch(matchId);
+      await leaveMatch(matchId);
 
       return true;
     } catch (err) {
       console.error(err);
-      setError(err.message);
       return false;
     } finally {
       setLoading(false);
@@ -23,8 +20,7 @@ export default function useJoinMatch() {
   }
 
   return {
-    join,
+    leave,
     loading,
-    error,
   };
 }
