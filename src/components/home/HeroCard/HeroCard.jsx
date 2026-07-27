@@ -1,8 +1,11 @@
 import { CalendarDays } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import styles from "./HeroCard.module.css";
 import Card from "../../ui/Card";
 
 export default function HeroCard() {
+  const navigate = useNavigate();
+
   return (
     <Card className={styles.hero}>
       <div>
@@ -18,7 +21,7 @@ export default function HeroCard() {
           Encuentra un partido cerca de ti en menos de un minuto.
         </p>
 
-        <button>
+        <button onClick={() => navigate("/explore")}>
           Explorar partidos
         </button>
       </div>

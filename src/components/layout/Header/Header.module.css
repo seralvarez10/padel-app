@@ -9,6 +9,7 @@
 .content{
     display:flex;
     flex-direction:column;
+    cursor:pointer;
 }
 
 .greeting{
@@ -41,11 +42,16 @@
     box-shadow:var(--shadow-sm);
 
     transition:var(--transition);
+    cursor:pointer;
 
 }
 
 .avatar:hover{
 
     transform:scale(1.05);
+    transition: .2s;
 
+}
+.content:hover{
+    opacity:.9;
 }

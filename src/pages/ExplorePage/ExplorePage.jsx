@@ -146,19 +146,7 @@ export default function ExplorePage() {
         {filteredMatches.map((match) => (
           <MatchCard
             key={match.id}
-            id={match.id}
-            title={match.title}
-            location={match.location}
-            date={match.match_date}
-            time={match.match_time}
-            level={match.level_min}
-            currentPlayers={match.occupied_slots}
-            maxPlayers={match.max_players}
-            status={match.status}
-            type={match.match_type}
-            distance={match.city}
-            court={match.court_type}
-            duration={`${match.duration} min`}
+            {...match}
           />
         ))}
       </Layout>

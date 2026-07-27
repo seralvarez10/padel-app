@@ -66,7 +66,8 @@ export async function getMatches() {
     .select(`
       *,
       match_players (
-        id
+        id,
+        player_id
       )
     `)
     .order("match_date", { ascending: true });
@@ -78,6 +79,10 @@ export async function getMatches() {
       ...match,
 
       occupied_slots: match.match_players.length,
+
+      creatorId: match.creator_id,
+
+      joinedPlayerIds: match.match_players.map((p) => p.player_id),
 
       match_time: match.match_time?.slice(0, 5),
 
@@ -224,4 +229,36 @@ export async function isUserInMatch(matchId) {
     .maybeSingle();
 
   return !!data;
+}
+export async function getMyMatches() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+
+  const { data, error } = await supabase
+    .from("match_players")
+    .select(`
+      match_id,
+      matches (
+        *,
+        match_players (
+          id,
+          player_id
+        )
+      )
+    `)
+    .eq("player_id", user.id);
+
+  if (error) throw error;
+
+  return data.map((item) => ({
+    ...item.matches,
+    occupied_slots: item.matches.match_players.length,
+    status: item.matches.status.toLowerCase(),
+    match_time: item.matches.match_time?.slice(0, 5),
+  }));
 }

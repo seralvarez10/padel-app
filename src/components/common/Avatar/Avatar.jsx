@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./Avatar.module.css";
 
@@ -7,6 +8,8 @@ export default function Avatar({
   alt = "Avatar",
   size = "md",
 }) {
+  const [imageError, setImageError] = useState(false);
+
   const initials = name
     .trim()
     .split(" ")
@@ -15,12 +18,12 @@ export default function Avatar({
     .substring(0, 2)
     .toUpperCase();
 
-  if (!src) {
+  if (!src || imageError) {
     return (
       <div
         className={`${styles.avatar} ${styles[size]} ${styles.placeholder}`}
       >
-        {initials || "?"}
+        {initials}
       </div>
     );
   }
@@ -30,15 +33,7 @@ export default function Avatar({
       src={src}
       alt={alt}
       className={`${styles.avatar} ${styles[size]}`}
-      onError={(e) => {
-        e.target.style.display = "none";
-        e.target.insertAdjacentHTML(
-          "afterend",
-          `<div class="${styles.avatar} ${styles[size]} ${styles.placeholder}">
-            ${initials || "?"}
-          </div>`
-        );
-      }}
+      onError={() => setImageError(true)}
     />
   );
 }

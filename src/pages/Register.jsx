@@ -16,8 +16,6 @@ export default function Register() {
             return;
         }
 
-        console.log(data);
-
         alert("Usuario creado correctamente");
     }
 

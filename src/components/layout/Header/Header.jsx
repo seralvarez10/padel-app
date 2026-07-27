@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import Avatar from "../../common/Avatar";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Header.module.css";
 
@@ -7,10 +8,15 @@ export default function Header({
   name,
   avatar,
 }) {
+  const navigate = useNavigate();
+
   return (
     <header className={styles.header}>
 
-      <div className={styles.content}>
+      <div
+        className={styles.content}
+        onClick={() => navigate("/profile")}
+      >
 
         <p className={styles.greeting}>
           Hola 👋
@@ -26,9 +32,13 @@ export default function Header({
 
       </div>
 
-      <div className={styles.avatar}>
+      <div
+        className={styles.avatar}
+        onClick={() => navigate("/profile")}
+      >
         <Avatar
           src={avatar}
+          name={name}
           size="md"
         />
       </div>

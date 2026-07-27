@@ -12,7 +12,7 @@
 
 .title{
 
-    font-size:28px;
+    font-size:22px;
 
     font-weight:700;
 
@@ -30,9 +30,17 @@
 
 .link{
 
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
     color:var(--color-primary);
 
     font-weight:700;
+
+    font-size:14px;
 
     transition:.2s;
 
@@ -41,6 +49,14 @@
 .link:hover{
 
     opacity:.7;
+
+}
+
+.link svg{
+
+    width:16px;
+
+    height:16px;
 
 }
 .searchSection{
