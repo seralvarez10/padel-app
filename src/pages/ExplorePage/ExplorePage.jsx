@@ -8,13 +8,17 @@ import MatchCard from "../../components/match/MatchCard";
 import FilterChip from "../../components/filters/FilterChip";
 
 import useMatches from "../../hooks/useMatches";
-import { currentUser } from "../../mocks/currentUser";
+import useProfile from "../../hooks/useProfile";
 
 import styles from "./ExplorePage.module.css";
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+  const {
+    profile,
+    loading: profileLoading,
+  } = useProfile();
 
   const {
     matches,
@@ -23,10 +27,10 @@ export default function ExplorePage() {
   } = useMatches();
 
 
-  if (loading) {
+  if (loading || profileLoading) {
     return (
       <Layout>
-        <p>Cargando partidos...</p>
+        <p>Cargando...</p>
       </Layout>
     );
   }
@@ -109,8 +113,8 @@ export default function ExplorePage() {
     <>
       <Layout>
         <Header
-          name={currentUser.name}
-          avatar={currentUser.avatar}
+          name={profile?.display_name}
+          avatar={profile?.avatar_url}
         />
 
         <SearchBar

@@ -1,0 +1,78 @@
+.page {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 24px;
+
+  background: linear-gradient(
+    135deg,
+    #f4fff7 0%,
+    #ecfdf3 100%
+  );
+}
+
+.card {
+  width: 100%;
+  max-width: 450px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 40px 32px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.header {
+  text-align: center;
+
+  margin-bottom: 32px;
+}
+
+.logo {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 20px;
+
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 34px;
+
+  background: #16a34a;
+}
+
+.title {
+  margin: 0;
+
+  font-size: 30px;
+
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.subtitle {
+  margin-top: 12px;
+
+  color: #6b7280;
+
+  line-height: 1.5;
+
+  font-size: 15px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

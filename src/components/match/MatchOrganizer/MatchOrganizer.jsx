@@ -12,13 +12,13 @@ export default function MatchOrganizer({ organizer }) {
             <div className={styles.card}>
                 <Avatar
                     src={organizer.avatar_url}
-                    name={organizer.full_name || organizer.username}
+                    name={organizer.display_name || "Jugador"}
                     size="lg"
                 />
 
                 <div className={styles.info}>
                     <strong>
-                        {organizer.full_name || organizer.username}
+                        {organizer.display_name || "Jugador"}
                     </strong>
 
                     <span>

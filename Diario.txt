@@ -1,17 +1,7 @@
-# Sprint 1
+Cosas que voy viendo que se necesitan mejorar
 
-## Objetivo
-
-Conseguir que un usuario pueda registrarse.
-
-## Completado
-
-- React
-- Vite
-- Router
-- Supabase
-- Tablas principales
-
-## Próximo objetivo
-
-Registro con Supabase Auth.
+- Cuando estas en la pantalla del perfil que o se ponga la foto que decidio el usuario o salgan las iniciales, ahora mismo salen fotos random
+- A la larga que se puedan tener distintos roles como: entrenador, dueño de un club o cosas parecidas para que se puedan añadir entrenamientos o torneos no solo partidos, y asi se pueda seguir el resultado del torneo en directo que se actualicxen marcadores cuando se caban los aprtidos el cuadro y demás y en cunato al entrenador que pueda crear las clases y añadir a los alumnos asi les salte notificacion de cuando tiene clase o si hay modificaciones o cualquier cosa parecida.
+- Otra mejora seria que cuando tu vayas a crear un partido en funcion de la ciudad que pongas te salgan en un desplegable los distintos clubs que hay para asi nop tener que escribir
+- poder ver el perfil de los demas jugadores del partido pinchando en el. 
+- Una vez finalizado el partido se tiene que añadir el resultado, y lo tienen que confirmar los rivales

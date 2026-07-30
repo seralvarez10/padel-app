@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 
 import Button from "../../ui/Button";
 import useJoinMatch from "../../../hooks/useJoinMatch";
@@ -16,17 +17,25 @@ export default function JoinMatchButton({
   } = useJoinMatch();
 
   async function handleClick() {
-    const ok = await join(matchId);
+    const ok = await join(matchId, joined);
 
-    if (ok && onJoined) {
-      onJoined();
+    if (ok) {
+      toast.success(
+        joined
+          ? "Has abandonado el partido"
+          : "Te has unido al partido"
+      );
+
+      onJoined?.();
     }
   }
 
   let buttonText = "Unirme al partido";
 
   if (loading) {
-    buttonText = "Uniéndose...";
+    buttonText = joined
+      ? "Saliendo..."
+      : "Uniéndose...";
   } else if (isOrganizer) {
     buttonText = "👑 Eres el organizador";
   } else if (joined) {
@@ -38,7 +47,11 @@ export default function JoinMatchButton({
   return (
     <Button
       onClick={handleClick}
-      disabled={loading || isOrganizer}
+      disabled={
+        loading ||
+        isOrganizer ||
+        (full && !joined)
+      }
     >
       {buttonText}
     </Button>

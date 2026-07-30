@@ -1,10 +1,11 @@
 import useCreateMatch from "../../../hooks/useCreateMatch";
 import styles from "./CreateMatchForm.module.css";
+import toast from "react-hot-toast";
 
-import Button from "../../ui/Button";
 import Input from "../../ui/Input";
-import PageHeader from "../../ui/PageHeader";
 import FormSection from "../../ui/FormSection";
+import { useNavigate } from "react-router-dom";
+import MatchForm from "../MatchForm/MatchForm";
 
 import {
   Type,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 
 export default function CreateMatchForm() {
+  const navigate = useNavigate();
   const {
     form,
     loading,
@@ -26,22 +28,32 @@ export default function CreateMatchForm() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const ok = await submit();
+    const match = await submit();
 
-    if (ok) {
-      alert("Partido creado correctamente");
+    if (match) {
+      toast.success("Partido creado correctamente");
+
+      navigate(`/matches/${match.id}`);
     }
   }
+  const today = new Date().toISOString().split("T")[0];
 
+  const currentTime = new Date().toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const minTime =
+    form.match_date === today ? currentTime : undefined;
   return (
-    <form
-      className={styles.form}
-      onSubmit={handleSubmit}
+    <MatchForm
+      title="Crear partido"
+      subtitle="Organiza tu próximo partido fácilmente."
+      buttonText="Crear partido"
+      loading={loading}
+      error={error}
+      handleSubmit={handleSubmit}
     >
-      <PageHeader
-        title="Crear partido"
-        subtitle="Organiza tu próximo partido fácilmente."
-      />
 
       {/* INFORMACIÓN BÁSICA */}
 
@@ -80,6 +92,7 @@ export default function CreateMatchForm() {
             name="match_date"
             value={form.match_date}
             onChange={handleChange}
+            min={today}
           />
 
           <Input
@@ -89,6 +102,7 @@ export default function CreateMatchForm() {
             name="match_time"
             value={form.match_time}
             onChange={handleChange}
+            min={minTime}
           />
 
         </div>
@@ -110,43 +124,9 @@ export default function CreateMatchForm() {
 
       </FormSection>
 
-      {/* CONFIGURACIÓN */}
+      {/* DETALLES */}
 
-      <FormSection title="🎾 Configuración del partido">
-
-        <div className={styles.group}>
-
-          <label>Tipo de partido</label>
-
-          <div className={styles.options}>
-
-            {["Libre", "Americano", "Competitivo", "Mixto"].map((type) => (
-
-              <button
-                key={type}
-                type="button"
-                className={`${styles.option} ${
-                  form.match_type === type
-                    ? styles.active
-                    : ""
-                }`}
-                onClick={() =>
-                  handleChange({
-                    target: {
-                      name: "match_type",
-                      value: type,
-                    },
-                  })
-                }
-              >
-                {type}
-              </button>
-
-            ))}
-
-          </div>
-
-        </div>
+      <FormSection title="⚙️ Detalles">
 
         <div className={styles.group}>
 
@@ -159,11 +139,10 @@ export default function CreateMatchForm() {
               <button
                 key={court}
                 type="button"
-                className={`${styles.option} ${
-                  form.court_type === court
-                    ? styles.active
-                    : ""
-                }`}
+                className={`${styles.option} ${form.court_type === court
+                  ? styles.active
+                  : ""
+                  }`}
                 onClick={() =>
                   handleChange({
                     target: {
@@ -224,40 +203,6 @@ export default function CreateMatchForm() {
 
         </div>
 
-        <div className={styles.group}>
-
-          <label>Jugadores apuntados</label>
-
-          <div className={styles.options}>
-
-            {[1, 2, 3].map((value) => (
-
-              <button
-                key={value}
-                type="button"
-                className={`${styles.option} ${
-                  Number(form.occupied_slots) === value
-                    ? styles.active
-                    : ""
-                }`}
-                onClick={() =>
-                  handleChange({
-                    target: {
-                      name: "occupied_slots",
-                      value,
-                    },
-                  })
-                }
-              >
-                {value}
-              </button>
-
-            ))}
-
-          </div>
-
-        </div>
-
       </FormSection>
 
       {/* DESCRIPCIÓN */}
@@ -275,21 +220,7 @@ export default function CreateMatchForm() {
 
       </FormSection>
 
-      <Button
-        type="submit"
-        disabled={loading}
-      >
-        {loading
-          ? "Creando..."
-          : "Crear Partido"}
-      </Button>
 
-      {error && (
-        <p className={styles.error}>
-          {error}
-        </p>
-      )}
-
-    </form>
+    </MatchForm>
   );
 }

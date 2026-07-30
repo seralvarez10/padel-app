@@ -9,13 +9,17 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 
-import { currentUser } from "../../mocks/currentUser";
+import useProfile from "../../hooks/useProfile";
 import useMatches from "../../hooks/useMatches";
 import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
   const { user } = useAuth();
+  const {
+    profile,
+    loading: profileLoading,
+  } = useProfile();
   const navigate = useNavigate();
 
 
@@ -25,7 +29,7 @@ export default function HomePage() {
     error,
   } = useMatches();
 
-  if (loading) {
+  if (loading || profileLoading) {
     return (
       <Layout>
         <p>Cargando partidos...</p>
@@ -63,8 +67,8 @@ export default function HomePage() {
     <>
       <Layout>
         <Header
-          name={currentUser.name}
-          avatar={currentUser.avatar}
+          name={profile?.display_name}
+          avatar={profile?.avatar_url}
         />
         <HeroCard />
 

@@ -29,7 +29,7 @@ const items = [
   {
     label: "Mis partidos",
     icon: CalendarDays,
-    path: "/matches",
+    path: "/my-matches",
   },
   {
     label: "Perfil",

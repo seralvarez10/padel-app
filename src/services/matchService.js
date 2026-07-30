@@ -47,17 +47,59 @@ export async function createMatch(matchData) {
     .insert({
       match_id: match.id,
       player_id: user.id,
-      role: "PLAYER",
+      role: "CREATOR",
     });
-  console.log("MATCH", match);
   if (playerError) {
-    alert(JSON.stringify(playerError, null, 2));
     throw playerError;
   }
 
-  if (playerError) throw playerError;
-
   return match;
+}
+
+export async function updateMatch(matchId, matchData) {
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+  // Comprobar que el usuario es el organizador
+  const { data: match, error: matchError } = await supabase
+    .from("matches")
+    .select("creator_id")
+    .eq("id", matchId)
+    .single();
+
+  if (matchError) throw matchError;
+
+  if (match.creator_id !== user.id) {
+    throw new Error("No tienes permisos para editar este partido.");
+  }
+
+  const { data, error } = await supabase
+    .from("matches")
+    .update({
+      title: matchData.title,
+      match_date: matchData.match_date,
+      match_time: matchData.match_time,
+      location: matchData.location,
+      city: matchData.city,
+      level_min: matchData.level_min,
+      level_max: matchData.level_max,
+      match_type: matchData.match_type,
+      court_type: matchData.court_type,
+      duration: matchData.duration,
+      description: matchData.description,
+    })
+    .eq("id", matchId)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
 }
 
 export async function getMatches() {
@@ -97,12 +139,13 @@ export async function getMatchById(id) {
     .select(`
       *,
       profiles!matches_creator_id_fkey(
-        id,
-        username,
-        full_name,
-        avatar_url,
-        level_current
-      ),
+  id,
+  display_name,
+  first_name,
+  last_name,
+  avatar_url,
+  level_current
+),
       match_players(
         id
       )
@@ -127,8 +170,9 @@ export async function getMatchPlayers(matchId) {
       player_id,
       profiles(
         id,
-        username,
-        full_name,
+        display_name,
+        first_name,
+        last_name,
         avatar_url,
         level_current
       )
@@ -261,4 +305,35 @@ export async function getMyMatches() {
     status: item.matches.status.toLowerCase(),
     match_time: item.matches.match_time?.slice(0, 5),
   }));
+}
+export async function deleteMatch(matchId) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+
+  // Comprobar que es el organizador
+  const { data: match, error: matchError } = await supabase
+    .from("matches")
+    .select("creator_id")
+    .eq("id", matchId)
+    .single();
+
+  if (matchError) throw matchError;
+
+  if (match.creator_id !== user.id) {
+    throw new Error("No tienes permisos para eliminar este partido.");
+  }
+
+  const { error } = await supabase
+    .from("matches")
+    .delete()
+    .eq("id", matchId);
+
+  if (error) throw error;
+
+  return true;
 }

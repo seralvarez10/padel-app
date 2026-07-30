@@ -1,0 +1,59 @@
+.form{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+
+    max-width:700px;
+    margin:0 auto;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.field label{
+    font-weight:600;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ddd;
+    border-radius:12px;
+
+    font-size:15px;
+
+    background:white;
+}
+
+.field textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+.actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+
+    margin-top:12px;
+}
+.avatarSection{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    margin-bottom:24px;
+}
+
+.avatarLabel{
+    font-size:14px;
+    font-weight:600;
+    color:var(--color-text-secondary);
+}

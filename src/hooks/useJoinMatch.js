@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { joinMatch } from "../services/matchService";
+import { joinMatch, leaveMatch } from "../services/matchService";
 
 export default function useJoinMatch() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function join(matchId) {
+  async function join(matchId, joined) {
     try {
       setLoading(true);
       setError(null);
 
-      await joinMatch(matchId);
+      if (joined) {
+        await leaveMatch(matchId);
+      } else {
+        await joinMatch(matchId);
+      }
 
       return true;
     } catch (err) {

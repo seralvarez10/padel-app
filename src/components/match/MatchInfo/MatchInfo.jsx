@@ -4,7 +4,6 @@ import {
   CalendarDays,
   Clock3,
   Star,
-  Users,
   Building2,
 } from "lucide-react";
 
@@ -13,19 +12,14 @@ import { formatMatchDate } from "../../../utils/formatDate";
 
 import styles from "./MatchInfo.module.css";
 
-export default function MatchInfo({
-  match,
-  totalPlayers,
-}) {
+export default function MatchInfo({ match, totalPlayers }) {
   return (
     <section className={styles.container}>
       <div className={styles.header}>
         <MatchStatus status={match.status} />
       </div>
 
-      <h1 className={styles.title}>
-        {match.title}
-      </h1>
+      <h1 className={styles.title}>{match.title}</h1>
 
       <div className={styles.info}>
         <MapPin size={18} />
@@ -44,33 +38,22 @@ export default function MatchInfo({
       </div>
 
       <div className={styles.grid}>
-
         {match.court_type && (
           <div className={styles.card}>
             <Building2 size={18} />
-            <span>{match.court_type || "Indoor"}</span>
+            <span>{match.court_type}</span>
           </div>
         )}
 
         {match.match_type && (
           <div className={styles.card}>
-            🎾 {match.match_type || "Libre"}
-          </div>
-        )}
-
-        {match.description && (
-          <div className={styles.description}>
-            <h3>Descripción</h3>
-
-            <p>{match.description}</p>
+            <span>🎾 {match.match_type}</span>
           </div>
         )}
 
         <div className={styles.card}>
           <Clock3 size={18} />
-          <span>
-            {match.duration ?? 90} min
-          </span>
+          <span>{match.duration ?? 90} min</span>
         </div>
 
         <div className={styles.card}>
@@ -79,16 +62,15 @@ export default function MatchInfo({
             {match.level_min} - {match.level_max}
           </span>
         </div>
-
       </div>
 
-      <div className={styles.players}>
-        <Users size={18} />
+      {match.description?.trim() && (
+        <div className={styles.description}>
+          <h3>📝 Descripción</h3>
+          <p>{match.description}</p>
+        </div>
+      )}
 
-        <span>
-          {totalPlayers}/{match.max_players} jugadores
-        </span>
-      </div>
     </section>
   );
 }

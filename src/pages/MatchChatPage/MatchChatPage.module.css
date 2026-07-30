@@ -1,0 +1,12 @@
+.page{
+    height:calc(100vh - 120px);
+
+    display:flex;
+    flex-direction:column;
+}
+
+.page h2{
+    padding:16px;
+    margin:0;
+    border-bottom:1px solid #eee;
+}

@@ -1,0 +1,15 @@
+.container{
+    flex:1;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+}
+
+.empty{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#888;
+    font-size:14px;
+}

@@ -1,23 +1,26 @@
 import PropTypes from "prop-types";
+
 import styles from "./Input.module.css";
 
 export default function Input({
   label,
   icon: Icon,
   error,
+  className = "",
   ...props
 }) {
   return (
-    <div className={styles.container}>
-
+    <div className={`${styles.container} ${className}`}>
       {label && (
-        <label className={styles.label}>
+        <label
+          htmlFor={props.id}
+          className={styles.label}
+        >
           {label}
         </label>
       )}
 
       <div className={styles.inputWrapper}>
-
         {Icon && (
           <Icon
             size={18}
@@ -26,10 +29,11 @@ export default function Input({
         )}
 
         <input
-          className={styles.input}
+          className={`${styles.input} ${
+            error ? styles.inputError : ""
+          }`}
           {...props}
         />
-
       </div>
 
       {error && (
@@ -37,7 +41,6 @@ export default function Input({
           {error}
         </span>
       )}
-
     </div>
   );
 }
@@ -46,4 +49,5 @@ Input.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.elementType,
   error: PropTypes.string,
+  className: PropTypes.string,
 };

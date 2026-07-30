@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 
 import styles from "./ProfileMenu.module.css";
+import { useNavigate } from "react-router-dom";
+import useLogout from "../../../hooks/useLogout";
 
 const items = [
   {
@@ -24,32 +26,37 @@ const items = [
   {
     icon: LogOut,
     title: "Cerrar sesión",
+    action: "logout",
     danger: true,
   },
 ];
 
 export default function ProfileMenu() {
+  const navigate = useNavigate();
+  const { logout } = useLogout();
+
+  async function handleClick(item) {
+    if (item.action === "logout") {
+      await logout();
+      navigate("/login");
+    }
+  }
+
   return (
-    <section className={styles.container}>
-      <h2 className={styles.title}>
-        Ajustes
-      </h2>
-
+    <section className={styles.menu}>
       {items.map((item) => {
-        const Icon = item.icon;
-
+        const Icon = item.icon; // Renombrar en mayúscula para usarlo como componente
+        
         return (
           <button
             key={item.title}
-            className={`${styles.item} ${
-              item.danger ? styles.danger : ""
-            }`}
+            onClick={() => handleClick(item)}
+            className={`${styles.item} ${item.danger ? styles.danger : ""}`}
           >
             <div className={styles.left}>
               <Icon size={20} />
               <span>{item.title}</span>
             </div>
-
             <ChevronRight size={18} />
           </button>
         );

@@ -7,12 +7,16 @@ export default function Avatar({
   name = "",
   alt = "Avatar",
   size = "md",
+  className = "",
 }) {
   const [imageError, setImageError] = useState(false);
 
-  const initials = name
+  const safeName = name ?? "";
+
+  const initials = safeName
     .trim()
     .split(" ")
+    .filter(Boolean)
     .map((word) => word[0])
     .join("")
     .substring(0, 2)
@@ -21,7 +25,7 @@ export default function Avatar({
   if (!src || imageError) {
     return (
       <div
-        className={`${styles.avatar} ${styles[size]} ${styles.placeholder}`}
+        className={`${styles.avatar} ${styles[size]} ${styles.placeholder} ${className}`}
       >
         {initials}
       </div>
@@ -32,7 +36,7 @@ export default function Avatar({
     <img
       src={src}
       alt={alt}
-      className={`${styles.avatar} ${styles[size]}`}
+      className={`${styles.avatar} ${styles[size]} ${className}`}
       onError={() => setImageError(true)}
     />
   );
@@ -43,4 +47,5 @@ Avatar.propTypes = {
   name: PropTypes.string,
   alt: PropTypes.string,
   size: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
+  className: PropTypes.string,
 };

@@ -15,7 +15,9 @@ export async function signIn(email, password) {
 }
 
 export async function signOut() {
-  return await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) throw error;
 }
 
 export async function getUser() {
@@ -24,4 +26,12 @@ export async function getUser() {
   } = await supabase.auth.getUser();
 
   return user;
+}
+export async function updateProfile(userId, data) {
+  const { error } = await supabase
+    .from("profiles")
+    .update(data)
+    .eq("id", userId);
+
+  if (error) throw error;
 }
