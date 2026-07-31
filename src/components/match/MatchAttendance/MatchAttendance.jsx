@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import ConfirmModal from "../../ui/ConfirmModal";
+import { useNavigate } from "react-router-dom";
 
 import {
     confirmAttendance,
@@ -18,6 +19,7 @@ export default function MatchAttendance({
 }) {
     const { user } = useAuth();
     const [showLeaveModal, setShowLeaveModal] = useState(false);
+    const navigate = useNavigate();
 
     if (!player || player.player_id !== user?.id) {
         return null;
@@ -37,6 +39,8 @@ export default function MatchAttendance({
             await cancelAttendance(match.id, user.id);
 
             onUpdated();
+
+            navigate("/explore");
         } catch (error) {
             console.error(error);
         }

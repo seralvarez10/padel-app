@@ -111,7 +111,8 @@ export async function getMatches() {
       *,
       match_players (
         id,
-        player_id
+        player_id,
+        status
       )
     `)
     .order("match_date", { ascending: true });
@@ -119,18 +120,41 @@ export async function getMatches() {
   if (error) throw error;
 
   return data.map((match) => {
+    // Solo contamos jugadores activos
+    const activePlayers = match.match_players.filter(
+      (player) => player.status !== "LEFT"
+    );
+
+    // Estado visual del partido
+    let visualStatus = "open";
+
+    if (match.status === "FINISHED") {
+      visualStatus = "finished";
+    } else if (match.status === "CANCELLED") {
+      visualStatus = "cancelled";
+    } else if (activePlayers.length >= match.max_players) {
+      visualStatus = "full";
+    } else if (activePlayers.length === match.max_players - 1) {
+      visualStatus = "almost_full";
+    }
+
     return {
       ...match,
 
-      occupied_slots: match.match_players.length,
+      match_players: activePlayers,
+
+      occupied_slots: activePlayers.length,
 
       creatorId: match.creator_id,
 
-      joinedPlayerIds: match.match_players.map((p) => p.player_id),
+      joinedPlayerIds: activePlayers.map(
+        (player) => player.player_id
+      ),
 
       match_time: match.match_time?.slice(0, 5),
 
-      status: (match.status || "PENDING").toLowerCase(),
+      // Estado visual para Home y Explorar
+      status: visualStatus,
     };
   });
 }
@@ -312,24 +336,42 @@ export async function getMyMatches() {
     .from("match_players")
     .select(`
       match_id,
+      status,
       matches (
         *,
         match_players (
           id,
-          player_id
+          player_id,
+          status
         )
       )
     `)
-    .eq("player_id", user.id);
+    .eq("player_id", user.id)
+    .in("status", ["JOINED", "CONFIRMED", "AT_RISK"]);
 
   if (error) throw error;
 
-  return data.map((item) => ({
-    ...item.matches,
-    occupied_slots: item.matches.match_players.length,
-    status: item.matches.status.toLowerCase(),
-    match_time: item.matches.match_time?.slice(0, 5),
-  }));
+  return data.map((item) => {
+    const activePlayers = item.matches.match_players.filter(
+      (player) => player.status !== "LEFT"
+    );
+
+    return {
+      ...item.matches,
+
+      match_players: activePlayers,
+
+      occupied_slots: activePlayers.length,
+
+      // Estado del partido
+      status: item.matches.status.toLowerCase(),
+
+      // Estado del usuario
+      playerStatus: item.status,
+
+      match_time: item.matches.match_time?.slice(0, 5),
+    };
+  });
 }
 export async function deleteMatch(matchId) {
   const {

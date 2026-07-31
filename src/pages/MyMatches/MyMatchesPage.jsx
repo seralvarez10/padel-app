@@ -54,6 +54,7 @@ export default function MyMatchesPage() {
             <MatchCard
               key={match.id}
               {...match}
+              playerStatus={match.playerStatus}
             />
           ))
         ) : (

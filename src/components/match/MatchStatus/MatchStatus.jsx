@@ -9,6 +9,7 @@ import {
 import styles from "./MatchStatus.module.css";
 
 const STATUS_CONFIG = {
+  // Estado del partido
   open: {
     label: "Abierto",
     icon: CircleCheck,
@@ -38,8 +39,26 @@ const STATUS_CONFIG = {
     icon: CircleDashed,
     className: "finished",
   },
-};
 
+  // Estado del jugador
+  confirmed: {
+    label: "Confirmado",
+    icon: CircleCheck,
+    className: "confirmed",
+  },
+
+  pending: {
+    label: "Pendiente",
+    icon: CircleAlert,
+    className: "pending",
+  },
+
+  at_risk: {
+    label: "Sin confirmar",
+    icon: CircleAlert,
+    className: "atRisk",
+  },
+};
 export default function MatchStatus({ status }) {
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.open;
 

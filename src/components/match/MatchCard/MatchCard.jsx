@@ -26,6 +26,7 @@ export default function MatchCard({
   occupied_slots,
   max_players,
   status,
+  playerStatus,
   match_type,
   city,
   court_type,
@@ -33,12 +34,27 @@ export default function MatchCard({
   isOrganizer = false,
   isJoined = false,
   isFull = false,
-
-  
 }) {
 
   const navigate = useNavigate();
   let buttonText = "Ver partido";
+  let badgeStatus = status;
+
+  if (playerStatus) {
+    switch (playerStatus) {
+      case "CONFIRMED":
+        badgeStatus = "confirmed";
+        break;
+
+      case "JOINED":
+        badgeStatus = "pending";
+        break;
+
+      case "AT_RISK":
+        badgeStatus = "at_risk";
+        break;
+    }
+  }
 
   if (isOrganizer) {
     buttonText = "👑 Organizando";
@@ -47,13 +63,16 @@ export default function MatchCard({
   } else if (isFull) {
     buttonText = "Partido completo";
   }
+  
   return (
     <Card
       className={styles.card}
       onClick={() => navigate(`/matches/${id}`)}
     >
       <div className={styles.header}>
-        <MatchStatus status={status} />
+        <MatchStatus
+          status={badgeStatus}
+        />
 
         <span className={styles.typeBadge}>
           🎾 {match_type}
@@ -162,6 +181,7 @@ MatchCard.propTypes = {
   occupied_slots: PropTypes.number.isRequired,
   max_players: PropTypes.number.isRequired,
   status: PropTypes.string.isRequired,
+  playerStatus: PropTypes.string,
   match_type: PropTypes.string,
   court_type: PropTypes.string,
   duration: PropTypes.number,

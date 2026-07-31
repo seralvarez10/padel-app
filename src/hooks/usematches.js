@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { getMatches } from "../services/matchService";
+import useRealtimeMatches from "./useRealtimeMatches";
 
 export default function useMatches() {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    loadMatches();
-  }, []);
 
   async function loadMatches() {
     try {
@@ -17,6 +14,7 @@ export default function useMatches() {
       const data = await getMatches();
 
       setMatches(data);
+      setError(null);
     } catch (err) {
       console.error(err);
       setError(err);
@@ -24,6 +22,12 @@ export default function useMatches() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadMatches();
+  }, []);
+
+  useRealtimeMatches(loadMatches);
 
   return {
     matches,
