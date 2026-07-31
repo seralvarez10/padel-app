@@ -7,90 +7,140 @@ export default function MatchPlayers({
   players,
   maxPlayers,
 }) {
+  function getStatusLabel(status) {
+    switch (status) {
+      case "CONFIRMED":
+        return {
+          text: "🟢 Confirmado",
+          className: styles.confirmed,
+        };
 
-  function getInitials(player) {
-    const name = player.profiles.display_name || "";
+      case "JOINED":
+        return {
+          text: "🟡 Pendiente",
+          className: styles.joined,
+        };
 
-    return name
-      .trim()
-      .split(" ")
-      .filter(Boolean)
-      .map((word) => word[0])
-      .join("")
-      .substring(0, 2)
-      .toUpperCase();
+      case "LEFT":
+        return {
+          text: "🔴 Ha abandonado",
+          className: styles.left,
+        };
+
+      case "AT_RISK":
+        return {
+          text: "🟠 Sin confirmar",
+          className: styles.atRisk,
+        };
+
+      case "EXPIRED":
+        return {
+          text: "⚪ Plaza perdida",
+          className: styles.expired,
+        };
+
+      case "NO_SHOW":
+        return {
+          text: "❌ No asistió",
+          className: styles.noShow,
+        };
+
+      default:
+        return {
+          text: "",
+          className: "",
+        };
+    }
   }
-  const sortedPlayers = [...players].sort((a, b) => {
+
+  // Ocultamos los jugadores que han abandonado el partido
+  const visiblePlayers = players.filter(
+    (player) => player.status !== "LEFT"
+  );
+
+  // Organizador siempre el primero
+  const sortedPlayers = [...visiblePlayers].sort((a, b) => {
     if (a.role === "CREATOR") return -1;
     if (b.role === "CREATOR") return 1;
     return 0;
   });
+
   return (
     <section className={styles.container}>
-
       <h2 className={styles.title}>
-        👥 Jugadores ({players.length}/{maxPlayers})
+        👥 Jugadores ({visiblePlayers.length}/{maxPlayers})
       </h2>
+
       <p className={styles.subtitle}>
-        {players.length === maxPlayers
+        {visiblePlayers.length === maxPlayers
           ? "🔒 Partido completo"
-          : `🟢 Quedan ${maxPlayers - players.length} plaza${maxPlayers - players.length > 1 ? "s" : ""}`}
+          : `🟢 Quedan ${
+              maxPlayers - visiblePlayers.length
+            } plaza${
+              maxPlayers - visiblePlayers.length > 1 ? "s" : ""
+            }`}
       </p>
-      {sortedPlayers.map((player) => (
 
-        <div
-          key={player.id}
-          className={styles.player}
-        >
+      {sortedPlayers.map((player) => {
+        const status = getStatusLabel(player.status);
 
-          <Avatar
-            src={player.profiles.avatar_url}
-            name={player.profiles.display_name}
-            size="md"
-          />
+        return (
+          <div
+            key={player.id}
+            className={styles.player}
+          >
+            <Avatar
+              src={player.profiles.avatar_url}
+              name={player.profiles.display_name}
+              size="md"
+            />
 
-          <div className={styles.info}>
+            <div className={styles.info}>
+              <strong>
+                {player.profiles.display_name || "Jugador"}
+              </strong>
 
-            <strong>
-              {player.profiles.display_name || "Jugador"}
-            </strong>
+              <div className={styles.meta}>
+                <span>
+                  🎾 Nivel {player.profiles.level_current}
+                </span>
 
-            <span>
-              🎾 Nivel {player.profiles.level_current}
-            </span>
+                {status.text && (
+                  <>
+                    <span className={styles.separator}>•</span>
 
-            {player.role === "CREATOR" && (
-              <span className={styles.creator}>
-                👑 Organizador
-              </span>
-            )}
+                    <span className={status.className}>
+                      {status.text}
+                    </span>
+                  </>
+                )}
+              </div>
 
+              {player.role === "CREATOR" && (
+                <span className={styles.creator}>
+                  👑 Organizador
+                </span>
+              )}
+            </div>
           </div>
-
-        </div>
-
-      ))}
+        );
+      })}
 
       {Array.from({
-        length: maxPlayers - players.length,
+        length: maxPlayers - visiblePlayers.length,
       }).map((_, index) => (
-
         <div
           key={index}
           className={styles.empty}
         >
-
           <Plus size={18} />
 
           <div>
             <strong>Plaza libre</strong>
             <span>Esperando jugador</span>
           </div>
-
         </div>
-
       ))}
-
     </section>
   );
 }

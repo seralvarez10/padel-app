@@ -110,3 +110,111 @@
 .empty svg{
     color:var(--color-primary);
 }
+.info{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+
+    flex:1;
+}
+
+.creator,
+.confirmed,
+.joined,
+.atRisk,
+.expired,
+.noShow,
+.left{
+    align-self:flex-start;
+
+    display:inline-flex;
+    align-items:center;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:600;
+}
+
+.confirmed{
+    color:#15803d;
+    font-weight:600;
+}
+
+.joined{
+    color:#ca8a04;
+    font-weight:600;
+}
+
+.atRisk{
+    color:#ea580c;
+    font-weight:600;
+}
+
+.left{
+    color:#dc2626;
+    font-weight:600;
+}
+
+.expired{
+    color:#6b7280;
+    font-weight:600;
+}
+
+.noShow{
+    color:#991b1b;
+    font-weight:600;
+}
+.empty div{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+.empty strong{
+    display:block;
+}
+.meta{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.separator{
+    color:var(--color-text-secondary);
+}
+
+.meta .confirmed,
+.meta .joined,
+.meta .atRisk,
+.meta .expired,
+.meta .left,
+.meta .noShow{
+    padding:0;
+    background:none;
+    border-radius:0;
+    font-size:14px;
+}
+.cancelButton{
+
+    padding:12px 18px;
+
+    background:white;
+
+    color:#dc2626;
+
+    border:1px solid #fecaca;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.cancelButton:hover{
+
+    background:#fef2f2;
+}

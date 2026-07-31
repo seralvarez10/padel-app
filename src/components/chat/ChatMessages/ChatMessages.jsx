@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import ChatMessage from "../ChatMessage/ChatMessage";
@@ -5,6 +6,14 @@ import ChatMessage from "../ChatMessage/ChatMessage";
 import styles from "./ChatMessages.module.css";
 
 export default function ChatMessages({ messages }) {
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
   if (!messages.length) {
     return (
       <div className={styles.empty}>
@@ -21,6 +30,8 @@ export default function ChatMessages({ messages }) {
           message={message}
         />
       ))}
+
+      <div ref={bottomRef} />
     </div>
   );
 }

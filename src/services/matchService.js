@@ -48,7 +48,9 @@ export async function createMatch(matchData) {
       match_id: match.id,
       player_id: user.id,
       role: "CREATOR",
-    });
+      status: "CONFIRMED",
+      confirmed_at: new Date().toISOString(),
+    })
   if (playerError) {
     throw playerError;
   }
@@ -167,6 +169,8 @@ export async function getMatchPlayers(matchId) {
     .select(`
       id,
       role,
+      status,
+      confirmed_at,
       player_id,
       profiles(
         id,
@@ -202,23 +206,42 @@ export async function joinMatch(matchId) {
 
   if (matchError) throw matchError;
 
-  // Comprobar si ya está apuntado
-  const { data: existing } = await supabase
+  // Buscar si ya existe un registro del jugador
+  const { data: existing, error: existingError } = await supabase
     .from("match_players")
-    .select("id")
+    .select("id, status")
     .eq("match_id", matchId)
     .eq("player_id", user.id)
     .maybeSingle();
 
+  if (existingError) throw existingError;
+
+  // Si había abandonado, lo reactivamos
+  if (existing && existing.status === "LEFT") {
+    const { error: updateError } = await supabase
+      .from("match_players")
+      .update({
+        status: "JOINED",
+        confirmed_at: null,
+      })
+      .eq("id", existing.id);
+
+    if (updateError) throw updateError;
+
+    return true;
+  }
+
+  // Si ya estaba apuntado con cualquier otro estado
   if (existing) {
     throw new Error("Ya estás apuntado");
   }
 
-  // Contar jugadores actuales
+  // Contar solo jugadores activos
   const { count, error: countError } = await supabase
     .from("match_players")
     .select("*", { count: "exact", head: true })
-    .eq("match_id", matchId);
+    .eq("match_id", matchId)
+    .neq("status", "LEFT");
 
   if (countError) throw countError;
 
@@ -226,13 +249,15 @@ export async function joinMatch(matchId) {
     throw new Error("El partido está completo");
   }
 
-  // Añadir jugador
+  // Añadir jugador nuevo
   const { error } = await supabase
     .from("match_players")
     .insert({
       match_id: matchId,
       player_id: user.id,
       role: "PLAYER",
+      status: "JOINED",
+      confirmed_at: null,
     });
 
   if (error) throw error;

@@ -28,6 +28,12 @@ export default function ChatInput({ onSend }) {
         placeholder="Escribe un mensaje..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleSubmit(e);
+          }
+        }}
       />
 
       <button type="submit">

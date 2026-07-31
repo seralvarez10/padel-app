@@ -1,8 +1,11 @@
 .container{
     flex:1;
     overflow-y:auto;
+
     display:flex;
     flex-direction:column;
+
+    padding:16px;
 }
 
 .empty{
@@ -10,6 +13,4 @@
     display:flex;
     justify-content:center;
     align-items:center;
-    color:#888;
-    font-size:14px;
 }

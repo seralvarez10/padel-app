@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import Layout from "../../components/layout/Layout";
 import BottomNavigation from "../../components/layout/BottomNavigation";
+import MatchAttendance from "../../components/match/MatchAttendance/MatchAttendance";
 
 import MatchInfo from "../../components/match/MatchInfo";
 import MatchPlayers from "../../components/match/MatchPlayers";
@@ -43,9 +44,13 @@ export default function MatchDetailPage() {
     totalPlayers,
   } = useMatchPlayers(id);
 
-  const isJoined = players.some(
+  const currentPlayer = players.find(
     (player) => player.player_id === user?.id
   );
+
+  const isJoined =
+    !!currentPlayer &&
+    currentPlayer.status !== "LEFT";
 
   const isOrganizer =
     match?.creator_id === user?.id;
@@ -86,6 +91,25 @@ export default function MatchDetailPage() {
           players={players}
           maxPlayers={match.max_players}
         />
+
+        {isJoined && (
+          <MatchAttendance
+            player={currentPlayer}
+            match={match}
+            onUpdated={() => {
+              reloadPlayers();
+            }}
+          />
+        )}
+
+        {(isJoined || isOrganizer) && (
+          <Link
+            to={`/matches/${match.id}/chat`}
+            className={styles.chatButton}
+          >
+            💬 Abrir chat
+          </Link>
+        )}
 
         {isOrganizer && (
           <div className={styles.organizerActions}>

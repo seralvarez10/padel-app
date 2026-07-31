@@ -1,83 +1,110 @@
-.container{
-    display:flex;
-    flex-direction:column;
-    gap:24px;
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 
-    padding-bottom:120px;
+    padding-bottom: 120px;
 }
 
 /* ===========================
    BOTONES DEL ORGANIZADOR
 =========================== */
 
-.organizerActions{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+.organizerActions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
-    margin-top:8px;
+    margin-top: 8px;
 }
 
 .editButton,
-.deleteButton{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
+.deleteButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 
-    width:100%;
+    width: 100%;
 
-    padding:14px;
+    padding: 14px;
 
-    border-radius:14px;
+    border-radius: 14px;
 
-    font-size:16px;
-    font-weight:600;
+    font-size: 16px;
+    font-weight: 600;
 
-    text-decoration:none;
+    text-decoration: none;
 
-    cursor:pointer;
+    cursor: pointer;
 
-    transition:all .2s ease;
+    transition: all .2s ease;
 }
 
 /* EDITAR */
 
-.editButton{
-    background:white;
+.editButton {
+    background: white;
 
-    border:2px solid var(--color-primary);
+    border: 2px solid var(--color-primary);
 
-    color:var(--color-primary);
+    color: var(--color-primary);
 }
 
-.editButton:hover{
-    background:var(--color-primary);
+.editButton:hover {
+    background: var(--color-primary);
 
-    color:white;
+    color: white;
 }
 
 /* ELIMINAR */
 
-.deleteButton{
-    background:#fff5f5;
+.deleteButton {
+    background: #fff5f5;
 
-    border:2px solid #ef4444;
+    border: 2px solid #ef4444;
 
-    color:#ef4444;
+    color: #ef4444;
 }
 
-.deleteButton:hover{
-    background:#ef4444;
+.deleteButton:hover {
+    background: #ef4444;
 
-    color:white;
+    color: white;
 }
 
 /* ===========================
    BOTÓN INFERIOR
 =========================== */
 
-.joinContainer{
+.joinContainer {
 
-    margin-top:24px;
+    margin-top: 24px;
+}
+
+.chatButton {
+    width: 100%;
+    margin: 24px 0;
+    padding: 14px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    background: #F4FFF8;
+    border: 1px solid #2FBF71;
+    border-radius: 14px;
+
+    color: #2FBF71;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+
+    transition: all .2s ease;
+}
+
+.chatButton:hover {
+    background: #2FBF71;
+    color: white;
 }
