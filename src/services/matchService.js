@@ -1,5 +1,10 @@
 import { supabase } from "../lib/supabase";
 
+import {
+  sendSystemMessage,
+  markMessagesAsReadAt,
+} from "./chatService";
+
 export const MATCH_STATUS = {
   PENDING: "PENDING",
   CONFIRMED: "CONFIRMED",
@@ -42,6 +47,11 @@ export async function createMatch(matchData) {
   if (matchError) throw matchError;
 
   // Añadir automáticamente al creador como primer jugador
+  const organizerPosition =
+    matchData.position === "ANY"
+      ? null
+      : matchData.position;
+
   const { error: playerError } = await supabase
     .from("match_players")
     .insert({
@@ -50,7 +60,8 @@ export async function createMatch(matchData) {
       role: "CREATOR",
       status: "CONFIRMED",
       confirmed_at: new Date().toISOString(),
-    })
+      position: organizerPosition,
+    });
   if (playerError) {
     throw playerError;
   }
@@ -119,44 +130,63 @@ export async function getMatches() {
 
   if (error) throw error;
 
-  return data.map((match) => {
-    // Solo contamos jugadores activos
-    const activePlayers = match.match_players.filter(
-      (player) => player.status !== "LEFT"
-    );
+  const now = new Date();
 
-    // Estado visual del partido
-    let visualStatus = "open";
+  return data
+    .filter((match) => {
+      // Los partidos finalizados o cancelados
+      // no deben aparecer en Home ni Explorar.
+      if (
+        match.status === "FINISHED" ||
+        match.status === "CANCELLED"
+      ) {
+        return false;
+      }
 
-    if (match.status === "FINISHED") {
-      visualStatus = "finished";
-    } else if (match.status === "CANCELLED") {
-      visualStatus = "cancelled";
-    } else if (activePlayers.length >= match.max_players) {
-      visualStatus = "full";
-    } else if (activePlayers.length === match.max_players - 1) {
-      visualStatus = "almost_full";
-    }
+      // Construimos la fecha y hora exactas del partido.
+      const matchDateTime = new Date(
+        `${match.match_date}T${match.match_time}`
+      );
 
-    return {
-      ...match,
+      // Si la fecha/hora ya ha pasado, no aparece.
+      return matchDateTime > now;
+    })
+    .map((match) => {
+      // Solo contamos jugadores activos
+      const activePlayers = match.match_players.filter(
+        (player) => player.status !== "LEFT"
+      );
 
-      match_players: activePlayers,
+      // Estado visual del partido
+      let visualStatus = "open";
 
-      occupied_slots: activePlayers.length,
+      if (activePlayers.length >= match.max_players) {
+        visualStatus = "full";
+      } else if (
+        activePlayers.length === match.max_players - 1
+      ) {
+        visualStatus = "almost_full";
+      }
 
-      creatorId: match.creator_id,
+      return {
+        ...match,
 
-      joinedPlayerIds: activePlayers.map(
-        (player) => player.player_id
-      ),
+        match_players: activePlayers,
 
-      match_time: match.match_time?.slice(0, 5),
+        occupied_slots: activePlayers.length,
 
-      // Estado visual para Home y Explorar
-      status: visualStatus,
-    };
-  });
+        creatorId: match.creator_id,
+
+        joinedPlayerIds: activePlayers.map(
+          (player) => player.player_id
+        ),
+
+        match_time: match.match_time?.slice(0, 5),
+
+        // Estado visual para Home y Explorar
+        status: visualStatus,
+      };
+    });
 }
 
 export async function getMatchById(id) {
@@ -196,6 +226,7 @@ export async function getMatchPlayers(matchId) {
       status,
       confirmed_at,
       player_id,
+      position,
       profiles(
         id,
         display_name,
@@ -212,82 +243,124 @@ export async function getMatchPlayers(matchId) {
   return data;
 }
 
-export async function joinMatch(matchId) {
+export async function joinMatch(
+  matchId,
+  position
+) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    throw new Error("Debes iniciar sesión");
+    throw new Error(
+      "Debes iniciar sesión"
+    );
   }
 
-  // Obtener el partido
-  const { data: match, error: matchError } = await supabase
-    .from("matches")
-    .select("max_players")
-    .eq("id", matchId)
-    .single();
+  if (!position) {
+    throw new Error(
+      "Debes seleccionar una posición"
+    );
+  }
 
-  if (matchError) throw matchError;
+  const validPositions = [
+    "TEAM_A_LEFT",
+    "TEAM_A_RIGHT",
+    "TEAM_B_LEFT",
+    "TEAM_B_RIGHT",
+  ];
 
-  // Buscar si ya existe un registro del jugador
-  const { data: existing, error: existingError } = await supabase
+  if (!validPositions.includes(position)) {
+    throw new Error(
+      "Posición no válida"
+    );
+  }
+
+  // Comprobar si el jugador ya existe
+  const {
+    data: existingPlayer,
+    error: existingError,
+  } = await supabase
     .from("match_players")
     .select("id, status")
     .eq("match_id", matchId)
     .eq("player_id", user.id)
     .maybeSingle();
 
-  if (existingError) throw existingError;
+  if (existingError) {
+    throw existingError;
+  }
 
-  // Si había abandonado, lo reactivamos
-  if (existing && existing.status === "LEFT") {
-    const { error: updateError } = await supabase
+  if (existingPlayer) {
+    if (
+      existingPlayer.status !== "LEFT"
+    ) {
+      throw new Error(
+        "Ya estás apuntado a este partido"
+      );
+    }
+
+    const { error } = await supabase
       .from("match_players")
       .update({
         status: "JOINED",
         confirmed_at: null,
+        position,
       })
-      .eq("id", existing.id);
+      .eq("id", existingPlayer.id);
 
-    if (updateError) throw updateError;
+    if (error) throw error;
 
-    return true;
+  } else {
+    const { error } = await supabase
+      .from("match_players")
+      .insert({
+        match_id: matchId,
+        player_id: user.id,
+        role: "PLAYER",
+        status: "JOINED",
+        position,
+      });
+
+    if (error) throw error;
   }
 
-  // Si ya estaba apuntado con cualquier otro estado
-  if (existing) {
-    throw new Error("Ya estás apuntado");
+  // Mensaje de sistema
+  const {
+    data: profile,
+    error: profileError,
+  } = await supabase
+    .from("profiles")
+    .select("display_name")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError) {
+    throw profileError;
   }
 
-  // Contar solo jugadores activos
-  const { count, error: countError } = await supabase
-    .from("match_players")
-    .select("*", { count: "exact", head: true })
-    .eq("match_id", matchId)
-    .neq("status", "LEFT");
-
-  if (countError) throw countError;
-
-  if (count >= match.max_players) {
-    throw new Error("El partido está completo");
-  }
-
-  // Añadir jugador nuevo
-  const { error } = await supabase
-    .from("match_players")
+  const {
+    data: systemMessage,
+    error: messageError,
+  } = await supabase
+    .from("match_messages")
     .insert({
       match_id: matchId,
-      player_id: user.id,
-      role: "PLAYER",
-      status: "JOINED",
-      confirmed_at: null,
-    });
+      sender_id: null,
+      message: `🟢 ${profile.display_name ||
+        "Un jugador"
+        } se ha unido al partido.`,
+    })
+    .select()
+    .single();
 
-  if (error) throw error;
+  if (messageError) {
+    throw messageError;
+  }
 
-  return true;
+  return systemMessage;
 }
+
 export async function leaveMatch(matchId) {
   const {
     data: { user },
@@ -340,10 +413,11 @@ export async function getMyMatches() {
       matches (
         *,
         match_players (
-          id,
-          player_id,
-          status
-        )
+  id,
+  player_id,
+  status,
+  position
+)
       )
     `)
     .eq("player_id", user.id)
@@ -403,4 +477,15 @@ export async function deleteMatch(matchId) {
   if (error) throw error;
 
   return true;
+}
+export async function getMatchResult(matchId) {
+  const { data, error } = await supabase
+    .from("match_results")
+    .select("*")
+    .eq("match_id", matchId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data;
 }

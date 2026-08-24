@@ -1,0 +1,267 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+
+  background: white;
+  border-radius: 20px;
+
+  padding: 24px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.closeButton {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  font-size: 24px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.court {
+  padding: 18px;
+
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+
+  background: #ecfdf5;
+}
+
+.teamLabel {
+  margin: 4px 0 10px;
+
+  text-align: center;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+
+  color: #166534;
+}
+
+.side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.position {
+  min-height: 80px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  box-sizing: border-box;
+}
+
+button.position {
+  width: 100%;
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+.empty {
+  flex-direction: column;
+
+  border: 2px dashed #86efac;
+
+  background: rgba(255, 255, 255, 0.6);
+
+  color: #15803d;
+}
+
+.empty:hover {
+  background: white;
+  border-color: #22c55e;
+}
+
+.selected {
+  border: 2px solid #16a34a;
+
+  background: #bbf7d0;
+
+  transform: scale(1.02);
+}
+
+.occupied {
+  border: 1px solid #d1fae5;
+
+  background: white;
+
+  cursor: not-allowed;
+
+  opacity: 0.8;
+}
+
+.plus {
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.positionLabel {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.playerInfo {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.playerInfo strong {
+  max-width: 100px;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: 12px;
+}
+
+.playerInfo span {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.net {
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+}
+
+.net::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  border-top: 2px solid #6b7280;
+}
+
+.net span {
+  position: relative;
+
+  padding: 0 10px;
+
+  background: #ecfdf5;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  color: #6b7280;
+}
+
+.actions {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.cancelButton,
+.confirmButton {
+  flex: 1;
+
+  min-height: 44px;
+
+  border-radius: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.cancelButton {
+  border: 1px solid #d1d5db;
+
+  background: white;
+
+  color: #374151;
+}
+
+.confirmButton {
+  border: none;
+
+  background: #16a34a;
+
+  color: white;
+}
+
+.confirmButton:disabled {
+  background: #9ca3af;
+
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 18px;
+  }
+
+  .court {
+    padding: 12px;
+  }
+
+  .position {
+    min-height: 70px;
+  }
+}

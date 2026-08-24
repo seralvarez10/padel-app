@@ -1,11 +1,10 @@
 import Layout from "../../components/layout/Layout";
 import BottomNavigation from "../../components/layout/BottomNavigation";
-import MatchCard from "../../components/match/MatchCard";
+import MyMatchCard from "../../components/match/MyMatchCard";
 
 import useMyMatches from "../../hooks/useMyMatches";
 
 export default function MyMatchesPage() {
-
   const {
     matches,
     loading,
@@ -27,20 +26,24 @@ export default function MyMatchesPage() {
       </Layout>
     );
   }
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+
+  const now = new Date();
+
+  // Construimos la fecha + hora exacta del partido
+  function getMatchDateTime(match) {
+    return new Date(
+      `${match.match_date}T${match.match_time}`
+    );
+  }
 
   const upcomingMatches = matches.filter((match) => {
-    const date = new Date(match.match_date);
-    date.setHours(0, 0, 0, 0);
-    return date >= today;
+    return getMatchDateTime(match) >= now;
   });
 
   const pastMatches = matches.filter((match) => {
-    const date = new Date(match.match_date);
-    date.setHours(0, 0, 0, 0);
-    return date < today;
+    return getMatchDateTime(match) < now;
   });
+
   return (
     <>
       <Layout>
@@ -51,10 +54,11 @@ export default function MyMatchesPage() {
 
         {upcomingMatches.length > 0 ? (
           upcomingMatches.map((match) => (
-            <MatchCard
+            <MyMatchCard
               key={match.id}
-              {...match}
-              playerStatus={match.playerStatus}
+              match={match}
+              showUnread={true}
+              isPast={false}
             />
           ))
         ) : (
@@ -67,9 +71,11 @@ export default function MyMatchesPage() {
 
         {pastMatches.length > 0 ? (
           pastMatches.map((match) => (
-            <MatchCard
+            <MyMatchCard
               key={match.id}
-              {...match}
+              match={match}
+              showUnread={false}
+              isPast={true}
             />
           ))
         ) : (
@@ -79,7 +85,6 @@ export default function MyMatchesPage() {
       </Layout>
 
       <BottomNavigation />
-
     </>
   );
 }

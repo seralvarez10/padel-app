@@ -7,3 +7,5 @@ Cosas que voy viendo que se necesitan mejorar
 - Una vez finalizado el partido se tiene que añadir el resultado, y lo tienen que confirmar los rivales
 - Añadir un padding de diferencia entrre la pagina y la barra de tareas(home, explorar...)
 - Pensar si el botonm de editar perfil podria ir dentro del apartado de configuracion del perfil
+- Cosa a mejorar si los partidos ya han pasado de fecha o se han jugado no deberian de salir en la home de partidos disponibles ni en explorar partidos, y luego si salen en el historial deberian de salir de otra forma ya que en el historial salen pendiente o confirmado como saldría si estuviera activo ese partido, pero yo creo que seria mejor que no saliera nada cuando etan finalizados me refiero que no salga lo de la asistencia en el historial que salga si se ha jugado o si no se ha jugado, no se si me explico
+- A la hora de crear una cuenta tnçenemos que poner ciertas reglas para crear la contraseña que tengas mas de 5 caracteres que tenga mayuscyula o numeros, ese tipo de cosas

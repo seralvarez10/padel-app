@@ -10,7 +10,11 @@ import ChatMessages from "../../components/chat/ChatMessages/ChatMessages";
 import ChatInput from "../../components/chat/ChatInput/ChatInput";
 import ChatHeader from "../../components/chat/ChatHeader/ChatHeader";
 
-import { getMessages, sendMessage } from "../../services/chatService";
+import {
+  getMessages,
+  sendMessage,
+  markMessagesAsRead,
+} from "../../services/chatService";
 
 import styles from "./MatchChatPage.module.css";
 
@@ -57,6 +61,7 @@ export default function MatchChatPage() {
   useEffect(() => {
     loadMessages();
     loadMatch();
+    markMessagesAsRead(matchId);
 
     const channel = supabase
       .channel(`chat-${matchId}`)

@@ -17,6 +17,7 @@ import {
 
 export default function CreateMatchForm() {
   const navigate = useNavigate();
+
   const {
     form,
     loading,
@@ -31,20 +32,28 @@ export default function CreateMatchForm() {
     const match = await submit();
 
     if (match) {
-      toast.success("Partido creado correctamente");
+      toast.success(
+        "Partido creado correctamente"
+      );
 
       navigate(`/matches/${match.id}`);
     }
   }
-  const today = new Date().toISOString().split("T")[0];
 
-  const currentTime = new Date().toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const today =
+    new Date().toISOString().split("T")[0];
+
+  const currentTime =
+    new Date().toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const minTime =
-    form.match_date === today ? currentTime : undefined;
+    form.match_date === today
+      ? currentTime
+      : undefined;
+
   return (
     <MatchForm
       title="Crear partido"
@@ -130,32 +139,35 @@ export default function CreateMatchForm() {
 
         <div className={styles.group}>
 
-          <label>Tipo de pista</label>
+          <label>
+            Tipo de pista
+          </label>
 
           <div className={styles.options}>
 
-            {["Indoor", "Outdoor"].map((court) => (
-
-              <button
-                key={court}
-                type="button"
-                className={`${styles.option} ${form.court_type === court
-                  ? styles.active
-                  : ""
+            {["Indoor", "Outdoor"].map(
+              (court) => (
+                <button
+                  key={court}
+                  type="button"
+                  className={`${styles.option} ${
+                    form.court_type === court
+                      ? styles.active
+                      : ""
                   }`}
-                onClick={() =>
-                  handleChange({
-                    target: {
-                      name: "court_type",
-                      value: court,
-                    },
-                  })
-                }
-              >
-                {court}
-              </button>
-
-            ))}
+                  onClick={() =>
+                    handleChange({
+                      target: {
+                        name: "court_type",
+                        value: court,
+                      },
+                    })
+                  }
+                >
+                  {court}
+                </button>
+              )
+            )}
 
           </div>
 
@@ -163,7 +175,9 @@ export default function CreateMatchForm() {
 
         <div className={styles.group}>
 
-          <label>Nivel mínimo</label>
+          <label>
+            Nivel mínimo
+          </label>
 
           <input
             className={styles.slider}
@@ -184,7 +198,9 @@ export default function CreateMatchForm() {
 
         <div className={styles.group}>
 
-          <label>Nivel máximo</label>
+          <label>
+            Nivel máximo
+          </label>
 
           <input
             className={styles.slider}
@@ -205,6 +221,86 @@ export default function CreateMatchForm() {
 
       </FormSection>
 
+      {/* POSICIÓN */}
+
+      <FormSection title="🎾 Tu posición">
+
+        <div className={styles.group}>
+
+          <label>
+            ¿Dónde prefieres jugar?
+          </label>
+
+          <div className={styles.options}>
+
+            <button
+              type="button"
+              className={`${styles.option} ${
+                form.position === "TEAM_A_LEFT"
+                  ? styles.active
+                  : ""
+              }`}
+              onClick={() =>
+                handleChange({
+                  target: {
+                    name: "position",
+                    value: "TEAM_A_LEFT",
+                  },
+                })
+              }
+            >
+              Derecha
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.option} ${
+                form.position === "TEAM_A_RIGHT"
+                  ? styles.active
+                  : ""
+              }`}
+              onClick={() =>
+                handleChange({
+                  target: {
+                    name: "position",
+                    value: "TEAM_A_RIGHT",
+                  },
+                })
+              }
+            >
+              Revés
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.option} ${
+                form.position === "ANY"
+                  ? styles.active
+                  : ""
+              }`}
+              onClick={() =>
+                handleChange({
+                  target: {
+                    name: "position",
+                    value: "ANY",
+                  },
+                })
+              }
+            >
+              Me da igual
+            </button>
+
+          </div>
+
+          <p className={styles.positionHelp}>
+            Podrás cambiar tu posición más adelante
+            si es necesario.
+          </p>
+
+        </div>
+
+      </FormSection>
+
       {/* DESCRIPCIÓN */}
 
       <FormSection title="📝 Descripción">
@@ -219,7 +315,6 @@ export default function CreateMatchForm() {
         />
 
       </FormSection>
-
 
     </MatchForm>
   );

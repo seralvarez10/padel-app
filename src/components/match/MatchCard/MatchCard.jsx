@@ -34,13 +34,26 @@ export default function MatchCard({
   isOrganizer = false,
   isJoined = false,
   isFull = false,
+  unreadCount = 0,
+  isPast = false,
 }) {
 
   const navigate = useNavigate();
   let buttonText = "Ver partido";
   let badgeStatus = status;
 
-  if (playerStatus) {
+  // Si es un partido del historial,
+  // mostramos el estado del partido y NO
+  // el estado de asistencia del jugador.
+  if (isPast) {
+    if (status === "finished") {
+      badgeStatus = "finished";
+    } else if (status === "cancelled") {
+      badgeStatus = "cancelled";
+    } else {
+      badgeStatus = "not_played";
+    }
+  } else if (playerStatus) {
     switch (playerStatus) {
       case "CONFIRMED":
         badgeStatus = "confirmed";
@@ -53,6 +66,9 @@ export default function MatchCard({
       case "AT_RISK":
         badgeStatus = "at_risk";
         break;
+
+      default:
+        badgeStatus = status;
     }
   }
 
@@ -63,7 +79,7 @@ export default function MatchCard({
   } else if (isFull) {
     buttonText = "Partido completo";
   }
-  
+
   return (
     <Card
       className={styles.card}
@@ -144,12 +160,23 @@ export default function MatchCard({
           ))}
         </div>
 
-        <div className={styles.playersCount}>
-          <Users size={16} />
+        <div className={styles.footerInfo}>
+          <div className={styles.playersCount}>
+            <Users size={16} />
 
-          <span>
-            {occupied_slots}/{max_players}
-          </span>
+            <span>
+              {occupied_slots}/{max_players}
+            </span>
+          </div>
+
+          {unreadCount > 0 && (
+            <div className={styles.unreadMessages}>
+              💬
+              <span>
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

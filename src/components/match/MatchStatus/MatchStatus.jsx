@@ -35,7 +35,7 @@ const STATUS_CONFIG = {
   },
 
   finished: {
-    label: "Finalizado",
+    label: "Jugado",
     icon: CircleDashed,
     className: "finished",
   },
@@ -57,6 +57,11 @@ const STATUS_CONFIG = {
     label: "Sin confirmar",
     icon: CircleAlert,
     className: "atRisk",
+  },
+  not_played: {
+    label: "No disputado",
+    icon: CircleDashed,
+    className: "notPlayed",
   },
 };
 export default function MatchStatus({ status }) {

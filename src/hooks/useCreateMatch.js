@@ -16,6 +16,7 @@ export default function useCreateMatch() {
     court_type: "Indoor",
     duration: 90,
     description: "",
+    position: "ANY",
   });
 
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,6 @@ export default function useCreateMatch() {
       setLoading(true);
       setError(null);
 
-      // Campos obligatorios
       if (!form.title.trim()) {
         throw new Error("Debes introducir un título.");
       }
@@ -56,17 +56,17 @@ export default function useCreateMatch() {
         throw new Error("Selecciona una hora.");
       }
 
-      // Fecha no anterior a hoy
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       const selectedDate = new Date(form.match_date);
 
       if (selectedDate < today) {
-        throw new Error("La fecha no puede ser anterior a hoy.");
+        throw new Error(
+          "La fecha no puede ser anterior a hoy."
+        );
       }
 
-      // Fecha y hora posteriores a la actual
       const now = new Date();
 
       const selectedDateTime = new Date(
@@ -79,14 +79,15 @@ export default function useCreateMatch() {
         );
       }
 
-      // Validar niveles
-      if (Number(form.level_min) > Number(form.level_max)) {
+      if (
+        Number(form.level_min) >
+        Number(form.level_max)
+      ) {
         throw new Error(
           "El nivel mínimo no puede ser mayor que el nivel máximo."
         );
       }
 
-      // Limpiar datos antes de guardar
       const cleanForm = {
         ...form,
         title: form.title.trim(),

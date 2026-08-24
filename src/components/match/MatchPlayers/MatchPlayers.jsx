@@ -1,151 +1,235 @@
 import PropTypes from "prop-types";
-import { Plus } from "lucide-react";
+import { useState } from "react";
 import Avatar from "../../common/Avatar";
+import JoinPositionModal from "../JoinPositionModal/JoinPositionModal";
+import {
+  updatePlayerPosition,
+  swapPlayerPositions,
+} from "../../../services/matchPlayersService";
+import toast from "react-hot-toast";
+
 import styles from "./MatchPlayers.module.css";
 
+const POSITIONS = {
+  TEAM_A_LEFT: {
+    team: "A",
+    label: "Derecha",
+  },
+
+  TEAM_A_RIGHT: {
+    team: "A",
+    label: "Revés",
+  },
+
+  TEAM_B_LEFT: {
+    team: "B",
+    label: "Revés",
+  },
+
+  TEAM_B_RIGHT: {
+    team: "B",
+    label: "Derecha",
+  },
+};
+
 export default function MatchPlayers({
+  matchId,
   players,
   maxPlayers,
+  currentUserId,
+  onPositionChange,
 }) {
-  function getStatusLabel(status) {
-    switch (status) {
-      case "CONFIRMED":
-        return {
-          text: "🟢 Confirmado",
-          className: styles.confirmed,
-        };
+  const [showPositionModal, setShowPositionModal] =
+    useState(false);
 
-      case "JOINED":
-        return {
-          text: "🟡 Pendiente",
-          className: styles.joined,
-        };
-
-      case "LEFT":
-        return {
-          text: "🔴 Ha abandonado",
-          className: styles.left,
-        };
-
-      case "AT_RISK":
-        return {
-          text: "🟠 Sin confirmar",
-          className: styles.atRisk,
-        };
-
-      case "EXPIRED":
-        return {
-          text: "⚪ Plaza perdida",
-          className: styles.expired,
-        };
-
-      case "NO_SHOW":
-        return {
-          text: "❌ No asistió",
-          className: styles.noShow,
-        };
-
-      default:
-        return {
-          text: "",
-          className: "",
-        };
-    }
-  }
-
-  // Ocultamos los jugadores que han abandonado el partido
   const visiblePlayers = players.filter(
     (player) => player.status !== "LEFT"
   );
 
-  // Organizador siempre el primero
-  const sortedPlayers = [...visiblePlayers].sort((a, b) => {
-    if (a.role === "CREATOR") return -1;
-    if (b.role === "CREATOR") return 1;
-    return 0;
-  });
+  const currentPlayer = visiblePlayers.find(
+    (player) => player.player_id === currentUserId
+  );
+
+  const isOrganizer =
+    currentPlayer?.role === "CREATOR";
+
+  const canChangePosition =
+    !!currentPlayer;
+
+  async function handlePositionChange(
+    position,
+    targetPlayer
+  ) {
+    try {
+      if (targetPlayer) {
+        await swapPlayerPositions(
+          matchId,
+          currentUserId,
+          targetPlayer.player_id
+        );
+
+        toast.success(
+          "Has intercambiado tu posición"
+        );
+      } else {
+        await updatePlayerPosition(
+          matchId,
+          currentUserId,
+          position
+        );
+
+        toast.success(
+          "Has cambiado de posición"
+        );
+      }
+
+      onPositionChange?.();
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error.message ||
+        "No se pudo actualizar la posición"
+      );
+    }
+  }
+
+  function getPlayer(position) {
+    return visiblePlayers.find(
+      (player) => player.position === position
+    );
+  }
+
+  function renderPosition(position) {
+    const player = getPlayer(position);
+    const positionInfo = POSITIONS[position];
+
+    if (!player) {
+      return (
+        <div className={styles.emptyPosition}>
+          <span className={styles.plus}>
+            +
+          </span>
+
+          <span className={styles.positionLabel}>
+            {positionInfo.label}
+          </span>
+        </div>
+      );
+    }
+
+    const name =
+      player.profiles?.display_name ||
+      "Jugador";
+
+    return (
+      <div className={styles.occupiedPosition}>
+        <Avatar
+          src={player.profiles?.avatar_url}
+          name={name}
+          size="sm"
+        />
+
+        <div className={styles.playerInfo}>
+          <strong>
+            {name}
+          </strong>
+
+          <span>
+            {positionInfo.label}
+          </span>
+        </div>
+
+        {player.role === "CREATOR" && (
+          <span className={styles.organizer}>
+            👑
+          </span>
+        )}
+      </div>
+    );
+  }
 
   return (
     <section className={styles.container}>
-      <h2 className={styles.title}>
-        👥 Jugadores ({visiblePlayers.length}/{maxPlayers})
-      </h2>
+      <div className={styles.header}>
+        <div>
+          <h2 className={styles.title}>
+            🎾 Posiciones
+          </h2>
 
-      <p className={styles.subtitle}>
-        {visiblePlayers.length === maxPlayers
-          ? "🔒 Partido completo"
-          : `🟢 Quedan ${
-              maxPlayers - visiblePlayers.length
-            } plaza${
-              maxPlayers - visiblePlayers.length > 1 ? "s" : ""
-            }`}
-      </p>
-
-      {sortedPlayers.map((player) => {
-        const status = getStatusLabel(player.status);
-
-        return (
-          <div
-            key={player.id}
-            className={styles.player}
-          >
-            <Avatar
-              src={player.profiles.avatar_url}
-              name={player.profiles.display_name}
-              size="md"
-            />
-
-            <div className={styles.info}>
-              <strong>
-                {player.profiles.display_name || "Jugador"}
-              </strong>
-
-              <div className={styles.meta}>
-                <span>
-                  🎾 Nivel {player.profiles.level_current}
-                </span>
-
-                {status.text && (
-                  <>
-                    <span className={styles.separator}>•</span>
-
-                    <span className={status.className}>
-                      {status.text}
-                    </span>
-                  </>
-                )}
-              </div>
-
-              {player.role === "CREATOR" && (
-                <span className={styles.creator}>
-                  👑 Organizador
-                </span>
-              )}
-            </div>
-          </div>
-        );
-      })}
-
-      {Array.from({
-        length: maxPlayers - visiblePlayers.length,
-      }).map((_, index) => (
-        <div
-          key={index}
-          className={styles.empty}
-        >
-          <Plus size={18} />
-
-          <div>
-            <strong>Plaza libre</strong>
-            <span>Esperando jugador</span>
-          </div>
+          <p className={styles.subtitle}>
+            {visiblePlayers.length}/{maxPlayers} jugadores
+          </p>
         </div>
-      ))}
+      </div>
+
+      <div className={styles.court}>
+        {/* Pareja A */}
+        <div className={styles.teamLabel}>
+          PAREJA A
+        </div>
+
+        <div className={styles.side}>
+          {renderPosition("TEAM_A_LEFT")}
+          {renderPosition("TEAM_A_RIGHT")}
+        </div>
+
+        {/* Red */}
+        <div className={styles.net}>
+          <span>RED</span>
+        </div>
+
+        {/* Pareja B */}
+        <div className={styles.side}>
+          {renderPosition("TEAM_B_LEFT")}
+          {renderPosition("TEAM_B_RIGHT")}
+        </div>
+
+        <div className={styles.teamLabel}>
+          PAREJA B
+        </div>
+      </div>
+
+      {canChangePosition && (
+        <button
+          type="button"
+          className={styles.choosePositionButton}
+          onClick={() =>
+            setShowPositionModal(true)
+          }
+        >
+          🎾 Cambiar posición
+        </button>
+      )}
+
+      {showPositionModal && (
+        <JoinPositionModal
+          players={visiblePlayers}
+          currentUserId={currentUserId}
+          onCancel={() =>
+            setShowPositionModal(false)
+          }
+          onConfirm={async (
+            position,
+            targetPlayer
+          ) => {
+            await handlePositionChange(
+              position,
+              targetPlayer
+            );
+
+            setShowPositionModal(false);
+          }}
+        />
+      )}
     </section>
   );
 }
 
 MatchPlayers.propTypes = {
+  matchId: PropTypes.string.isRequired,
   players: PropTypes.array.isRequired,
   maxPlayers: PropTypes.number.isRequired,
+  currentUserId: PropTypes.string,
+  onPositionChange: PropTypes.func,
 };

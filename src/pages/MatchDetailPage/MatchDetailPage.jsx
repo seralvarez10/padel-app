@@ -6,16 +6,19 @@ import { useAuth } from "../../contexts/AuthContext";
 import Layout from "../../components/layout/Layout";
 import BottomNavigation from "../../components/layout/BottomNavigation";
 import MatchAttendance from "../../components/match/MatchAttendance/MatchAttendance";
+import MatchResult from "../../components/match/MatchResult/MatchResult";
 
 import MatchInfo from "../../components/match/MatchInfo";
 import MatchPlayers from "../../components/match/MatchPlayers";
 import JoinMatchButton from "../../components/match/JoinMatchButton";
+import useMatchResult from "../../hooks/useMatchResult";
 
 import ConfirmModal from "../../components/ui/ConfirmModal";
 
 import useMatch from "../../hooks/useMatch";
 import useMatchPlayers from "../../hooks/useMatchPlayers";
 import useDeleteMatch from "../../hooks/useDeleteMatch";
+import useUnreadMessages from "../../hooks/useUnreadMessages";
 
 import styles from "./MatchDetailPage.module.css";
 
@@ -43,6 +46,14 @@ export default function MatchDetailPage() {
     reload: reloadPlayers,
     totalPlayers,
   } = useMatchPlayers(id);
+  const {
+    result,
+    loading: resultLoading,
+    error: resultError,
+    reload: reloadResult,
+  } = useMatchResult(id);
+ 
+  const { unreadCount } = useUnreadMessages(id);
 
   const currentPlayer = players.find(
     (player) => player.player_id === user?.id
@@ -88,8 +99,11 @@ export default function MatchDetailPage() {
         />
 
         <MatchPlayers
+          matchId={match.id}
           players={players}
           maxPlayers={match.max_players}
+          currentUserId={user?.id}
+          onPositionChange={reloadPlayers}
         />
 
         {isJoined && (
@@ -100,14 +114,26 @@ export default function MatchDetailPage() {
               reloadPlayers();
             }}
           />
+
         )}
+        <MatchResult
+          result={result}
+          players={players}
+          currentUserId={user?.id}
+        />
 
         {(isJoined || isOrganizer) && (
           <Link
             to={`/matches/${match.id}/chat`}
             className={styles.chatButton}
           >
-            💬 Abrir chat
+            <span>💬 Abrir chat</span>
+
+            {unreadCount > 0 && (
+              <span className={styles.unreadBadge}>
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </Link>
         )}
 
@@ -138,6 +164,7 @@ export default function MatchDetailPage() {
             joined={isJoined}
             full={totalPlayers >= match.max_players}
             isOrganizer={isOrganizer}
+            players={players}
             onJoined={() => {
               reload();
               reloadPlayers();

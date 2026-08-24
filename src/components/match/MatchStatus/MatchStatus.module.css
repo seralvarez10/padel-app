@@ -1,6 +1,9 @@
 .status {
+
   display: inline-flex;
+
   align-items: center;
+
   gap: 6px;
 
   padding: 6px 10px;
@@ -8,44 +11,79 @@
   border-radius: 999px;
 
   font-size: 12px;
+
   font-weight: 600;
+
 }
 
 .open {
+
   background: #dcfce7;
+
   color: #15803d;
+
 }
 
 .almostFull {
+
   background: #fef3c7;
+
   color: #b45309;
+
 }
 
 .full {
+
   background: #fee2e2;
+
   color: #b91c1c;
+
 }
 
 .cancelled {
+
   background: #f3f4f6;
+
   color: #6b7280;
+
 }
 
 .finished {
+
   background: #e5e7eb;
+
   color: #4b5563;
-}
-.confirmed{
-    background:#ECFDF5;
-    color:#166534;
+
 }
 
-.pending{
-    background:#FEF3C7;
-    color:#92400E;
+.notPlayed {
+
+  background: #f3f4f6;
+
+  color: #6b7280;
+
 }
 
-.atRisk{
-    background:#FFF7ED;
-    color:#C2410C;
+.confirmed {
+
+  background: #ECFDF5;
+
+  color: #166534;
+
+}
+
+.pending {
+
+  background: #FEF3C7;
+
+  color: #92400E;
+
+}
+
+.atRisk {
+
+  background: #FFF7ED;
+
+  color: #C2410C;
+
 }

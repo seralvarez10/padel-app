@@ -7,11 +7,38 @@ import styles from "./ChatMessage.module.css";
 export default function ChatMessage({ message }) {
   const { user } = useAuth();
 
-  const isOwnMessage = message.profiles.id === user?.id;
+  // Los mensajes del sistema no tienen sender_id ni profile
+  const isSystemMessage = !message.profiles;
+
+  // Si es un mensaje normal, comprobamos si es nuestro
+  const isOwnMessage =
+    !isSystemMessage &&
+    message.profiles.id === user?.id;
+
+  // Mensaje del sistema
+  if (isSystemMessage) {
+    return (
+      <div className={styles.systemMessage}>
+        <div className={styles.systemBubble}>
+          {message.message}
+        </div>
+
+        <span className={styles.time}>
+          {new Date(message.created_at).toLocaleTimeString("es-ES", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+      </div>
+    );
+  }
+
+  // Mensaje normal
   return (
     <div
-      className={`${styles.message} ${isOwnMessage ? styles.own : styles.other
-        }`}
+      className={`${styles.message} ${
+        isOwnMessage ? styles.own : styles.other
+      }`}
     >
       {!isOwnMessage && (
         <Avatar
