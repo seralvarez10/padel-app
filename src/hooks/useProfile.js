@@ -4,46 +4,78 @@ import { useAuth } from "../contexts/AuthContext";
 import { getProfile } from "../services/profileService";
 import { getProfileStats } from "../services/statisticsService";
 
-export default function useProfile() {
-    const { user } = useAuth();
+import {
+  getFriendsCount,
+  getMutualFriendsCount,
+} from "../services/friendshipService";
 
-    const [profile, setProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState({
-        matchesPlayed: 0,
-        matchesCreated: 0,
-        attendance: null,
-    });
+export default function useProfile(profileId = null) {
+  const { user } = useAuth();
 
-    useEffect(() => {
-        async function loadProfile() {
-            if (!user) {
-                setProfile(null);
-                setLoading(false);
-                return;
-            }
+  const targetUserId = profileId || user?.id;
+  const isOwnProfile = !profileId;
 
-            try {
-                const [profileData, statsData] = await Promise.all([
-                    getProfile(user.id),
-                    getProfileStats(user.id),
-                ]);
+  const [profile, setProfile] = useState(null);
 
-                setProfile(profileData);
-                setStats(statsData);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        }
+  const [loading, setLoading] = useState(true);
 
-        loadProfile();
-    }, [user]);
+  const [stats, setStats] = useState({
+    matchesPlayed: 0,
+    matchesCreated: 0,
+    attendance: null,
+  });
 
-    return {
-        profile,
-        stats,
-        loading,
-    };
+  const [friendsCount, setFriendsCount] = useState(0);
+  const [mutualFriendsCount, setMutualFriendsCount] = useState(0);
+
+  useEffect(() => {
+    async function loadProfile() {
+      if (!targetUserId) {
+        setProfile(null);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const [
+          profileData,
+          statsData,
+          friendsCountData,
+          mutualFriendsCountData,
+        ] = await Promise.all([
+          getProfile(targetUserId),
+          getProfileStats(targetUserId),
+          getFriendsCount(targetUserId),
+          isOwnProfile
+            ? Promise.resolve(0)
+            : getMutualFriendsCount(user.id, targetUserId),
+        ]);
+
+        setProfile(profileData);
+        setStats(statsData);
+        setFriendsCount(friendsCountData);
+        setMutualFriendsCount(mutualFriendsCountData);
+      } catch (error) {
+        console.error("Error cargando perfil:", error);
+
+        setProfile(null);
+        setFriendsCount(0);
+        setMutualFriendsCount(0);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProfile();
+  }, [targetUserId, user?.id, isOwnProfile]);
+
+  return {
+    profile,
+    stats,
+    friendsCount,
+    mutualFriendsCount,
+    loading,
+  };
 }

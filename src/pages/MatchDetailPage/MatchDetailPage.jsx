@@ -46,13 +46,12 @@ export default function MatchDetailPage() {
     reload: reloadPlayers,
     totalPlayers,
   } = useMatchPlayers(id);
+
   const {
     result,
-    loading: resultLoading,
-    error: resultError,
     reload: reloadResult,
   } = useMatchResult(id);
- 
+
   const { unreadCount } = useUnreadMessages(id);
 
   const currentPlayer = players.find(
@@ -65,6 +64,37 @@ export default function MatchDetailPage() {
 
   const isOrganizer =
     match?.creator_id === user?.id;
+
+  /*
+   * Comprobar si el partido ya ha terminado.
+   *
+   * Usamos tanto el estado FINISHED como
+   * la fecha/hora del partido.
+   */
+  const matchDateTime = match
+    ? new Date(
+        `${match.match_date}T${match.match_time}`
+      )
+    : null;
+
+  const hasFinished =
+    match?.status === "FINISHED" ||
+    (matchDateTime && matchDateTime <= new Date());
+
+  /*
+   * Comprobar si el partido está cancelado.
+   */
+  const isCancelled =
+    match?.status === "CANCELLED";
+
+  /*
+   * La asistencia solo tiene sentido
+   * antes de que termine el partido.
+   */
+  const showAttendance =
+    isJoined &&
+    !hasFinished &&
+    !isCancelled;
 
   if (loading || playersLoading) {
     return (
@@ -93,6 +123,7 @@ export default function MatchDetailPage() {
   return (
     <>
       <Layout className={styles.container}>
+
         <MatchInfo
           match={match}
           totalPlayers={totalPlayers}
@@ -106,7 +137,13 @@ export default function MatchDetailPage() {
           onPositionChange={reloadPlayers}
         />
 
-        {isJoined && (
+        {/* 
+          La asistencia solo aparece si:
+          - El usuario está apuntado
+          - El partido no ha terminado
+          - El partido no está cancelado
+        */}
+        {showAttendance && (
           <MatchAttendance
             player={currentPlayer}
             match={match}
@@ -114,12 +151,13 @@ export default function MatchDetailPage() {
               reloadPlayers();
             }}
           />
-
         )}
+
         <MatchResult
+          match={match}
           result={result}
           players={players}
-          currentUserId={user?.id}
+          onResultSubmitted={reloadResult}
         />
 
         {(isJoined || isOrganizer) && (
@@ -131,7 +169,9 @@ export default function MatchDetailPage() {
 
             {unreadCount > 0 && (
               <span className={styles.unreadBadge}>
-                {unreadCount > 99 ? "99+" : unreadCount}
+                {unreadCount > 99
+                  ? "99+"
+                  : unreadCount}
               </span>
             )}
           </Link>
@@ -139,6 +179,7 @@ export default function MatchDetailPage() {
 
         {isOrganizer && (
           <div className={styles.organizerActions}>
+
             <Link
               to={`/matches/${match.id}/edit`}
               className={styles.editButton}
@@ -148,21 +189,28 @@ export default function MatchDetailPage() {
 
             <button
               className={styles.deleteButton}
-              onClick={() => setShowDeleteModal(true)}
+              onClick={() =>
+                setShowDeleteModal(true)
+              }
               disabled={deleting}
             >
               {deleting
                 ? "Eliminando..."
                 : "🗑️ Eliminar partido"}
             </button>
+
           </div>
         )}
 
         <div className={styles.joinContainer}>
+
           <JoinMatchButton
             matchId={match.id}
             joined={isJoined}
-            full={totalPlayers >= match.max_players}
+            full={
+              totalPlayers >=
+              match.max_players
+            }
             isOrganizer={isOrganizer}
             players={players}
             onJoined={() => {
@@ -170,6 +218,7 @@ export default function MatchDetailPage() {
               reloadPlayers();
             }}
           />
+
         </div>
 
         <ConfirmModal
@@ -179,12 +228,15 @@ export default function MatchDetailPage() {
           confirmText="Eliminar"
           cancelText="Cancelar"
           loading={deleting}
-          onCancel={() => setShowDeleteModal(false)}
+          onCancel={() =>
+            setShowDeleteModal(false)
+          }
           onConfirm={async () => {
             await remove();
             setShowDeleteModal(false);
           }}
         />
+
       </Layout>
 
       <BottomNavigation />

@@ -1,0 +1,207 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.closeButton {
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.teamTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.player {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vs {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.sets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setHeader,
+.setRow {
+  display: grid;
+  grid-template-columns: 45px 1fr 25px 1fr 30px;
+  align-items: center;
+  gap: 8px;
+}
+
+.setHeader {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-align: center;
+}
+
+.setHeader span:first-child {
+  text-align: left;
+}
+
+.setRow {
+  padding: 8px 0;
+}
+
+.setNumber {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.setRow input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.separator {
+  text-align: center;
+  font-weight: 700;
+}
+
+.removeSet {
+  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.addSet {
+  margin-top: 12px;
+  border: 1px dashed #16a34a;
+  background: #f0fdf4;
+  color: #15803d;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notice {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 9px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 12px;
+}
+
+.notice strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.notice p {
+  margin: 0;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancelButton,
+.submitButton {
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancelButton {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+}
+
+.submitButton {
+  border: none;
+  background: #16a34a;
+  color: white;
+}
+
+.cancelButton:disabled,
+.submitButton:disabled,
+.addSet:disabled,
+.removeSet:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -413,11 +413,20 @@ export async function getMyMatches() {
       matches (
         *,
         match_players (
-  id,
-  player_id,
-  status,
-  position
-)
+          id,
+          player_id,
+          status,
+          position
+        ),
+        match_results (
+          id,
+          status,
+          submitted_by,
+          score,
+          response_deadline,
+          confirmed_by,
+          confirmed_at
+        )
       )
     `)
     .eq("player_id", user.id)
@@ -426,9 +435,11 @@ export async function getMyMatches() {
   if (error) throw error;
 
   return data.map((item) => {
-    const activePlayers = item.matches.match_players.filter(
-      (player) => player.status !== "LEFT"
-    );
+
+    const activePlayers =
+      item.matches.match_players.filter(
+        (player) => player.status !== "LEFT"
+      );
 
     return {
       ...item.matches,
@@ -437,13 +448,19 @@ export async function getMyMatches() {
 
       occupied_slots: activePlayers.length,
 
-      // Estado del partido
+      match_result:
+        Array.isArray(item.matches.match_results)
+          ? item.matches.match_results[0] || null
+          : item.matches.match_results || null,
+
+      currentUserId: user.id,
+
       status: item.matches.status.toLowerCase(),
 
-      // Estado del usuario
       playerStatus: item.status,
 
-      match_time: item.matches.match_time?.slice(0, 5),
+      match_time:
+        item.matches.match_time?.slice(0, 5),
     };
   });
 }
@@ -488,4 +505,404 @@ export async function getMatchResult(matchId) {
   if (error) throw error;
 
   return data;
+}
+export async function submitMatchResult(matchId, score) {
+  const { data, error } = await supabase.rpc(
+    "submit_match_result",
+    {
+      p_match_id: matchId,
+      p_score: score,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Error al publicar resultado:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+export async function confirmMatchResult(matchId) {
+  const { data, error } = await supabase.rpc(
+    "confirm_match_result",
+    {
+      p_match_id: matchId,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Error al confirmar resultado:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+
+export async function rejectMatchResult(matchId) {
+  const { data, error } = await supabase.rpc(
+    "reject_match_result",
+    {
+      p_match_id: matchId,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Error al rechazar resultado:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+export async function sendFriendRequest(receiverId) {
+  const { data, error } = await supabase.rpc(
+    "send_friend_request",
+    {
+      p_receiver_id: receiverId,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Error al enviar solicitud de amistad:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+
+export async function acceptFriendRequest(
+  friendshipId
+) {
+  const { data, error } = await supabase.rpc(
+    "accept_friend_request",
+    {
+      p_friendship_id: friendshipId,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Error al aceptar solicitud:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+
+export async function rejectFriendRequest(
+  friendshipId
+) {
+  const { data, error } = await supabase.rpc(
+    "reject_friend_request",
+    {
+      p_friendship_id: friendshipId,
+    }
+  );
+
+  if (error) {
+    console.error(
+      "Error al rechazar solicitud:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+export async function getFriends() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+
+  // Obtener amistades aceptadas
+  const { data: friendships, error: friendshipsError } =
+    await supabase
+      .from("friendships")
+      .select(`
+        id,
+        requester_id,
+        receiver_id,
+        status,
+        created_at
+      `)
+      .eq("status", "ACCEPTED")
+      .or(
+        `requester_id.eq.${user.id},receiver_id.eq.${user.id}`
+      );
+
+  if (friendshipsError) {
+    console.error(
+      "Error al obtener amistades:",
+      friendshipsError
+    );
+
+    throw friendshipsError;
+  }
+
+  if (!friendships || friendships.length === 0) {
+    return [];
+  }
+
+  // Obtener el ID del amigo en cada amistad
+  const friendIds = friendships.map((friendship) =>
+    friendship.requester_id === user.id
+      ? friendship.receiver_id
+      : friendship.requester_id
+  );
+
+  // Obtener perfiles
+  const { data: profiles, error: profilesError } =
+    await supabase
+      .from("profiles")
+      .select(`
+        id,
+        display_name,
+        first_name,
+        last_name,
+        avatar_url,
+        level_current,
+        trust_score
+      `)
+      .in("id", friendIds);
+
+  if (profilesError) {
+    console.error(
+      "Error al obtener perfiles de amigos:",
+      profilesError
+    );
+
+    throw profilesError;
+  }
+
+  // Combinar amistad + perfil
+  return friendships.map((friendship) => {
+    const friendId =
+      friendship.requester_id === user.id
+        ? friendship.receiver_id
+        : friendship.requester_id;
+
+    const profile = profiles.find(
+      (profile) => profile.id === friendId
+    );
+
+    return {
+      ...friendship,
+      friend_id: friendId,
+      profile: profile || null,
+    };
+  });
+}
+
+export async function getPendingFriendRequests() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+
+  const { data: requests, error: requestsError } =
+    await supabase
+      .from("friendships")
+      .select(`
+        id,
+        requester_id,
+        receiver_id,
+        status,
+        created_at
+      `)
+      .eq("receiver_id", user.id)
+      .eq("status", "PENDING");
+
+  if (requestsError) {
+    console.error(
+      "Error al obtener solicitudes:",
+      requestsError
+    );
+
+    throw requestsError;
+  }
+
+  if (!requests || requests.length === 0) {
+    return [];
+  }
+
+  const requesterIds = requests.map(
+    (request) => request.requester_id
+  );
+
+  const { data: profiles, error: profilesError } =
+    await supabase
+      .from("profiles")
+      .select(`
+        id,
+        display_name,
+        first_name,
+        last_name,
+        avatar_url,
+        level_current,
+        trust_score
+      `)
+      .in("id", requesterIds);
+
+  if (profilesError) {
+    console.error(
+      "Error al obtener perfiles:",
+      profilesError
+    );
+
+    throw profilesError;
+  }
+
+  return requests.map((request) => ({
+    ...request,
+    profile:
+      profiles.find(
+        (profile) =>
+          profile.id === request.requester_id
+      ) || null,
+  }));
+}
+export async function searchPlayers(searchTerm) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Debes iniciar sesión");
+  }
+
+  const term = searchTerm?.trim();
+
+  if (!term) {
+    return [];
+  }
+
+  // 1. Buscar jugadores
+  const { data: players, error: playersError } =
+    await supabase
+      .from("profiles")
+      .select(`
+        id,
+        display_name,
+        first_name,
+        last_name,
+        avatar_url,
+        level_current,
+        trust_score
+      `)
+      .neq("id", user.id)
+      .or(
+        `display_name.ilike.%${term}%,first_name.ilike.%${term}%,last_name.ilike.%${term}%`
+      )
+      .limit(20);
+
+  if (playersError) {
+    console.error(
+      "Error buscando jugadores:",
+      playersError
+    );
+
+    throw playersError;
+  }
+
+  if (!players || players.length === 0) {
+    return [];
+  }
+
+  // 2. Obtener las relaciones de amistad del usuario actual
+  const { data: friendships, error: friendshipsError } =
+    await supabase
+      .from("friendships")
+      .select(`
+        id,
+        requester_id,
+        receiver_id,
+        status
+      `)
+      .or(
+        `requester_id.eq.${user.id},receiver_id.eq.${user.id}`
+      )
+      .in("status", ["PENDING", "ACCEPTED"]);
+
+  if (friendshipsError) {
+    console.error(
+      "Error obteniendo relaciones de amistad:",
+      friendshipsError
+    );
+
+    throw friendshipsError;
+  }
+
+  // 3. Añadir el estado de amistad a cada jugador
+  return players.map((player) => {
+    const friendship = friendships?.find((item) => {
+      const otherUserId =
+        item.requester_id === user.id
+          ? item.receiver_id
+          : item.requester_id;
+
+      return otherUserId === player.id;
+    });
+
+    if (!friendship) {
+      return {
+        ...player,
+        friendshipStatus: "NONE",
+        friendshipId: null,
+      };
+    }
+
+    // Ya son amigos
+    if (friendship.status === "ACCEPTED") {
+      return {
+        ...player,
+        friendshipStatus: "FRIENDS",
+        friendshipId: friendship.id,
+      };
+    }
+
+    // Solicitud enviada por mí
+    if (
+      friendship.status === "PENDING" &&
+      friendship.requester_id === user.id
+    ) {
+      return {
+        ...player,
+        friendshipStatus: "PENDING_SENT",
+        friendshipId: friendship.id,
+      };
+    }
+
+    // Solicitud recibida
+    return {
+      ...player,
+      friendshipStatus: "PENDING_RECEIVED",
+      friendshipId: friendship.id,
+    };
+  });
 }

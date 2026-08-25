@@ -1,0 +1,651 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 90px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 26px;
+}
+
+.header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.searchButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: white;
+    color: #6b7280;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.searchButton:hover {
+    border-color: #22c55e;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sectionHeader h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 18px;
+}
+
+.requestCount {
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.totalLabel {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.requestCard,
+.friendCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.avatar {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.userInfo strong {
+    display: block;
+    font-size: 15px;
+}
+
+.userInfo span {
+    display: block;
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.requestActions {
+    display: flex;
+    gap: 8px;
+}
+
+.acceptButton,
+.rejectButton {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.acceptButton {
+    border: 1px solid #16a34a;
+    background: #16a34a;
+    color: white;
+}
+
+.rejectButton {
+    border: 1px solid #ef4444;
+    background: white;
+    color: #ef4444;
+}
+
+.acceptButton:disabled,
+.rejectButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.profileButton {
+    padding: 8px 12px;
+    border: 1px solid #22c55e;
+    border-radius: 8px;
+    background: white;
+    color: #16a34a;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.empty {
+    padding: 36px 20px;
+    text-align: center;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+}
+
+.emptyIcon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.empty h3 {
+    margin: 0 0 8px;
+}
+
+.empty p {
+    margin: 0 auto 18px;
+    max-width: 320px;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.primaryButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 10px;
+    background: #16a34a;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.loading,
+.error {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.error {
+    color: #b91c1c;
+}
+
+.searchBox {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 15px;
+
+    background: white;
+
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+
+    color: #6b7280;
+}
+
+.searchBox:focus-within {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px #dcfce7;
+}
+
+.searchBox input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 15px;
+    color: #111827;
+}
+
+.searchBox input::placeholder {
+    color: #9ca3af;
+}
+
+.searchResultsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.searchMessage {
+    padding: 25px;
+
+    text-align: center;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+.addFriendButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 9px 12px;
+
+    border: 1px solid #22c55e;
+    border-radius: 9px;
+
+    background: #16a34a;
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.addFriendButton:hover {
+    background: #15803d;
+}
+
+.addFriendButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sectionHeader h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.requestCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 22px;
+    height: 22px;
+
+    padding: 0 6px;
+
+    border-radius: 999px;
+
+    background: #ef4444;
+    color: white;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.showAllButton {
+    border: none;
+    background: transparent;
+
+    color: #15803d;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.requestsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+
+    overflow: hidden;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.requestCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 16px;
+
+    background: white;
+}
+
+.requestCard+.requestCard {
+    border-top: 1px solid #e5e7eb;
+}
+
+.requestUser {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 0;
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.userDetails strong {
+    font-size: 15px;
+}
+
+.userDetails span {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.requestActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.requestActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+.rejectIconButton,
+.acceptIconButton {
+    width: 44px;
+    height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.rejectIconButton {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.rejectIconButton:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.acceptIconButton {
+    border: 1px solid #86efac;
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.acceptIconButton:hover {
+    background: #bbf7d0;
+    border-color: #4ade80;
+}
+
+.rejectIconButton:active,
+.acceptIconButton:active {
+    transform: scale(0.94);
+}
+
+.rejectIconButton:disabled,
+.acceptIconButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.searchSection {
+    width: 100%;
+}
+
+.searchBox {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 15px;
+
+    background: white;
+
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+
+    color: #6b7280;
+}
+
+.searchBox:focus-within {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px #dcfce7;
+}
+
+.searchBox input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 15px;
+    color: #111827;
+}
+
+.addFriendButton,
+.sentButton,
+.friendsButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    min-height: 38px;
+
+    padding: 0 13px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.addFriendButton {
+    border: 1px solid #16a34a;
+    background: #16a34a;
+    color: white;
+    cursor: pointer;
+}
+
+.sentButton {
+    border: 1px solid #d1d5db;
+    background: #f3f4f6;
+    color: #6b7280;
+    cursor: default;
+}
+
+.friendsButton {
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #15803d;
+    cursor: default;
+}
+
+.profileButton {
+    padding: 8px 12px;
+
+    border: 1px solid #22c55e;
+    border-radius: 8px;
+
+    background: white;
+    color: #16a34a;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.profileLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  flex-shrink: 0;
+}
+
+.emptyRequests {
+    min-height: 170px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 24px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+}
+
+.emptyRequestsIcon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.emptyRequests h3 {
+    margin: 0 0 6px;
+
+    font-size: 15px;
+}
+
+.emptyRequests p {
+    max-width: 360px;
+
+    margin: 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .requestCard {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .requestActions {
+        width: auto;
+    }
+}

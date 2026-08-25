@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import EditMatchPage from "./pages/EditMatchPage/EditMatchPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import MatchChatPage from "./pages/MatchChatPage/MatchChatPage";
+import FriendsPage from "./pages/Friends/Friends";
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
 
           <Route
             path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:userId"
             element={
               <ProtectedRoute>
                 <ProfilePage />
@@ -88,6 +97,10 @@ function App() {
           <Route
             path="/matches/:matchId/chat"
             element={<MatchChatPage />}
+          />
+          <Route
+            path="/friends"
+            element={<FriendsPage />}
           />
         </Routes>
       </BrowserRouter>

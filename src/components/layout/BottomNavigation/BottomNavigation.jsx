@@ -4,9 +4,13 @@ import {
   PlusCircle,
   Search,
   User,
+  Users,
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
+
+import useFriendRequestCount from "../../../hooks/useFriendRequestCount";
+
 
 import styles from "./BottomNavigation.module.css";
 
@@ -32,6 +36,11 @@ const items = [
     path: "/my-matches",
   },
   {
+    label: "Amigos",
+    icon: Users,
+    path: "/friends",
+  },
+  {
     label: "Perfil",
     icon: User,
     path: "/profile",
@@ -39,20 +48,38 @@ const items = [
 ];
 
 export default function BottomNavigation() {
+  const { count: friendRequestsCount } =
+    useFriendRequestCount();
+
   return (
     <nav className={styles.navigation}>
       {items.map((item) => {
         const Icon = item.icon;
 
+        const showFriendBadge =
+          item.path === "/friends" &&
+          friendRequestsCount > 0;
+
         return (
           <NavLink
             key={item.path}
             to={item.path}
+            end={item.path === "/profile"}
             className={({ isActive }) =>
               `${styles.link} ${isActive ? styles.active : ""}`
             }
           >
-            <Icon size={22} />
+            <div className={styles.iconContainer}>
+              <Icon size={22} />
+
+              {showFriendBadge && (
+                <span className={styles.badge}>
+                  {friendRequestsCount > 99
+                    ? "99+"
+                    : friendRequestsCount}
+                </span>
+              )}
+            </div>
 
             <span>{item.label}</span>
           </NavLink>

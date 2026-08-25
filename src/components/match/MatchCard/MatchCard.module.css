@@ -203,3 +203,33 @@
   font-size: 13px;
   font-weight: 700;
 }
+.matchResult {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.resultWon {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.resultLost {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.resultPending {
+  background: #fff3cd;
+  color: #9a6700;
+}
+
+.resultRejected {
+  background: #fef3c7;
+  color: #92400e;
+}

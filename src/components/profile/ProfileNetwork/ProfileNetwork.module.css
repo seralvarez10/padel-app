@@ -1,0 +1,180 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--color-background);
+
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.item:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #dcfce7;
+  color: var(--color-primary);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.value {
+  font-size: 20px;
+  color: var(--color-text);
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.35);
+
+  z-index: 200;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+
+  background: var(--color-surface);
+  border-radius: 16px;
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+
+  overflow: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modalHeader h3 {
+  margin: 0;
+
+  font-size: 18px;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+
+  cursor: pointer;
+}
+
+.modalContent {
+  padding: 12px 20px 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.person:last-child {
+  border-bottom: none;
+}
+
+.personInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.personInfo strong {
+  font-size: 14px;
+}
+
+.personInfo span {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.empty {
+  padding: 25px 10px;
+
+  text-align: center;
+
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .items {
+    grid-template-columns: 1fr;
+  }
+}
