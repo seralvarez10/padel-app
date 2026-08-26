@@ -1,229 +1,423 @@
 .container {
-  margin-top: 20px;
-  padding: 20px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 0;
+  padding: 14px 12px;
+
+  background: #ffffff;
+
+  border: 1px solid #edf0f2;
+  border-radius: 18px;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.04);
+
+  box-sizing: border-box;
 }
+
+
+/* =========================================
+   CABECERA
+========================================= */
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+
+  margin-bottom: 12px;
 }
 
 .header h2 {
   margin: 0;
-  font-size: 18px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #111827;
 }
+
+
+/* =========================================
+   ESTADO
+========================================= */
+
 .status {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+
+  padding: 4px 8px;
+
   border-radius: 999px;
-  font-size: 12px;
+
+  font-size: 9px;
   font-weight: 600;
 }
+
 .statusPending {
-  background: #fff3cd;
-  color: #9a6700;
+  background: #fff7ed;
+  color: #c2410c;
 }
 
-.statusConfirmed {
-  background: #dcfce7;
-  color: #15803d;
-}
-
+.statusConfirmed,
 .statusAutoConfirmed {
-  background: #dcfce7;
+  background: #ecfdf5;
   color: #15803d;
 }
 
 .statusRejected {
-  background: #fee2e2;
+  background: #fef2f2;
   color: #dc2626;
 }
+
+
+/* =========================================
+   MENSAJE VACÍO
+========================================= */
+
 .empty {
-  text-align: center;
-  padding: 10px 0;
-}
-.scoreboard {
-  margin-top: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.scoreHeader,
-.scoreRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+
   text-align: center;
-}
 
-.scoreHeader {
-  padding: 12px 16px;
-  background: #f8fafc;
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.scoreRow {
-  padding: 14px 16px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.scoreRow span {
-  text-align: left;
-  color: #64748b;
-  font-size: 13px;
-}
-
-.scoreRow strong {
-  font-size: 20px;
-  color: #111827;
+  padding: 10px 4px;
 }
 
 .emptyIcon {
   display: block;
-  font-size: 32px;
-  margin-bottom: 8px;
+
+  margin-bottom: 6px;
+
+  font-size: 24px;
 }
 
 .empty h3 {
-  margin: 0 0 8px;
+  margin: 0 0 5px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #111827;
 }
 
 .empty p {
-  margin: 0 0 16px;
+  margin: 0;
+
+  max-width: 280px;
+
   color: #6b7280;
-  font-size: 14px;
+
+  font-size: 10px;
+  line-height: 1.4;
 }
+
+
+/* =========================================
+   BOTÓN PRINCIPAL
+========================================= */
+
+.primaryButton {
+  margin-top: 12px;
+
+  height: 32px;
+
+  padding: 0 14px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #16a34a;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.primaryButton:hover {
+  background: #15803d;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   PAREJAS
+========================================= */
 
 .teams {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
   align-items: center;
-  gap: 15px;
+
+  gap: 8px;
 }
 
 .team {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 14px;
-  border-radius: 10px;
-  background: #f9fafb;
+
+  gap: 3px;
+
+  min-width: 0;
+
+  padding: 8px 10px;
+
+  background: #f8faf9;
+
+  border-radius: 9px;
+
+  border: 1px solid #eef2ef;
 }
 
 .teamTitle {
-  margin-bottom: 5px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #6b7280;
+  margin-bottom: 2px;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  color: #16a34a;
+
+  letter-spacing: 0.02em;
+}
+
+.team span:not(.teamTitle) {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 9px;
+
+  color: #374151;
 }
 
 .vs {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 8px;
+
+  font-weight: 600;
+
   color: #9ca3af;
 }
 
+
+/* =========================================
+   INFORMACIÓN DEL RESULTADO
+========================================= */
+
 .resultInfo {
-  margin-top: 18px;
-  padding-top: 15px;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 12px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid #f0f2f3;
 }
 
-.resultInfo pre {
-  margin-top: 10px;
-  padding: 12px;
-  background: #f9fafb;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 12px;
-}
-.primaryButton {
-  margin-top: 10px;
-  border: none;
-  border-radius: 9px;
-  padding: 11px 18px;
-  background: #16a34a;
-  color: white;
+.resultInfo > strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 10px;
   font-weight: 600;
-  cursor: pointer;
+
+  color: #111827;
 }
+
+.resultInfo > p {
+  margin: 4px 0;
+
+  color: #6b7280;
+
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+
+/* =========================================
+   MARCADOR
+========================================= */
+
+.scoreboard {
+  margin-top: 12px;
+
+  overflow: hidden;
+
+  border: 1px solid #edf0f2;
+
+  border-radius: 10px;
+}
+
+.scoreHeader,
+.scoreRow {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+.scoreHeader {
+  min-height: 30px;
+
+  padding: 5px 8px;
+
+  background: #f8faf9;
+
+  color: #6b7280;
+
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.scoreRow {
+  min-height: 38px;
+
+  padding: 5px 8px;
+
+  border-top: 1px solid #edf0f2;
+}
+
+.scoreRow span {
+  text-align: left;
+
+  color: #6b7280;
+
+  font-size: 9px;
+}
+
+.scoreRow strong {
+  font-size: 16px;
+
+  color: #111827;
+}
+
+
+/* =========================================
+   ACCIONES
+========================================= */
+
 .resultActions {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
-  margin-bottom: 18px;
+
+  gap: 7px;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .confirmResultButton,
 .rejectResultButton {
   flex: 1;
-  min-height: 44px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
-  gap: 8px;
 
-  border-radius: 10px;
-  padding: 10px 16px;
+  gap: 5px;
 
-  font-size: 14px;
+  height: 31px;
+
+  padding: 0 8px;
+
+  border-radius: 7px;
+
+  font-size: 9px;
   font-weight: 600;
 
   cursor: pointer;
+
   transition:
-    background-color 0.2s ease,
+    background 0.2s ease,
     border-color 0.2s ease,
     transform 0.1s ease;
 }
 
+
+/* =========================================
+   CONFIRMAR
+========================================= */
+
 .confirmResultButton {
   background: #16a34a;
+
   border: 1px solid #16a34a;
+
   color: white;
 }
 
 .confirmResultButton:hover:not(:disabled) {
   background: #15803d;
+
   border-color: #15803d;
 }
 
+
+/* =========================================
+   RECHAZAR
+========================================= */
+
 .rejectResultButton {
-  background: #fff;
+  background: white;
+
   border: 1px solid #fca5a5;
+
   color: #dc2626;
 }
 
 .rejectResultButton:hover:not(:disabled) {
   background: #fef2f2;
+
   border-color: #ef4444;
 }
 
-.confirmResultButton:active:not(:disabled),
-.rejectResultButton:active:not(:disabled) {
-  transform: scale(0.98);
+
+/* =========================================
+   ICONOS
+========================================= */
+
+.actionIcon {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  line-height: 1;
 }
+
+
+/* =========================================
+   DESHABILITADOS
+========================================= */
 
 .confirmResultButton:disabled,
 .rejectResultButton:disabled {
   opacity: 0.6;
+
   cursor: not-allowed;
 }
 
-.actionIcon {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1;
-}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
 @media (max-width: 600px) {
   .resultActions {
     flex-direction: column;
@@ -232,5 +426,38 @@
   .confirmResultButton,
   .rejectResultButton {
     width: 100%;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .container {
+    padding: 18px 16px;
+
+    border-radius: 20px;
+  }
+
+  .header h2 {
+    font-size: 15px;
+  }
+
+  .status {
+    font-size: 10px;
+  }
+
+  .team {
+    padding: 10px 12px;
+  }
+
+  .team span:not(.teamTitle) {
+    font-size: 10px;
+  }
+
+  .scoreRow {
+    min-height: 44px;
+  }
+
+  .scoreRow strong {
+    font-size: 18px;
   }
 }

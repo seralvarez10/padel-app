@@ -1,0 +1,182 @@
+.joinButton,
+.leaveButton,
+.organizerButton,
+.fullButton,
+.loadingButton {
+  width: 100%;
+
+  min-height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 9px 14px;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* =========================================
+   UNIRSE
+========================================= */
+
+.joinButton {
+  background: #16a34a;
+
+  border: 1px solid #16a34a;
+
+  color: #ffffff;
+}
+
+.joinButton:hover {
+  background: #15803d;
+
+  border-color: #15803d;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 10px rgba(22, 163, 74, 0.18);
+}
+
+.joinButton:active {
+  transform: scale(0.99);
+}
+
+
+/* =========================================
+   SALIR
+========================================= */
+
+.leaveButton {
+  background: #ffffff;
+
+  border: 1px solid #fca5a5;
+
+  color: #dc2626;
+}
+
+.leaveButton:hover {
+  background: #fef2f2;
+
+  border-color: #ef4444;
+}
+
+.leaveButton:active {
+  transform: scale(0.99);
+}
+
+
+/* =========================================
+   ORGANIZADOR
+========================================= */
+
+.organizerButton {
+  background: #eff6ff;
+
+  border: 1px solid #bfdbfe;
+
+  color: #2563eb;
+
+  cursor: default;
+}
+
+
+/* =========================================
+   PARTIDO COMPLETO
+========================================= */
+
+.fullButton {
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  color: #94a3b8;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   CARGANDO
+========================================= */
+
+.loadingButton {
+  background: #86efac;
+
+  border: 1px solid #86efac;
+
+  color: #ffffff;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   ICONO
+========================================= */
+
+.icon {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  font-size: 12px;
+
+  line-height: 1;
+}
+
+
+/* =========================================
+   DESHABILITADO
+========================================= */
+
+.joinButton:disabled,
+.leaveButton:disabled,
+.organizerButton:disabled,
+.fullButton:disabled,
+.loadingButton:disabled {
+  opacity: 1;
+}
+
+
+/* =========================================
+   DESKTOP
+========================================= */
+
+@media (min-width: 768px) {
+  .joinButton,
+  .leaveButton,
+  .organizerButton,
+  .fullButton,
+  .loadingButton {
+    min-height: 42px;
+
+    font-size: 12px;
+
+    border-radius: 10px;
+  }
+
+  .icon {
+    font-size: 13px;
+  }
+}

@@ -1,27 +1,343 @@
+/* =========================
+   PÁGINA
+========================= */
+
+.page {
+  width: 100%;
+
+  padding-bottom: 80px;
+}
+
+
+/* =========================
+   CABECERA
+========================= */
+
+.pageHeader {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.pageHeader h1 {
+  margin: 0;
+
+  font-size: 28px;
+
+  line-height: 1.15;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.matchCount {
+  margin-bottom: 2px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.searchWrapper {
+  margin-bottom: 18px;
+}
+
+
+/* =========================
+   FILTROS
+========================= */
+
+.filtersWrapper {
+  width: 100%;
+
+  margin-bottom: 24px;
+
+  overflow: hidden;
+}
+
 .filters {
   display: flex;
-  gap: 12px;
+
+  align-items: center;
+
+  gap: 10px;
+
+  width: max-content;
+
   overflow-x: auto;
-  padding: 18px 0;
+
+  padding: 2px 2px 8px;
+
   scrollbar-width: none;
+
+  -webkit-overflow-scrolling: touch;
 }
 
 .filters::-webkit-scrollbar {
   display: none;
 }
 
-.resultsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+
+/*
+ * Ajustamos los FilterChip para que
+ * tengan el aspecto de la referencia.
+ */
+
+.filters button {
+  flex-shrink: 0;
+
+  min-height: 38px;
+
+  padding: 0 17px;
+
+  border-radius: 999px;
+
+  border: 1px solid #e5e7eb;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 2px 6px
+    rgba(15, 23, 42, 0.03);
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.resultsHeader h2 {
+.filters button:hover {
+  border-color: #22c55e;
+
+  color: #15803d;
+}
+
+.filters button:active {
+  transform: scale(0.97);
+}
+
+
+/*
+ * El FilterChip activo debería ser verde.
+ */
+
+.filters button[aria-pressed="true"] {
+  background: #16a34a;
+
+  border-color: #16a34a;
+
+  color: #ffffff;
+}
+
+
+/* =========================
+   RESULTADOS
+========================= */
+
+.results {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/*
+ * Quitamos el margen superior
+ * que MatchCard añade normalmente.
+ */
+
+.results > * {
+  margin-top: 0;
+}
+
+
+/* =========================
+   ESTADO VACÍO
+========================= */
+
+.emptyState {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 260px;
+
+  padding: 32px 20px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #edf0f2;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 4px 16px
+    rgba(15, 23, 42, 0.04);
+}
+
+.emptyIcon {
+  width: 52px;
+
+  height: 52px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  border-radius: 50%;
+
+  background: #ecfdf5;
+
   font-size: 24px;
 }
 
-.resultsHeader span {
-  color: var(--color-text-secondary);
+.emptyState h2 {
+  margin: 0;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.emptyState p {
+  max-width: 280px;
+
+  margin: 8px 0 0;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   LOADING / ERROR
+========================= */
+
+.loading,
+.error {
+  padding: 40px 20px;
+
+  text-align: center;
+
+  color: #6b7280;
+
   font-size: 14px;
+}
+
+.error {
+  color: #dc2626;
+}
+
+
+/* =========================
+   TABLET / DESKTOP
+========================= */
+
+@media (min-width: 768px) {
+
+  .pageHeader h1 {
+    font-size: 30px;
+  }
+
+  .results {
+    gap: 16px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .page {
+    padding-bottom: 78px;
+  }
+
+  .pageHeader {
+    margin-bottom: 18px;
+  }
+
+  .pageHeader h1 {
+    font-size: 25px;
+  }
+
+  .matchCount {
+    font-size: 13px;
+  }
+
+  .searchWrapper {
+    margin-bottom: 16px;
+  }
+
+  .filtersWrapper {
+    margin-left: -2px;
+
+    width: calc(100% + 4px);
+
+    margin-bottom: 20px;
+  }
+
+  .filters {
+    gap: 8px;
+
+    padding-left: 2px;
+
+    padding-right: 2px;
+  }
+
+  .filters button {
+    min-height: 36px;
+
+    padding: 0 15px;
+
+    font-size: 12px;
+  }
+
+  .results {
+    gap: 12px;
+  }
+
 }

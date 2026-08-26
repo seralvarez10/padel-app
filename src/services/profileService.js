@@ -23,16 +23,7 @@ export async function updateProfile(profile) {
 
   const { data, error } = await supabase
     .from("profiles")
-    .update({
-      display_name: profile.display_name,
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      city: profile.city,
-      bio: profile.bio,
-      dominant_hand: profile.dominant_hand,
-      preferred_side: profile.preferred_side,
-      avatar_url: profile.avatar_url,
-    })
+    .update(profile)
     .eq("id", user.id)
     .select()
     .single();

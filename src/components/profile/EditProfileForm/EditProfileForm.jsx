@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import Avatar from "../../common/Avatar";
 
@@ -53,14 +54,18 @@ export default function EditProfileForm({
         ];
 
         if (!allowedTypes.includes(file.type)) {
-            alert("Solo se permiten imágenes JPG, PNG o WEBP.");
+            toast.error(
+                "Solo se permiten imágenes JPG, PNG o WEBP."
+            );
             return;
         }
 
         const maxSize = 5 * 1024 * 1024; // 5 MB
 
         if (file.size > maxSize) {
-            alert("La imagen no puede superar los 5 MB.");
+            toast.error(
+                "La imagen no puede superar los 5 MB."
+            );
             return;
         }
 

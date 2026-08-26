@@ -20,17 +20,31 @@ export default function MatchResult({
   players,
   onResultSubmitted,
 }) {
-  const [showForm, setShowForm] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [showForm, setShowForm] =
+    useState(false);
+
+  const [submitting, setSubmitting] =
+    useState(false);
 
   const { user } = useAuth();
 
-  const activePlayers = players.filter(
-    (player) => player.status !== "LEFT"
-  );
+
+  /*
+   * ==========================================
+   * JUGADORES ACTIVOS
+   * ==========================================
+   */
+
+  const activePlayers =
+    players.filter(
+      (player) =>
+        player.status !== "LEFT"
+    );
+
 
   const isComplete =
     activePlayers.length === 4;
+
 
   const allPositionsAssigned =
     isComplete &&
@@ -38,16 +52,23 @@ export default function MatchResult({
       (player) => player.position
     );
 
+
   /*
-   * Comprobar si el usuario actual
-   * fue quien publicó el resultado.
+   * ==========================================
+   * USUARIO QUE PUBLICÓ EL RESULTADO
+   * ==========================================
    */
+
   const isResultSubmitter =
     result?.submitted_by === user?.id;
 
+
   /*
-   * Comprobar si el partido ya ha terminado.
+   * ==========================================
+   * PARTIDO TERMINADO
+   * ==========================================
    */
+
   const matchDateTime = new Date(
     `${match.match_date}T${match.match_time}`
   );
@@ -55,20 +76,37 @@ export default function MatchResult({
   const hasFinished =
     matchDateTime <= new Date();
 
-  /*
-   * Jugadores de cada pareja.
-   */
-  const teamA = activePlayers.filter(
-    (player) =>
-      player.position === "TEAM_A_LEFT" ||
-      player.position === "TEAM_A_RIGHT"
-  );
 
-  const teamB = activePlayers.filter(
-    (player) =>
-      player.position === "TEAM_B_LEFT" ||
-      player.position === "TEAM_B_RIGHT"
-  );
+  /*
+   * ==========================================
+   * EQUIPOS
+   * ==========================================
+   */
+
+  const teamA =
+    activePlayers.filter(
+      (player) =>
+        player.position ===
+          "TEAM_A_LEFT" ||
+        player.position ===
+          "TEAM_A_RIGHT"
+    );
+
+  const teamB =
+    activePlayers.filter(
+      (player) =>
+        player.position ===
+          "TEAM_B_LEFT" ||
+        player.position ===
+          "TEAM_B_RIGHT"
+    );
+
+
+  /*
+   * ==========================================
+   * NOMBRE JUGADOR
+   * ==========================================
+   */
 
   function getPlayerName(player) {
     return (
@@ -77,9 +115,13 @@ export default function MatchResult({
     );
   }
 
+
   /*
+   * ==========================================
    * PUBLICAR RESULTADO
+   * ==========================================
    */
+
   async function handleSubmit(score) {
     try {
       setSubmitting(true);
@@ -89,9 +131,6 @@ export default function MatchResult({
         score
       );
 
-      /*
-       * Recargar resultado desde Supabase.
-       */
       await onResultSubmitted?.();
 
       setShowForm(false);
@@ -108,7 +147,7 @@ export default function MatchResult({
 
       toast.error(
         error.message ||
-        "No se pudo publicar el resultado"
+          "No se pudo publicar el resultado"
       );
 
     } finally {
@@ -116,9 +155,13 @@ export default function MatchResult({
     }
   }
 
+
   /*
+   * ==========================================
    * CONFIRMAR RESULTADO
+   * ==========================================
    */
+
   async function handleConfirm() {
     try {
       setSubmitting(true);
@@ -141,7 +184,7 @@ export default function MatchResult({
 
       toast.error(
         error.message ||
-        "No se pudo confirmar el resultado"
+          "No se pudo confirmar el resultado"
       );
 
     } finally {
@@ -149,9 +192,13 @@ export default function MatchResult({
     }
   }
 
+
   /*
+   * ==========================================
    * RECHAZAR RESULTADO
+   * ==========================================
    */
+
   async function handleReject() {
     try {
       setSubmitting(true);
@@ -174,7 +221,7 @@ export default function MatchResult({
 
       toast.error(
         error.message ||
-        "No se pudo rechazar el resultado"
+          "No se pudo rechazar el resultado"
       );
 
     } finally {
@@ -182,30 +229,63 @@ export default function MatchResult({
     }
   }
 
+
   /*
-   * Si no hay 4 jugadores y tampoco hay resultado,
-   * no mostramos nada.
+   * ==========================================
+   * SIN RESULTADO Y SIN 4 JUGADORES
+   * ==========================================
    */
-  if (!isComplete && !result) {
+
+  if (
+    !isComplete &&
+    !result
+  ) {
     return null;
   }
 
+
   /*
-   * Partido completo pero todavía no terminado.
+   * ==========================================
+   * PARTIDO COMPLETO
+   * ==========================================
    */
-  if (!result && !hasFinished) {
+
+  if (
+    !result &&
+    !hasFinished
+  ) {
     return (
-      <section className={styles.container}>
-        <div className={styles.header}>
-          <h2>🏆 Resultado</h2>
+      <section
+        className={
+          styles.container
+        }
+      >
+        <div
+          className={
+            styles.header
+          }
+        >
+          <h2>
+            Resultado
+          </h2>
         </div>
 
-        <div className={styles.empty}>
-          <span className={styles.emptyIcon}>
+        <div
+          className={
+            styles.empty
+          }
+        >
+          <span
+            className={
+              styles.emptyIcon
+            }
+          >
             🏁
           </span>
 
-          <h3>Partido completo</h3>
+          <h3>
+            Partido completo
+          </h3>
 
           <p>
             El resultado estará disponible
@@ -216,49 +296,80 @@ export default function MatchResult({
     );
   }
 
+
   /*
-   * Partido terminado pero todavía no hay resultado.
+   * ==========================================
+   * PARTIDO TERMINADO SIN RESULTADO
+   * ==========================================
    */
-  if (!result && hasFinished) {
+
+  if (
+    !result &&
+    hasFinished
+  ) {
     return (
       <>
-        <section className={styles.container}>
-          <div className={styles.header}>
-            <h2>🏆 Resultado</h2>
+        <section
+          className={
+            styles.container
+          }
+        >
+          <div
+            className={
+              styles.header
+            }
+          >
+            <h2>
+              Resultado
+            </h2>
           </div>
 
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>
+          <div
+            className={
+              styles.empty
+            }
+          >
+            <span
+              className={
+                styles.emptyIcon
+              }
+            >
               🏁
             </span>
 
-            <h3>Partido finalizado</h3>
+            <h3>
+              Partido finalizado
+            </h3>
 
             {!isComplete ? (
               <p>
-                El partido necesita 4 jugadores
-                para registrar el resultado.
+                El partido necesita
+                4 jugadores para
+                registrar el resultado.
               </p>
             ) : !allPositionsAssigned ? (
               <p>
-                Los 4 jugadores deben tener una
-                posición asignada.
+                Los 4 jugadores deben
+                tener una posición asignada.
               </p>
             ) : (
               <>
                 <p>
                   El partido ha terminado.
-                  Ya podéis registrar el resultado.
+                  Ya podéis registrar
+                  el resultado.
                 </p>
 
                 <button
                   type="button"
-                  className={styles.primaryButton}
+                  className={
+                    styles.primaryButton
+                  }
                   onClick={() =>
                     setShowForm(true)
                   }
                 >
-                  🏆 Publicar resultado
+                  Publicar resultado
                 </button>
               </>
             )}
@@ -280,104 +391,238 @@ export default function MatchResult({
     );
   }
 
+
   /*
-   * Resultado existente.
+   * ==========================================
+   * RESULTADO EXISTENTE
+   * ==========================================
    */
+
+  let statusClass =
+    "";
+
+  let statusText =
+    result.status;
+
+
+  if (
+    result.status === "PENDING"
+  ) {
+    statusClass =
+      styles.statusPending;
+
+    statusText =
+      "Pendiente";
+
+  } else if (
+    result.status === "CONFIRMED"
+  ) {
+    statusClass =
+      styles.statusConfirmed;
+
+    statusText =
+      "Confirmado";
+
+  } else if (
+    result.status ===
+    "AUTO_CONFIRMED"
+  ) {
+    statusClass =
+      styles.statusAutoConfirmed;
+
+    statusText =
+      "Confirmado automáticamente";
+
+  } else if (
+    result.status === "REJECTED"
+  ) {
+    statusClass =
+      styles.statusRejected;
+
+    statusText =
+      "Rechazado";
+  }
+
+
   return (
-    <section className={styles.container}>
-      <div className={styles.header}>
-        <h2>🏆 Resultado</h2>
+    <section
+      className={
+        styles.container
+      }
+    >
+
+      {/* ==================================
+          CABECERA
+      ================================== */}
+
+      <div
+        className={
+          styles.header
+        }
+      >
+        <h2>
+          Resultado
+        </h2>
 
         <span
-          className={`${styles.status} ${result.status === "PENDING"
-            ? styles.statusPending
-            : result.status === "CONFIRMED"
-              ? styles.statusConfirmed
-              : result.status === "AUTO_CONFIRMED"
-                ? styles.statusAutoConfirmed
-                : result.status === "REJECTED"
-                  ? styles.statusRejected
-                  : ""
-            }`}
+          className={`${styles.status} ${statusClass}`}
         >
-          {result.status === "PENDING"
-            ? "Pendiente"
-            : result.status === "CONFIRMED"
-              ? "Confirmado"
-              : result.status === "AUTO_CONFIRMED"
-                ? "Confirmado automáticamente"
-                : result.status === "REJECTED"
-                  ? "Rechazado"
-                  : result.status}
+          {statusText}
         </span>
       </div>
 
-      <div className={styles.teams}>
-        <div className={styles.team}>
-          <span className={styles.teamTitle}>
+
+      {/* ==================================
+          EQUIPOS
+      ================================== */}
+
+      <div
+        className={
+          styles.teams
+        }
+      >
+
+        <div
+          className={
+            styles.team
+          }
+        >
+          <span
+            className={
+              styles.teamTitle
+            }
+          >
             PAREJA A
           </span>
 
-          {teamA.map((player) => (
-            <span key={player.player_id}>
-              {getPlayerName(player)}
-            </span>
-          ))}
+          {teamA.map(
+            (player) => (
+              <span
+                key={
+                  player.player_id
+                }
+              >
+                {getPlayerName(
+                  player
+                )}
+              </span>
+            )
+          )}
         </div>
 
-        <div className={styles.vs}>
+
+        <div
+          className={
+            styles.vs
+          }
+        >
           VS
         </div>
 
-        <div className={styles.team}>
-          <span className={styles.teamTitle}>
+
+        <div
+          className={
+            styles.team
+          }
+        >
+          <span
+            className={
+              styles.teamTitle
+            }
+          >
             PAREJA B
           </span>
 
-          {teamB.map((player) => (
-            <span key={player.player_id}>
-              {getPlayerName(player)}
-            </span>
-          ))}
+          {teamB.map(
+            (player) => (
+              <span
+                key={
+                  player.player_id
+                }
+              >
+                {getPlayerName(
+                  player
+                )}
+              </span>
+            )
+          )}
         </div>
+
       </div>
 
-      <div className={styles.resultInfo}>
 
-        {/* PENDING */}
-        {result.status === "PENDING" && (
+      {/* ==================================
+          INFORMACIÓN DEL RESULTADO
+      ================================== */}
+
+      <div
+        className={
+          styles.resultInfo
+        }
+      >
+
+        {/* PENDIENTE */}
+
+        {result.status ===
+          "PENDING" && (
           <>
             <strong>
-              ⏳ Resultado pendiente de confirmación
+              Resultado pendiente de confirmación
             </strong>
 
             <p>
-              El resultado ha sido publicado y está
-              pendiente de confirmación por la pareja rival.
+              El resultado ha sido
+              publicado y está pendiente
+              de confirmación por la
+              pareja rival.
             </p>
 
             {result.response_deadline && (
               <p>
-                La otra pareja tiene hasta el{" "}
+                La otra pareja tiene
+                hasta el{" "}
+
                 <strong>
                   {new Date(
                     result.response_deadline
-                  ).toLocaleDateString("es-ES")}
-                </strong>{" "}
-                para confirmar o rechazar el resultado.
+                  ).toLocaleDateString(
+                    "es-ES"
+                  )}
+                </strong>
+
+                {" "}
+                para confirmar o
+                rechazar el resultado.
               </p>
             )}
 
+
             {!isResultSubmitter && (
-              <div className={styles.resultActions}>
+              <div
+                className={
+                  styles.resultActions
+                }
+              >
 
                 <button
                   type="button"
-                  className={styles.confirmResultButton}
-                  onClick={handleConfirm}
-                  disabled={submitting}
+                  className={
+                    styles.confirmResultButton
+                  }
+                  onClick={
+                    handleConfirm
+                  }
+                  disabled={
+                    submitting
+                  }
                 >
-                  <span className={styles.actionIcon}>✓</span>
+                  <span
+                    className={
+                      styles.actionIcon
+                    }
+                  >
+                    ✓
+                  </span>
 
                   <span>
                     {submitting
@@ -386,13 +631,26 @@ export default function MatchResult({
                   </span>
                 </button>
 
+
                 <button
                   type="button"
-                  className={styles.rejectResultButton}
-                  onClick={handleReject}
-                  disabled={submitting}
+                  className={
+                    styles.rejectResultButton
+                  }
+                  onClick={
+                    handleReject
+                  }
+                  disabled={
+                    submitting
+                  }
                 >
-                  <span className={styles.actionIcon}>×</span>
+                  <span
+                    className={
+                      styles.actionIcon
+                    }
+                  >
+                    ×
+                  </span>
 
                   <span>
                     Rechazar resultado
@@ -404,79 +662,127 @@ export default function MatchResult({
           </>
         )}
 
-        {/* CONFIRMED */}
-        {result.status === "CONFIRMED" && (
+
+        {/* CONFIRMADO */}
+
+        {result.status ===
+          "CONFIRMED" && (
           <>
             <strong>
-              ✅ Resultado confirmado
+              Resultado confirmado
             </strong>
 
             <p>
-              Ambas parejas han confirmado el
-              resultado del partido.
+              Ambas parejas han confirmado
+              el resultado del partido.
             </p>
           </>
         )}
 
-        {/* AUTO CONFIRMED */}
-        {result.status === "AUTO_CONFIRMED" && (
+
+        {/* AUTO CONFIRMADO */}
+
+        {result.status ===
+          "AUTO_CONFIRMED" && (
           <>
             <strong>
-              🤖 Resultado confirmado automáticamente
+              Resultado confirmado automáticamente
             </strong>
 
             <p>
-              La pareja rival no respondió dentro
-              del plazo establecido.
+              La pareja rival no respondió
+              dentro del plazo establecido.
             </p>
           </>
         )}
 
-        {/* REJECTED */}
-        {result.status === "REJECTED" && (
+
+        {/* RECHAZADO */}
+
+        {result.status ===
+          "REJECTED" && (
           <>
             <strong>
-              ❌ Resultado rechazado
+              Resultado rechazado
             </strong>
 
             <p>
-              La otra pareja ha rechazado el
-              resultado publicado.
+              La otra pareja ha rechazado
+              el resultado publicado.
             </p>
           </>
         )}
 
-        <div className={styles.scoreboard}>
 
-          <div className={styles.scoreHeader}>
+        {/* ==================================
+            MARCADOR
+        ================================== */}
+
+        <div
+          className={
+            styles.scoreboard
+          }
+        >
+
+          <div
+            className={
+              styles.scoreHeader
+            }
+          >
             <span></span>
-            <span>Pareja A</span>
-            <span>Pareja B</span>
+
+            <span>
+              Pareja A
+            </span>
+
+            <span>
+              Pareja B
+            </span>
           </div>
 
-          {result.score?.sets?.map((set, index) => (
-            <div
-              key={index}
-              className={styles.scoreRow}
-            >
-              <span>Set {index + 1}</span>
 
-              <strong>{set.a}</strong>
+          {result.score?.sets?.map(
+            (set, index) => (
+              <div
+                key={index}
+                className={
+                  styles.scoreRow
+                }
+              >
+                <span>
+                  Set {index + 1}
+                </span>
 
-              <strong>{set.b}</strong>
-            </div>
-          ))}
+                <strong>
+                  {set.a}
+                </strong>
+
+                <strong>
+                  {set.b}
+                </strong>
+              </div>
+            )
+          )}
 
         </div>
 
       </div>
+
     </section>
   );
 }
 
+
 MatchResult.propTypes = {
-  match: PropTypes.object.isRequired,
-  result: PropTypes.object,
-  players: PropTypes.array.isRequired,
-  onResultSubmitted: PropTypes.func,
+  match:
+    PropTypes.object.isRequired,
+
+  result:
+    PropTypes.object,
+
+  players:
+    PropTypes.array.isRequired,
+
+  onResultSubmitted:
+    PropTypes.func,
 };

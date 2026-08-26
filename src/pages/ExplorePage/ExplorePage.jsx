@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import Layout from "../../components/layout/Layout";
-import Header from "../../components/layout/Header";
 import SearchBar from "../../components/common/SearchBar";
 import BottomNavigation from "../../components/layout/BottomNavigation";
 import MatchCard from "../../components/match/MatchCard";
@@ -9,12 +8,16 @@ import FilterChip from "../../components/filters/FilterChip";
 
 import useMatches from "../../hooks/useMatches";
 import useProfile from "../../hooks/useProfile";
+import { useAuth } from "../../contexts/AuthContext";
 
 import styles from "./ExplorePage.module.css";
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+
+  const { user } = useAuth();
+
   const {
     profile,
     loading: profileLoading,
@@ -26,11 +29,12 @@ export default function ExplorePage() {
     error,
   } = useMatches();
 
-
   if (loading || profileLoading) {
     return (
       <Layout>
-        <p>Cargando...</p>
+        <div className={styles.loading}>
+          Cargando partidos...
+        </div>
       </Layout>
     );
   }
@@ -38,68 +42,151 @@ export default function ExplorePage() {
   if (error) {
     return (
       <Layout>
-        <p>Error al cargar los partidos.</p>
+        <div className={styles.error}>
+          Error al cargar los partidos.
+        </div>
       </Layout>
     );
   }
+
+  /*
+   * ==========================================
+   * FECHAS
+   * ==========================================
+   */
+
   const today = new Date();
 
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(
+    tomorrow.getDate() + 1
+  );
 
-  const nextWeek = new Date();
-  nextWeek.setDate(today.getDate() + 7);
-  const filteredMatches = matches.filter((match) => {
-    const text = search.toLowerCase();
+  const nextWeek = new Date(today);
+  nextWeek.setDate(
+    nextWeek.getDate() + 7
+  );
 
-    const matchesSearch =
-      match.title?.toLowerCase().includes(text) ||
-      match.location?.toLowerCase().includes(text) ||
-      match.distance?.toLowerCase().includes(text) ||
-      match.type?.toLowerCase().includes(text);
+  const todayStart = new Date(today);
+  todayStart.setHours(0, 0, 0, 0);
 
-    let matchesFilter = true;
-    const matchDate = new Date(match.match_date);
+  const tomorrowStart = new Date(tomorrow);
+  tomorrowStart.setHours(0, 0, 0, 0);
 
-    today.setHours(0, 0, 0, 0);
+  const nextWeekEnd = new Date(nextWeek);
+  nextWeekEnd.setHours(
+    23,
+    59,
+    59,
+    999
+  );
 
-    tomorrow.setHours(0, 0, 0, 0);
+  /*
+   * ==========================================
+   * FILTRADO
+   * ==========================================
+   */
 
-    nextWeek.setHours(23, 59, 59, 999);
+  const filteredMatches = matches.filter(
+    (match) => {
+      const text = search
+        .trim()
+        .toLowerCase();
 
-    matchDate.setHours(0, 0, 0, 0);
+      const matchesSearch =
+        !text ||
+        match.title
+          ?.toLowerCase()
+          .includes(text) ||
+        match.location
+          ?.toLowerCase()
+          .includes(text) ||
+        match.city
+          ?.toLowerCase()
+          .includes(text) ||
+        match.match_type
+          ?.toLowerCase()
+          .includes(text) ||
+        match.court_type
+          ?.toLowerCase()
+          .includes(text);
 
-    switch (filter) {
-      case "Indoor":
-        matchesFilter = match.court_type === "Indoor";
-        break;
+      let matchesFilter = true;
 
-      case "Outdoor":
-        matchesFilter = match.court_type === "Outdoor";
-        break;
+      const matchDate = new Date(
+        match.match_date
+      );
 
-      case "Hoy":
-        matchesFilter =
-          matchDate.toDateString() === today.toDateString();
-        break;
+      matchDate.setHours(0, 0, 0, 0);
 
-      case "Mañana":
-        matchesFilter =
-          matchDate.toDateString() === tomorrow.toDateString();
-        break;
+      switch (filter) {
+        case "Hoy":
+          matchesFilter =
+            matchDate.getTime() ===
+            todayStart.getTime();
+          break;
 
-      case "Esta semana":
-        matchesFilter =
-          matchDate >= today &&
-          matchDate <= nextWeek;
-        break;
+        case "Mañana":
+          matchesFilter =
+            matchDate.getTime() ===
+            tomorrowStart.getTime();
+          break;
 
-      default:
-        matchesFilter = true;
+        case "Esta semana":
+          matchesFilter =
+            matchDate >= todayStart &&
+            matchDate <= nextWeekEnd;
+          break;
+
+        case "Indoor":
+          matchesFilter =
+            match.court_type === "Indoor";
+          break;
+
+        case "Outdoor":
+          matchesFilter =
+            match.court_type === "Outdoor";
+          break;
+
+        default:
+          matchesFilter = true;
+      }
+
+      return (
+        matchesSearch &&
+        matchesFilter
+      );
     }
+  );
 
-    return matchesSearch && matchesFilter;
-  });
+  /*
+   * ==========================================
+   * ESTADO DEL USUARIO EN CADA PARTIDO
+   * ==========================================
+   */
+
+  const matchesWithStatus =
+    filteredMatches.map((match) => {
+      const isOrganizer =
+        match.creator_id === user?.id;
+
+      const isJoined =
+        match.match_players?.some(
+          (player) =>
+            player.player_id === user?.id
+        ) ?? false;
+
+      const isFull =
+        Number(match.occupied_slots ?? 0) >=
+        Number(match.max_players ?? 4);
+
+      return {
+        ...match,
+        isOrganizer,
+        isJoined,
+        isFull,
+      };
+    });
 
   const filters = [
     "Hoy",
@@ -112,47 +199,113 @@ export default function ExplorePage() {
   return (
     <>
       <Layout>
-        <Header
-          name={profile?.display_name}
-          avatar={profile?.avatar_url}
-        />
+        <main className={styles.page}>
 
-        <SearchBar
-          placeholder="Buscar partidos..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+          {/* =========================
+              CABECERA
+          ========================= */}
 
-        <div className={styles.filters}>
-          {filters.map((item) => (
-            <FilterChip
-              key={item}
-              label={item}
-              active={filter === item}
-              onClick={() =>
-                setFilter(filter === item ? "" : item)
+          <header className={styles.pageHeader}>
+
+            <div>
+              <h1>
+                Explorar partidos
+              </h1>
+            </div>
+
+            <span className={styles.matchCount}>
+              {matchesWithStatus.length}{" "}
+              {matchesWithStatus.length === 1
+                ? "partido"
+                : "partidos"}
+            </span>
+
+          </header>
+
+
+          {/* =========================
+              BUSCADOR
+          ========================= */}
+
+          <div className={styles.searchWrapper}>
+            <SearchBar
+              placeholder="Buscar partidos..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
               }
             />
-          ))}
-        </div>
+          </div>
 
-        <div className={styles.resultsHeader}>
-          <h2>Explorar partidos</h2>
 
-          <span>
-            {filteredMatches.length}{" "}
-            {filteredMatches.length === 1
-              ? "partido"
-              : "partidos"}
-          </span>
-        </div>
+          {/* =========================
+              FILTROS
+          ========================= */}
 
-        {filteredMatches.map((match) => (
-          <MatchCard
-            key={match.id}
-            {...match}
-          />
-        ))}
+          <div className={styles.filtersWrapper}>
+
+            <div className={styles.filters}>
+
+              {filters.map((item) => (
+                <FilterChip
+                  key={item}
+                  label={item}
+                  active={
+                    filter === item
+                  }
+                  onClick={() =>
+                    setFilter(
+                      filter === item
+                        ? ""
+                        : item
+                    )
+                  }
+                />
+              ))}
+
+            </div>
+
+          </div>
+
+
+          {/* =========================
+              RESULTADOS
+          ========================= */}
+
+          <section className={styles.results}>
+
+            {matchesWithStatus.length === 0 ? (
+              <div className={styles.emptyState}>
+
+                <div className={styles.emptyIcon}>
+                  🎾
+                </div>
+
+                <h2>
+                  No encontramos partidos
+                </h2>
+
+                <p>
+                  Prueba a cambiar los
+                  filtros o buscar otra
+                  ubicación.
+                </p>
+
+              </div>
+            ) : (
+              matchesWithStatus.map(
+                (match) => (
+                  <MatchCard
+                    key={match.id}
+                    {...match}
+                  />
+                )
+              )
+            )}
+
+          </section>
+
+        </main>
       </Layout>
 
       <BottomNavigation />

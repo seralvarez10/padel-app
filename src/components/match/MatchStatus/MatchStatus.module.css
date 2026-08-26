@@ -1,89 +1,78 @@
 .status {
-
   display: inline-flex;
-
   align-items: center;
+  gap: 4px;
 
-  gap: 6px;
-
-  padding: 6px 10px;
+  padding: 5px 9px;
 
   border-radius: 999px;
 
-  font-size: 12px;
+  font-size: 10px;
+  line-height: 1;
 
   font-weight: 600;
 
+  white-space: nowrap;
 }
 
+.status svg {
+  width: 13px;
+  height: 13px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================
+   ESTADOS DEL PARTIDO
+========================================= */
+
 .open {
-
   background: #dcfce7;
-
   color: #15803d;
-
 }
 
 .almostFull {
-
   background: #fef3c7;
-
   color: #b45309;
-
 }
 
 .full {
-
   background: #fee2e2;
-
   color: #b91c1c;
-
 }
 
 .cancelled {
-
   background: #f3f4f6;
-
   color: #6b7280;
-
 }
 
 .finished {
-
   background: #e5e7eb;
-
   color: #4b5563;
-
 }
 
-.notPlayed {
 
-  background: #f3f4f6;
-
-  color: #6b7280;
-
-}
+/* =========================================
+   ESTADOS DEL JUGADOR
+========================================= */
 
 .confirmed {
-
-  background: #ECFDF5;
-
+  background: #ecfdf5;
   color: #166534;
-
 }
 
 .pending {
-
-  background: #FEF3C7;
-
-  color: #92400E;
-
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .atRisk {
+  background: #fff7ed;
+  color: #c2410c;
+}
 
-  background: #FFF7ED;
-
-  color: #C2410C;
-
+.notPlayed {
+  background: #f3f4f6;
+  color: #6b7280;
 }

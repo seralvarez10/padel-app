@@ -8,8 +8,12 @@ export default function FilterChip({
 }) {
   return (
     <button
-      className={`${styles.chip} ${active ? styles.active : ""}`}
+      type="button"
+      className={`${styles.chip} ${
+        active ? styles.active : ""
+      }`}
       onClick={onClick}
+      aria-pressed={active}
     >
       {label}
     </button>

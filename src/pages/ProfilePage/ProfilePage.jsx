@@ -6,9 +6,7 @@ import BottomNavigation from "../../components/layout/BottomNavigation";
 import ProfileHeader from "../../components/profile/ProfileHeader";
 import ProfileInfo from "../../components/profile/ProfileInfo";
 import ProfileStats from "../../components/profile/ProfileStats";
-import ProfileMenu from "../../components/profile/ProfileMenu";
-import EditProfileButton from "../../components/profile/EditProfileButton";
-
+import ProfileMenu from "../../components/profile/ProfileMenu"; // Asegúrate de importar esto
 
 import styles from "./ProfilePage.module.css";
 
@@ -37,7 +35,18 @@ export default function ProfilePage() {
       <>
         <Layout>
           <div className={styles.container}>
-            <p>No se ha encontrado este perfil.</p>
+            <p>
+              Este perfil no está disponible.
+            </p>
+
+            {!isOwnProfile && (
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+              >
+                Volver
+              </button>
+            )}
           </div>
         </Layout>
 
@@ -45,6 +54,18 @@ export default function ProfilePage() {
       </>
     );
   }
+
+  const showStats =
+    isOwnProfile ||
+    profile.show_stats !== false;
+
+  const showGameInfo =
+    isOwnProfile ||
+    profile.show_game_info !== false;
+
+  const showBio =
+    isOwnProfile ||
+    profile.show_bio !== false;
 
   return (
     <>
@@ -58,18 +79,20 @@ export default function ProfilePage() {
             isOwnProfile={isOwnProfile}
           />
 
-          <ProfileStats stats={stats} />
+          {showStats && (
+            <ProfileStats stats={stats} />
+          )}
 
-          <ProfileInfo profile={profile} />
+          {(showGameInfo || showBio) && (
+            <ProfileInfo
+              profile={profile}
+              showGameInfo={showGameInfo}
+              showBio={showBio}
+            />
+          )}
 
           {isOwnProfile && (
-            <>
-              <ProfileMenu />
-
-              <EditProfileButton
-                onClick={() => navigate("/profile/edit")}
-              />
-            </>
+            <ProfileMenu />
           )}
 
         </div>

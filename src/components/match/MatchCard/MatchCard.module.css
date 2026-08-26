@@ -1,235 +1,487 @@
+/* =========================
+   CARD
+========================= */
+
 .card {
+  margin-top: 12px;
 
-  margin-top: 18px;
+  padding: 14px;
 
-  transition:
-    transform .25s,
-    box-shadow .25s,
-    border-color .25s;
+  border-radius: 16px;
+
+  border: 1px solid #edf0f2;
+
+  background: #ffffff;
 
   cursor: pointer;
 
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .card:hover {
+  transform: translateY(-2px);
 
-  transform: translateY(-4px);
+  border-color: #d8eadf;
 
-  box-shadow: var(--shadow-md);
-  border-color:#22C55E;
-
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.07);
 }
+
+
+/* =========================
+   HEADER
+========================= */
 
 .header {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
+  gap: 8px;
 }
+
+
+/* =========================
+   TÍTULO
+========================= */
 
 .title {
-  margin: 10px 0 8px;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.location {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  margin-bottom: 14px;
-
-  color: var(--color-text-secondary);
-
-  font-size: 15px;
-}
-
-.details {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 12px;
-
-  margin: 14px 0;
-
-}
-
-.detail {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  padding: 12px;
-
-  border-radius: 12px;
-
-  background: #FAFAFA;
-
-  color: var(--color-text-secondary);
+  margin: 10px 0 5px;
 
   font-size: 14px;
 
-}
+  line-height: 1.35;
 
-.typeBadge {
-  background: #EEF2FF;
-  color: #4338CA;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-size: 13px;
   font-weight: 700;
-}
 
-.courtBadge {
-  background: #ECFDF5;
-  color: #166534;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
+  color: var(--color-text);
 }
 
 
+/* =========================
+   UBICACIÓN
+========================= */
 
-
-
-.avatar,
-.emptyAvatar {
-
-  width: 34px;
-
-  height: 34px;
-
-  border-radius: 50%;
-
+.location {
   display: flex;
-
-  justify-content: center;
 
   align-items: center;
 
-  font-size: 12px;
+  gap: 4px;
 
-  font-weight: 700;
+  margin-bottom: 10px;
 
+  color: #6b7280;
+
+  font-size: 11px;
+}
+
+.location svg {
+  color: #6b7280;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================
+   TIPO
+========================= */
+
+.typeBadge {
+  padding: 4px 9px;
+
+  border-radius: 999px;
+
+  background: #f3e8ff;
+
+  color: #9333ea;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =========================
+   FECHA
+========================= */
+
+.dateRow {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  min-height: 30px;
+
+  margin-bottom: 9px;
+
+  padding: 0 9px;
+
+  border-radius: 8px;
+
+  background: #effcf4;
+
+  color: #166534;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.dateRow svg {
+  color: #16a34a;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================
+   METADATA
+========================= */
+
+.metaGrid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  gap: 5px;
+
+  margin-bottom: 11px;
+}
+
+.metaItem {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 4px;
+
+  min-height: 26px;
+
+  padding: 0 5px;
+
+  border-radius: 7px;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 9px;
+
+  white-space: nowrap;
+}
+
+.metaIcon {
+  font-size: 11px;
+}
+
+
+/* =========================
+   JUGADORES
+========================= */
+
+.footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  min-height: 26px;
+
+  margin-top: 2px;
 }
 
 .players {
-
   display: flex;
 
+  align-items: center;
 }
 
 .avatar,
 .emptyAvatar {
+  width: 22px;
 
-  margin-left: -8px;
+  height: 22px;
 
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 2px solid white;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  margin-left: -5px;
 }
 
 .avatar:first-child,
 .emptyAvatar:first-child {
-
   margin-left: 0;
+}
 
+.avatar {
+  background: #16a34a;
+
+  color: white;
+}
+
+.emptyAvatar {
+  background: #e5e7eb;
+
+  color: #9ca3af;
 }
 
 .playersCount {
   display: flex;
+
   align-items: center;
-  gap: 6px;
-  font-weight: 600;
+
+  gap: 4px;
+
+  color: #6b7280;
+
+  font-size: 9px;
+
+  font-weight: 500;
 }
+
+
+/* =========================
+   BOTONES
+========================= */
 
 .joinButton {
   width: 100%;
-  margin-top: 22px;
-  height: 44px;
-  border-radius: 12px;
-  font-size: 15px;
-  background: linear-gradient(135deg,
-      var(--color-primary),
-      var(--color-primary-dark));
-  color: white;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  transition: var(--transition);
-}
 
-.joinButton:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  min-height: 34px;
+
+  margin-top: 10px;
+
+  padding: 0 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 4px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .joinButton:active {
-  transform: scale(.98);
+  transform: scale(0.98);
 }
 
-.footer {
 
-  margin-top: 22px;
+/* -------------------------
+   DISPONIBLE PARA UNIRSE
+------------------------- */
 
-  padding-top: 18px;
+.joinAvailableButton {
+  background: #16a34a;
 
-  border-top: 1px solid var(--color-border);
+  border: 1px solid #16a34a;
 
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-}
-.footerInfo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  color: white;
 }
 
-.unreadMessages {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.joinAvailableButton:hover {
+  background: #15803d;
 
-  font-size: 13px;
-  font-weight: 700;
+  border-color: #15803d;
+
+  box-shadow:
+    0 4px 12px rgba(22, 163, 74, 0.20);
 }
+
+
+/* -------------------------
+   ORGANIZADOR
+------------------------- */
+
+.manageButton {
+  background: #ecfdf5;
+
+  border: 1px solid #86efac;
+
+  color: #15803d;
+}
+
+.manageButton:hover {
+  background: #dcfce7;
+
+  border-color: #4ade80;
+
+  box-shadow:
+    0 4px 12px rgba(22, 163, 74, 0.10);
+}
+
+
+/* -------------------------
+   YA APUNTADO
+------------------------- */
+
+.joinedButton {
+  background: #f0fdf4;
+
+  border: 1px solid #bbf7d0;
+
+  color: #16a34a;
+}
+
+.joinedButton:hover {
+  background: #dcfce7;
+
+  border-color: #86efac;
+}
+
+
+/* -------------------------
+   PARTIDO COMPLETO
+------------------------- */
+
+.fullButton {
+  background: #f3f4f6;
+
+  border: 1px solid #e5e7eb;
+
+  color: #6b7280;
+
+  cursor: default;
+}
+
+.fullButton:active {
+  transform: none;
+}
+
+
+/* =========================
+   RESULTADOS
+========================= */
+
 .matchResult {
   display: flex;
+
   align-items: center;
-  gap: 8px;
-  margin: 12px 0;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 14px;
+
+  gap: 7px;
+
+  margin: 9px 0;
+
+  padding: 8px 10px;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+
   font-weight: 700;
 }
 
 .resultWon {
   background: #dcfce7;
+
   color: #15803d;
 }
 
 .resultLost {
   background: #fee2e2;
+
   color: #dc2626;
 }
 
 .resultPending {
-  background: #fff3cd;
-  color: #9a6700;
+  background: #fff7ed;
+
+  color: #c2410c;
 }
 
 .resultRejected {
   background: #fef3c7;
+
   color: #92400e;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footerInfo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.unreadMessages {
+  display: flex;
+
+  align-items: center;
+
+  gap: 3px;
+
+  color: var(--color-primary);
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .card {
+    padding: 13px;
+
+    border-radius: 15px;
+  }
+
+  .metaGrid {
+    gap: 4px;
+  }
+
+  .metaItem {
+    font-size: 8px;
+  }
+
 }

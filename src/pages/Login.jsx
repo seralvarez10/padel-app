@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock } from "lucide-react";
+import {
+  Mail,
+  Lock,
+} from "lucide-react";
 
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthInput from "../components/auth/AuthInput";
 import AuthButton from "../components/auth/AuthButton";
+import toast from "react-hot-toast";
 
 import { signIn } from "../services/authService";
 
@@ -21,46 +25,85 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    setLoading(true);
-
-    const { error } = await signIn(email, password);
-
-    setLoading(false);
-
-    if (error) {
-      alert(error.message);
+    if (!email.trim()) {
+      toast.error("Introduce tu correo electrónico.");
       return;
     }
 
-    navigate("/");
+    if (!password.trim()) {
+      toast.error("Introduce tu contraseña.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { error } = await signIn(
+        email,
+        password
+      );
+
+      if (error) {
+        toast.error(
+          "El correo o la contraseña no son correctos."
+        );
+        return;
+      }
+
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <AuthLayout
       title="Bienvenido de nuevo"
-      subtitle="Inicia sesión para seguir organizando partidos."
+      subtitle="Inicia sesión para seguir organizando partidos"
     >
+
       <form
         className={styles.form}
         onSubmit={handleLogin}
       >
+
         <AuthInput
           label="Correo electrónico"
           icon={Mail}
           type="email"
           placeholder="correo@ejemplo.com"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
+          autoComplete="email"
         />
 
-        <AuthInput
-          label="Contraseña"
-          icon={Lock}
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className={styles.passwordField}>
+
+          <div className={styles.passwordHeader}>
+            <span>Contraseña</span>
+
+            <button
+              type="button"
+              className={styles.forgotButton}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
+
+          <AuthInput
+            icon={Lock}
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+            autoComplete="current-password"
+          />
+
+        </div>
 
         <AuthButton
           type="submit"
@@ -68,7 +111,27 @@ export default function Login() {
         >
           Iniciar sesión
         </AuthButton>
+
       </form>
+
+      <div className={styles.divider}>
+        <span></span>
+        <p>o continúa con</p>
+        <span></span>
+      </div>
+
+      <button
+        type="button"
+        className={styles.googleButton}
+      >
+        <span className={styles.googleIcon}>
+          G
+        </span>
+
+        <span>
+          Continuar con Google
+        </span>
+      </button>
 
       <p className={styles.footer}>
         ¿No tienes cuenta?{" "}
@@ -76,6 +139,7 @@ export default function Login() {
           Regístrate
         </Link>
       </p>
+
     </AuthLayout>
   );
 }

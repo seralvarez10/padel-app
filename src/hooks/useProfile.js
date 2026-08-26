@@ -16,12 +16,11 @@ export default function useProfile(profileId = null) {
   const isOwnProfile = !profileId;
 
   const [profile, setProfile] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   const [stats, setStats] = useState({
     matchesPlayed: 0,
-    matchesCreated: 0,
+    organized: 0,
     attendance: null,
   });
 
@@ -39,26 +38,79 @@ export default function useProfile(profileId = null) {
       setLoading(true);
 
       try {
+        // Primero obtenemos el perfil
+        const profileData = await getProfile(targetUserId);
+
+        /*
+         * Si estamos viendo el perfil de otra persona
+         * y esa persona lo tiene oculto, no mostramos nada.
+         */
+        if (
+          !isOwnProfile &&
+          profileData.profile_visible === false
+        ) {
+          setProfile(null);
+          setStats({
+            matchesPlayed: 0,
+            organized: 0,
+            attendance: null,
+          });
+          setFriendsCount(0);
+          setMutualFriendsCount(0);
+
+          return;
+        }
+
+        /*
+         * El propio usuario siempre puede ver
+         * toda su información.
+         *
+         * Para otro usuario, solo cargamos estadísticas
+         * y red si están permitidas.
+         */
+        const shouldShowStats =
+          isOwnProfile ||
+          profileData.show_stats !== false;
+
+        const shouldShowNetwork =
+          isOwnProfile ||
+          profileData.show_network !== false;
+
         const [
-          profileData,
           statsData,
           friendsCountData,
           mutualFriendsCountData,
         ] = await Promise.all([
-          getProfile(targetUserId),
-          getProfileStats(targetUserId),
-          getFriendsCount(targetUserId),
-          isOwnProfile
-            ? Promise.resolve(0)
-            : getMutualFriendsCount(user.id, targetUserId),
+          shouldShowStats
+            ? getProfileStats(targetUserId)
+            : Promise.resolve({
+              matchesPlayed: 0,
+              organized: 0,
+              attendance: null,
+            }),
+
+          shouldShowNetwork
+            ? getFriendsCount(targetUserId)
+            : Promise.resolve(0),
+
+          shouldShowNetwork && !isOwnProfile
+            ? getMutualFriendsCount(
+              user.id,
+              targetUserId
+            )
+            : Promise.resolve(0),
         ]);
 
         setProfile(profileData);
         setStats(statsData);
         setFriendsCount(friendsCountData);
         setMutualFriendsCount(mutualFriendsCountData);
+
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        console.error(
+          "Error cargando perfil:",
+          error
+        );
 
         setProfile(null);
         setFriendsCount(0);
@@ -69,7 +121,11 @@ export default function useProfile(profileId = null) {
     }
 
     loadProfile();
-  }, [targetUserId, user?.id, isOwnProfile]);
+  }, [
+    targetUserId,
+    user?.id,
+    isOwnProfile,
+  ]);
 
   return {
     profile,

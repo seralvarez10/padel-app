@@ -1,21 +1,22 @@
 import { supabase } from "../lib/supabase";
 
 export async function getUserFriendIds(userId) {
-    const { data, error } = await supabase
-        .from("friendships")
-        .select("requester_id, receiver_id")
-        .eq("status", "ACCEPTED")
-        .or(`requester_id.eq.${userId},receiver_id.eq.${userId}`);
+    if (!userId) {
+        return [];
+    }
+
+    const { data, error } = await supabase.rpc(
+        "get_user_friend_ids",
+        {
+            target_user_id: userId,
+        }
+    );
 
     if (error) {
         throw error;
     }
 
-    return (data || []).map((friendship) =>
-        friendship.requester_id === userId
-            ? friendship.receiver_id
-            : friendship.requester_id
-    );
+    return data || [];
 }
 
 export async function getFriendsCount(userId) {
@@ -71,6 +72,7 @@ export async function getFriendProfiles(userId) {
     if (error) {
         throw error;
     }
+
 
     return data || [];
 }

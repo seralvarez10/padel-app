@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 
 import Avatar from "../../common/Avatar";
 import Badge from "../../ui/Badge";
+import { useNavigate } from "react-router-dom";
 
 import {
   MapPin,
   Users,
   UserRoundCheck,
+  Settings,
   X,
 } from "lucide-react";
 
@@ -26,6 +28,7 @@ export default function ProfileHeader({
   mutualFriendsCount = 0,
   isOwnProfile = false,
 }) {
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const [modalType, setModalType] = useState(null);
@@ -74,6 +77,21 @@ export default function ProfileHeader({
       ? "Amigos"
       : "Amigos en común";
 
+  /*
+   * PRIVACIDAD
+   *
+   * En nuestro propio perfil mostramos todo.
+   * En perfiles ajenos respetamos la configuración.
+   */
+
+  const showCity =
+    isOwnProfile ||
+    profile.show_city !== false;
+
+  const showNetwork =
+    isOwnProfile ||
+    profile.show_network !== false;
+
   return (
     <>
       <section className={styles.header}>
@@ -88,6 +106,17 @@ export default function ProfileHeader({
           </button>
         )}
 
+        {isOwnProfile && (
+          <button
+            type="button"
+            className={styles.settingsButton}
+            onClick={() => navigate("/settings")}
+            aria-label="Configuración"
+          >
+            <Settings size={20} />
+          </button>
+        )}
+
         <Avatar
           className={styles.avatar}
           src={profile.avatar_url}
@@ -98,6 +127,7 @@ export default function ProfileHeader({
         <h1>{profile.display_name}</h1>
 
         <div className={styles.info}>
+
           <Badge
             className={styles.level}
             variant="success"
@@ -105,36 +135,51 @@ export default function ProfileHeader({
             🎾 Nivel {profile.level_current}
           </Badge>
 
-          <span className={styles.city}>
-            <MapPin size={16} />
-            {profile.city || "Ciudad no especificada"}
-          </span>
+          {showCity && (
+            <span className={styles.city}>
+              <MapPin size={16} />
+
+              {profile.city ||
+                "Ciudad no especificada"}
+            </span>
+          )}
+
         </div>
 
-        {!isOwnProfile && (
+        {showNetwork && !isOwnProfile && (
           <div className={styles.network}>
 
             <button
               type="button"
               className={styles.networkItem}
-              onClick={() => openNetwork("friends")}
+              onClick={() =>
+                openNetwork("friends")
+              }
             >
               <Users size={16} />
 
               <span>
-                <strong>{friendsCount}</strong> amigos
+                <strong>
+                  {friendsCount}
+                </strong>{" "}
+                amigos
               </span>
             </button>
 
             <button
               type="button"
               className={styles.networkItem}
-              onClick={() => openNetwork("mutual")}
+              onClick={() =>
+                openNetwork("mutual")
+              }
             >
               <UserRoundCheck size={16} />
 
               <span>
-                <strong>{mutualFriendsCount}</strong> en común
+                <strong>
+                  {mutualFriendsCount}
+                </strong>{" "}
+                en común
               </span>
             </button>
 
@@ -156,6 +201,7 @@ export default function ProfileHeader({
           >
 
             <div className={styles.modalHeader}>
+
               <h2>{modalTitle}</h2>
 
               <button
@@ -166,6 +212,7 @@ export default function ProfileHeader({
               >
                 <X size={20} />
               </button>
+
             </div>
 
             <div className={styles.modalContent}>
@@ -197,13 +244,18 @@ export default function ProfileHeader({
                       size="sm"
                     />
 
-                    <div className={styles.personInfo}>
+                    <div
+                      className={
+                        styles.personInfo
+                      }
+                    >
                       <strong>
                         {person.display_name}
                       </strong>
 
                       <span>
-                        🎾 Nivel {person.level_current}
+                        🎾 Nivel{" "}
+                        {person.level_current}
                       </span>
                     </div>
                   </div>
@@ -214,6 +266,7 @@ export default function ProfileHeader({
           </div>
         </div>
       )}
+
     </>
   );
 }
@@ -223,11 +276,16 @@ ProfileHeader.propTypes = {
     id: PropTypes.string,
     avatar_url: PropTypes.string,
     display_name: PropTypes.string,
+
     level_current: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]),
+
     city: PropTypes.string,
+
+    show_city: PropTypes.bool,
+    show_network: PropTypes.bool,
   }).isRequired,
 
   friendsCount: PropTypes.number,

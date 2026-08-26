@@ -2,10 +2,11 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import Button from "../../ui/Button";
 import JoinPositionModal from "../JoinPositionModal/JoinPositionModal";
 
 import useJoinMatch from "../../../hooks/useJoinMatch";
+
+import styles from "./JoinMatchButton.module.css";
 
 export default function JoinMatchButton({
   matchId,
@@ -40,9 +41,7 @@ export default function JoinMatchButton({
     }
   }
 
-  async function handleJoin(
-    position
-  ) {
+  async function handleJoin(position) {
     const ok = await join(
       matchId,
       false,
@@ -69,36 +68,78 @@ export default function JoinMatchButton({
     setShowPositionModal(true);
   }
 
-  let buttonText =
-    "Unirme al partido";
+  /*
+   * =========================
+   * ESTADO DEL BOTÓN
+   * =========================
+   */
+
+  let buttonText = "Unirme al partido";
+
+  let buttonClass =
+    styles.joinButton;
+
+  let disabled = false;
+
+  let icon = "🎾";
 
   if (loading) {
     buttonText = joined
       ? "Saliendo..."
       : "Uniéndose...";
+
+    disabled = true;
+
+    buttonClass = styles.loadingButton;
+
+    icon = "⏳";
   } else if (isOrganizer) {
     buttonText =
-      "👑 Eres el organizador";
+      "Eres el organizador";
+
+    disabled = true;
+
+    buttonClass =
+      styles.organizerButton;
+
+    icon = "👑";
   } else if (joined) {
     buttonText =
-      "🚪 Salir del partido";
+      "Salir del partido";
+
+    buttonClass =
+      styles.leaveButton;
+
+    icon = "↩";
   } else if (full) {
     buttonText =
       "Partido completo";
+
+    disabled = true;
+
+    buttonClass =
+      styles.fullButton;
+
+    icon = "×";
   }
 
   return (
     <>
-      <Button
+      <button
+        type="button"
+        className={buttonClass}
         onClick={handleClick}
-        disabled={
-          loading ||
-          isOrganizer ||
-          (full && !joined)
-        }
+        disabled={disabled}
       >
-        {buttonText}
-      </Button>
+        <span className={styles.icon}>
+          {icon}
+        </span>
+
+        <span>
+          {buttonText}
+        </span>
+      </button>
+
 
       {showPositionModal && (
         <JoinPositionModal
@@ -116,9 +157,14 @@ export default function JoinMatchButton({
 
 JoinMatchButton.propTypes = {
   matchId: PropTypes.string.isRequired,
+
   joined: PropTypes.bool,
+
   full: PropTypes.bool,
+
   isOrganizer: PropTypes.bool,
+
   players: PropTypes.array,
+
   onJoined: PropTypes.func,
 };

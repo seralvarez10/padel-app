@@ -1,36 +1,50 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+
+import {
+  Users,
+  Crown,
+} from "lucide-react";
+
 import Avatar from "../../common/Avatar";
 import JoinPositionModal from "../JoinPositionModal/JoinPositionModal";
+
 import {
   updatePlayerPosition,
   swapPlayerPositions,
 } from "../../../services/matchPlayersService";
+
 import toast from "react-hot-toast";
 
 import styles from "./MatchPlayers.module.css";
+
 
 const POSITIONS = {
   TEAM_A_LEFT: {
     team: "A",
     label: "Derecha",
+    emptyLabel: "Derecha libre",
   },
 
   TEAM_A_RIGHT: {
     team: "A",
     label: "Revés",
+    emptyLabel: "Revés libre",
   },
 
   TEAM_B_LEFT: {
     team: "B",
     label: "Revés",
+    emptyLabel: "Revés libre",
   },
 
   TEAM_B_RIGHT: {
     team: "B",
     label: "Derecha",
+    emptyLabel: "Derecha libre",
   },
 };
+
 
 export default function MatchPlayers({
   matchId,
@@ -39,22 +53,42 @@ export default function MatchPlayers({
   currentUserId,
   onPositionChange,
 }) {
-  const [showPositionModal, setShowPositionModal] =
-    useState(false);
+  const [
+    showPositionModal,
+    setShowPositionModal,
+  ] = useState(false);
 
-  const visiblePlayers = players.filter(
-    (player) => player.status !== "LEFT"
-  );
 
-  const currentPlayer = visiblePlayers.find(
-    (player) => player.player_id === currentUserId
-  );
+  /*
+   * ==========================================
+   * JUGADORES VISIBLES
+   * ==========================================
+   */
 
-  const isOrganizer =
-    currentPlayer?.role === "CREATOR";
+  const visiblePlayers =
+    players.filter(
+      (player) =>
+        player.status !== "LEFT"
+    );
+
+
+  const currentPlayer =
+    visiblePlayers.find(
+      (player) =>
+        player.player_id ===
+        currentUserId
+    );
+
 
   const canChangePosition =
     !!currentPlayer;
+
+
+  /*
+   * ==========================================
+   * CAMBIAR POSICIÓN
+   * ==========================================
+   */
 
   async function handlePositionChange(
     position,
@@ -84,6 +118,7 @@ export default function MatchPlayers({
       }
 
       onPositionChange?.();
+
     } catch (error) {
       console.error(error);
 
@@ -94,45 +129,93 @@ export default function MatchPlayers({
     }
   }
 
+
+  /*
+   * ==========================================
+   * BUSCAR JUGADOR
+   * ==========================================
+   */
+
   function getPlayer(position) {
     return visiblePlayers.find(
-      (player) => player.position === position
+      (player) =>
+        player.position === position
     );
   }
 
+
+  /*
+   * ==========================================
+   * RENDERIZAR POSICIÓN
+   * ==========================================
+   */
+
   function renderPosition(position) {
-    const player = getPlayer(position);
-    const positionInfo = POSITIONS[position];
+    const player =
+      getPlayer(position);
+
+    const positionInfo =
+      POSITIONS[position];
+
+
+    /*
+     * POSICIÓN VACÍA
+     */
 
     if (!player) {
       return (
-        <div className={styles.emptyPosition}>
-          <span className={styles.plus}>
+        <div
+          className={
+            styles.emptyPosition
+          }
+        >
+          <span
+            className={
+              styles.emptyPlus
+            }
+          >
             +
           </span>
 
-          <span className={styles.positionLabel}>
-            {positionInfo.label}
+          <span
+            className={
+              styles.emptyLabel
+            }
+          >
+            {positionInfo.emptyLabel}
           </span>
         </div>
       );
     }
 
-    const name =
+
+    /*
+     * POSICIÓN OCUPADA
+     */
+
+    const fullName =
       player.profiles?.display_name ||
       "Jugador";
+
+    const nameParts =
+      fullName.trim().split(/\s+/);
+
+    const shortName =
+      nameParts.length > 1
+        ? `${nameParts[0]} ${nameParts[1][0]}.`
+        : nameParts[0];
 
     return (
       <div className={styles.occupiedPosition}>
         <Avatar
           src={player.profiles?.avatar_url}
-          name={name}
+          name={fullName}
           size="sm"
         />
 
         <div className={styles.playerInfo}>
           <strong>
-            {name}
+            {shortName}
           </strong>
 
           <span>
@@ -142,70 +225,165 @@ export default function MatchPlayers({
 
         {player.role === "CREATOR" && (
           <span className={styles.organizer}>
-            👑
+            ♛
           </span>
         )}
       </div>
     );
   }
 
+
   return (
-    <section className={styles.container}>
-      <div className={styles.header}>
-        <div>
-          <h2 className={styles.title}>
-            🎾 Posiciones
+    <section
+      className={
+        styles.container
+      }
+    >
+
+      {/* ==================================
+          CABECERA
+      ================================== */}
+
+      <div
+        className={
+          styles.header
+        }
+      >
+        <div
+          className={
+            styles.titleWrapper
+          }
+        >
+          <Users
+            size={17}
+            className={
+              styles.titleIcon
+            }
+          />
+
+          <h2
+            className={
+              styles.title
+            }
+          >
+            Posiciones
           </h2>
-
-          <p className={styles.subtitle}>
-            {visiblePlayers.length}/{maxPlayers} jugadores
-          </p>
         </div>
+
+
+        <span
+          className={
+            styles.playerCount
+          }
+        >
+          {visiblePlayers.length}/
+          {maxPlayers}
+        </span>
       </div>
 
-      <div className={styles.court}>
-        {/* Pareja A */}
-        <div className={styles.teamLabel}>
+
+      {/* ==================================
           PAREJA A
-        </div>
+      ================================== */}
 
-        <div className={styles.side}>
-          {renderPosition("TEAM_A_LEFT")}
-          {renderPosition("TEAM_A_RIGHT")}
-        </div>
-
-        {/* Red */}
-        <div className={styles.net}>
-          <span>RED</span>
-        </div>
-
-        {/* Pareja B */}
-        <div className={styles.side}>
-          {renderPosition("TEAM_B_LEFT")}
-          {renderPosition("TEAM_B_RIGHT")}
-        </div>
-
-        <div className={styles.teamLabel}>
-          PAREJA B
-        </div>
+      <div
+        className={
+          styles.teamLabel
+        }
+      >
+        PAREJA A
       </div>
+
+
+      <div
+        className={
+          styles.team
+        }
+      >
+        {renderPosition(
+          "TEAM_A_LEFT"
+        )}
+
+        {renderPosition(
+          "TEAM_A_RIGHT"
+        )}
+      </div>
+
+
+      {/* ==================================
+          VS
+      ================================== */}
+
+      <div
+        className={
+          styles.vs
+        }
+      >
+        <span />
+        <strong>VS</strong>
+        <span />
+      </div>
+
+
+      {/* ==================================
+          PAREJA B
+      ================================== */}
+
+      <div
+        className={
+          styles.teamLabel
+        }
+      >
+        PAREJA B
+      </div>
+
+
+      <div
+        className={
+          styles.team
+        }
+      >
+        {renderPosition(
+          "TEAM_B_LEFT"
+        )}
+
+        {renderPosition(
+          "TEAM_B_RIGHT"
+        )}
+      </div>
+
+
+      {/* ==================================
+          CAMBIAR POSICIÓN
+      ================================== */}
 
       {canChangePosition && (
         <button
           type="button"
-          className={styles.choosePositionButton}
+          className={
+            styles.choosePositionButton
+          }
           onClick={() =>
             setShowPositionModal(true)
           }
         >
-          🎾 Cambiar posición
+          Cambiar mi posición
         </button>
       )}
 
+
+      {/* ==================================
+          MODAL
+      ================================== */}
+
       {showPositionModal && (
         <JoinPositionModal
-          players={visiblePlayers}
-          currentUserId={currentUserId}
+          players={
+            visiblePlayers
+          }
+          currentUserId={
+            currentUserId
+          }
           onCancel={() =>
             setShowPositionModal(false)
           }
@@ -218,18 +396,31 @@ export default function MatchPlayers({
               targetPlayer
             );
 
-            setShowPositionModal(false);
+            setShowPositionModal(
+              false
+            );
           }}
         />
       )}
+
     </section>
   );
 }
 
+
 MatchPlayers.propTypes = {
-  matchId: PropTypes.string.isRequired,
-  players: PropTypes.array.isRequired,
-  maxPlayers: PropTypes.number.isRequired,
-  currentUserId: PropTypes.string,
-  onPositionChange: PropTypes.func,
+  matchId:
+    PropTypes.string.isRequired,
+
+  players:
+    PropTypes.array.isRequired,
+
+  maxPlayers:
+    PropTypes.number.isRequired,
+
+  currentUserId:
+    PropTypes.string,
+
+  onPositionChange:
+    PropTypes.func,
 };

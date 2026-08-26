@@ -1,27 +1,206 @@
 .form {
   display: flex;
+
   flex-direction: column;
+
   gap: 22px;
 }
 
+.passwordField {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.passwordHeader {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.passwordHeader span {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.forgotButton {
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #16a34a;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.forgotButton:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin: 28px 0 20px;
+}
+
+.divider span {
+  flex: 1;
+
+  height: 1px;
+
+  background: #dfe4e8;
+}
+
+.divider p {
+  margin: 0;
+
+  color: #9aa3af;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+/* =========================
+   GOOGLE
+========================= */
+
+.googleButton {
+  width: 100%;
+
+  min-height: 56px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  border: 1.5px solid #dce1e6;
+
+  border-radius: 15px;
+
+  background: white;
+
+  color: #374151;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.googleButton:hover {
+  border-color: #c5ccd4;
+
+  background: #fafafa;
+
+  transform: translateY(-1px);
+}
+
+.googleIcon {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  color: #4285f4;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
 .footer {
-  margin-top: 28px;
+  margin: 28px 0 0;
 
   text-align: center;
 
-  font-size: 15px;
+  font-size: 16px;
 
-  color: #6b7280;
+  color: #7b8491;
 }
 
 .footer a {
   color: #16a34a;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-decoration: none;
 }
 
 .footer a:hover {
   text-decoration: underline;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  .passwordHeader {
+    align-items: flex-start;
+  }
+
+  .passwordHeader span {
+    font-size: 14px;
+  }
+
+  .forgotButton {
+    font-size: 13px;
+  }
+
+  .footer {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .passwordHeader {
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .forgotButton {
+    align-self: flex-end;
+  }
 }

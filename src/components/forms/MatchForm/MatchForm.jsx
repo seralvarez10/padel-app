@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Button from "../../ui/Button";
 import PageHeader from "../../ui/PageHeader";
 
-import styles from "../CreateMatchForm/CreateMatchForm.module.css";
+import styles from "./MatchForm.module.css";
 
 export default function MatchForm({
   title,
@@ -24,14 +24,18 @@ export default function MatchForm({
         subtitle={subtitle}
       />
 
-      {children}
+      <div className={styles.card}>
+        {children}
+      </div>
 
-      <Button
-        type="submit"
-        disabled={loading}
-      >
-        {loading ? "Guardando..." : buttonText}
-      </Button>
+      <div className={styles.submitWrapper}>
+        <Button
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Guardando..." : buttonText}
+        </Button>
+      </div>
 
       {error && (
         <p className={styles.error}>

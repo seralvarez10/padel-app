@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
+
 import {
   MapPin,
   CalendarDays,
   Users,
   Star,
   Clock3,
-  ArrowRight,
+  ChevronRight,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -167,13 +168,31 @@ export default function MatchCard({
    * ==========================================
    */
 
-  if (isOrganizer) {
-    buttonText = "👑 Organizando";
+  if (isPast) {
+    buttonText = "Ver partido";
+  } else if (isOrganizer) {
+    buttonText = "Gestionar partido";
   } else if (isJoined) {
-    buttonText = "✓ Apuntado";
+    buttonText = "Ver partido";
   } else if (isFull) {
     buttonText = "Partido completo";
+  } else {
+    buttonText = "Unirme";
   }
+
+  /*
+   * Clase visual del botón
+   */
+
+  const buttonClass = isPast
+    ? styles.joinedButton
+    : isOrganizer
+      ? styles.manageButton
+      : isJoined
+        ? styles.joinedButton
+        : isFull
+          ? styles.fullButton
+          : styles.joinAvailableButton;
 
   return (
     <Card
@@ -182,81 +201,136 @@ export default function MatchCard({
         navigate(`/matches/${id}`)
       }
     >
+
+      {/* =========================
+          CABECERA
+      ========================= */}
+
       <div className={styles.header}>
+
         <MatchStatus
           status={badgeStatus}
         />
 
         <span className={styles.typeBadge}>
-          🎾 {match_type}
+          {match_type || "Libre"}
         </span>
+
       </div>
+
+
+      {/* =========================
+          TÍTULO
+      ========================= */}
 
       <h3 className={styles.title}>
         {title}
       </h3>
 
+
+      {/* =========================
+          UBICACIÓN
+      ========================= */}
+
       <div className={styles.location}>
-        <MapPin size={16} />
+
+        <MapPin size={14} />
 
         <span>
-          {location} · {city}
+          {location}
+          {city ? `, ${city}` : ""}
         </span>
+
       </div>
 
-      <div className={styles.details}>
-        <div className={styles.detail}>
-          <CalendarDays size={16} />
+
+      {/* =========================
+          FECHA Y HORA
+      ========================= */}
+
+      <div className={styles.dateRow}>
+
+        <CalendarDays size={14} />
+
+        <span>
+          {formatMatchDate(match_date)} · {match_time}
+        </span>
+
+      </div>
+
+
+      {/* =========================
+          INFORMACIÓN DEL PARTIDO
+      ========================= */}
+
+      <div className={styles.metaGrid}>
+
+        <div className={styles.metaItem}>
+
+          <span className={styles.metaIcon}>
+            {court_type === "Indoor"
+              ? "⌂"
+              : "☀"}
+          </span>
 
           <span>
-            {formatMatchDate(match_date)} ·{" "}
-            {match_time}
+            {court_type || "Pista"}
           </span>
+
         </div>
 
-        <div className={styles.detail}>
-          <span className={styles.courtBadge}>
-            {court_type}
-          </span>
-        </div>
 
-        <div className={styles.detail}>
-          <Clock3 size={16} />
+        <div className={styles.metaItem}>
+
+          <Clock3 size={13} />
 
           <span>
-            {duration}
+            {duration
+              ? `${duration} min`
+              : "--"}
           </span>
+
         </div>
 
-        <div className={styles.detail}>
-          <Star size={16} />
+
+        <div className={styles.metaItem}>
+
+          <Star size={13} />
 
           <span>
             Nivel {level_min}
           </span>
+
         </div>
+
       </div>
 
-      {/* ==========================================
+
+      {/* =========================
           RESULTADO
-          ========================================== */}
+      ========================= */}
 
       {isPast && resultText && (
         <div
           className={`${styles.matchResult} ${resultStatus === "result_won"
-              ? styles.resultWon
-              : styles.resultLost
+            ? styles.resultWon
+            : styles.resultLost
             }`}
         >
-          {resultStatus === "result_won"
-            ? "🏆"
-            : "❌"}
+
+          <span>
+            {resultStatus === "result_won"
+              ? "🏆"
+              : "❌"}
+          </span>
 
           <span>
             {resultText}
           </span>
+
         </div>
       )}
+
 
       {isPast &&
         !resultText &&
@@ -264,12 +338,16 @@ export default function MatchCard({
           <div
             className={`${styles.matchResult} ${styles.resultPending}`}
           >
-            ⏳
+
+            <span>⏳</span>
+
             <span>
               Resultado pendiente
             </span>
+
           </div>
         )}
+
 
       {isPast &&
         !resultText &&
@@ -277,15 +355,25 @@ export default function MatchCard({
           <div
             className={`${styles.matchResult} ${styles.resultRejected}`}
           >
-            ⚠️
+
+            <span>⚠️</span>
+
             <span>
               Resultado rechazado
             </span>
+
           </div>
         )}
 
+
+      {/* =========================
+          JUGADORES
+      ========================= */}
+
       <div className={styles.footer}>
+
         <div className={styles.players}>
+
           {Array.from({
             length: occupied_slots,
           }).map((_, index) => (
@@ -293,13 +381,16 @@ export default function MatchCard({
               key={index}
               className={styles.avatar}
             >
-              👤
+              {index === 0 ? "SA" : ""}
             </div>
           ))}
 
+
           {Array.from({
-            length:
-              max_players - occupied_slots,
+            length: Math.max(
+              0,
+              max_players - occupied_slots
+            ),
           }).map((_, index) => (
             <div
               key={`empty-${index}`}
@@ -308,51 +399,68 @@ export default function MatchCard({
               +
             </div>
           ))}
+
         </div>
 
+
         <div className={styles.footerInfo}>
+
           <div className={styles.playersCount}>
-            <Users size={16} />
+
+            <Users size={13} />
 
             <span>
-              {occupied_slots}/{max_players}
+              {occupied_slots}/{max_players} jugadores
             </span>
+
           </div>
+
 
           {unreadCount > 0 && (
             <div
-              className={
-                styles.unreadMessages
-              }
+              className={styles.unreadMessages}
             >
-              💬
+
+              <span>💬</span>
 
               <span>
                 {unreadCount > 99
                   ? "99+"
                   : unreadCount}
               </span>
+
             </div>
           )}
+
         </div>
+
       </div>
 
+
+      {/* =========================
+          BOTÓN
+      ========================= */}
+
       <button
-        className={styles.joinButton}
+        type="button"
+        className={`${styles.joinButton} ${buttonClass}`}
         onClick={(e) => {
           e.stopPropagation();
 
           navigate(`/matches/${id}`);
         }}
       >
-        <span>{buttonText}</span>
 
-        {!isOrganizer &&
-          !isJoined &&
-          !isFull && (
-            <ArrowRight size={18} />
-          )}
+        <span>
+          {buttonText}
+        </span>
+
+        {!isFull && (
+          <ChevronRight size={17} />
+        )}
+
       </button>
+
     </Card>
   );
 }

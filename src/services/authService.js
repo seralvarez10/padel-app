@@ -35,3 +35,41 @@ export async function updateProfile(userId, data) {
 
   if (error) throw error;
 }
+export async function changePassword(
+  currentPassword,
+  newPassword
+) {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw userError;
+  }
+
+  if (!user?.email) {
+    throw new Error("No se ha encontrado el usuario.");
+  }
+
+  // Comprobar contraseña actual
+  const { error: signInError } =
+    await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    });
+
+  if (signInError) {
+    throw new Error("La contraseña actual no es correcta.");
+  }
+
+  // Cambiar contraseña
+  const { error: updateError } =
+    await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+  if (updateError) {
+    throw updateError;
+  }
+}

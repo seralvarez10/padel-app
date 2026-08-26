@@ -1,144 +1,410 @@
+/* =========================================
+   CONTENEDOR
+========================================= */
+
 .container {
-  margin-top: 24px;
+  width: 100%;
+
+  padding: 13px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #edf0f2;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.04);
 }
 
+
+/* =========================================
+   CABECERA
+========================================= */
+
 .header {
-  margin-bottom: 14px;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 9px;
+}
+
+.titleWrapper {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.titleIcon {
+  width: 15px;
+  height: 15px;
+
+  flex-shrink: 0;
+
+  color: #16a34a;
 }
 
 .title {
   margin: 0;
-  font-size: 20px;
+
+  font-size: 13px;
+
+  line-height: 1;
+
+  font-weight: 700;
+
+  color: #111827;
 }
 
-.subtitle {
-  margin: 4px 0 0;
-  color: #6b7280;
-  font-size: 14px;
+.playerCount {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  background: #f0fdf4;
+
+  color: #15803d;
+
+  font-size: 9px;
+
+  font-weight: 700;
 }
 
-.court {
-  border-radius: 16px;
-  padding: 18px;
-  background: #ecfdf5;
-  border: 1px solid #bbf7d0;
-}
+
+/* =========================================
+   ETIQUETA DE PAREJA
+========================================= */
 
 .teamLabel {
+  margin: 6px 0 5px;
+
   text-align: center;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #166534;
-  margin: 4px 0 10px;
-}
 
-.side {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
+  font-size: 8px;
 
-.occupiedPosition,
-.emptyPosition {
-  min-height: 78px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.occupiedPosition {
-  background: white;
-  border: 1px solid #d1fae5;
-  gap: 8px;
-}
-
-.emptyPosition {
-  background: rgba(255, 255, 255, 0.55);
-  border: 2px dashed #86efac;
-  flex-direction: column;
-}
-
-.plus {
-  font-size: 24px;
   line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
   color: #16a34a;
 }
 
-.positionLabel {
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 600;
+
+/* =========================================
+   EQUIPO
+========================================= */
+
+.team {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 5px;
+
+  width: 100%;
 }
+
+
+/* =========================================
+   POSICIONES
+========================================= */
+
+.occupiedPosition,
+.emptyPosition {
+  width: 100%;
+
+  min-height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  border-radius: 8px;
+}
+
+
+/* =========================================
+   POSICIÓN OCUPADA
+========================================= */
+
+.occupiedPosition {
+  gap: 6px;
+
+  padding: 4px 7px;
+
+  background: #ecfdf5;
+
+  border: 1px solid #dcfce7;
+}
+
+
+/* =========================================
+   POSICIÓN VACÍA
+========================================= */
+
+.emptyPosition {
+  gap: 4px;
+
+  padding: 4px 6px;
+
+  background: #ffffff;
+
+  border: 1px dashed #cbd5e1;
+}
+
+
+/* =========================================
+   "+" POSICIÓN VACÍA
+========================================= */
+
+.emptyPlus {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 15px;
+  height: 15px;
+
+  border-radius: 50%;
+
+  background: #f1f5f9;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  line-height: 1;
+
+  font-weight: 500;
+}
+
+
+/* =========================================
+   TEXTO POSICIÓN VACÍA
+========================================= */
+
+.emptyLabel {
+  color: #64748b;
+
+  font-size: 8px;
+
+  font-weight: 500;
+
+  line-height: 1.1;
+}
+
+
+/* =========================================
+   INFORMACIÓN DEL JUGADOR
+========================================= */
 
 .playerInfo {
   display: flex;
+
   flex-direction: column;
+
+  gap: 1px;
+
   min-width: 0;
+
+  overflow: hidden;
 }
 
 .playerInfo strong {
-  font-size: 13px;
+  display: block;
+
+  max-width: 100%;
+
+  color: #111827;
+
+  font-size: 9px;
+
+  line-height: 1.15;
+
+  font-weight: 600;
+
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
 .playerInfo span {
-  font-size: 11px;
-  color: #6b7280;
+  color: #64748b;
+
+  font-size: 8px;
+
+  line-height: 1.1;
 }
+
+
+/* =========================================
+   ORGANIZADOR
+========================================= */
 
 .organizer {
   position: absolute;
-  top: 5px;
-  right: 7px;
-  font-size: 12px;
-}
 
-.net {
-  height: 32px;
+  top: 3px;
+
+  right: 4px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
-  position: relative;
+
+  color: #f59e0b;
 }
 
-.net::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-top: 2px solid #6b7280;
+.organizer svg {
+  width: 10px;
+  height: 10px;
 }
 
-.net span {
-  position: relative;
-  z-index: 1;
-  background: #ecfdf5;
-  padding: 0 10px;
-  font-size: 9px;
+
+/* =========================================
+   VS
+========================================= */
+
+.vs {
+  display: grid;
+
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items: center;
+
+  gap: 7px;
+
+  height: 18px;
+
+  margin: 1px 0;
+}
+
+.vs span {
+  display: block;
+
+  width: 100%;
+
+  height: 1px;
+
+  background: #e5e7eb;
+}
+
+.vs strong {
+  color: #94a3b8;
+
+  font-size: 7px;
+
+  line-height: 1;
+
   font-weight: 700;
-  color: #6b7280;
-  letter-spacing: 0.08em;
+
+  letter-spacing: 0.05em;
 }
+
+
+/* =========================================
+   CAMBIAR POSICIÓN
+========================================= */
+
 .choosePositionButton {
   width: 100%;
-  margin-top: 12px;
-  padding: 11px 16px;
 
-  border: 1px solid #16a34a;
-  border-radius: 10px;
+  min-height: 30px;
 
-  background: white;
-  color: #15803d;
+  margin-top: 8px;
+
+  padding: 6px 10px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dbe1e6;
+
+  border-radius: 8px;
+
+  background: #f8fafc;
+
+  color: #475569;
+
+  font-size: 9px;
+
+  line-height: 1;
 
   font-weight: 600;
+
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .choosePositionButton:hover {
-  background: #ecfdf5;
+  background: #f0fdf4;
+
+  border-color: #bbf7d0;
+
+  color: #15803d;
+}
+
+.choosePositionButton:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================================
+   PANTALLAS PEQUEÑAS
+========================================= */
+
+@media (max-width: 360px) {
+  .container {
+    padding: 12px;
+  }
+
+  .team {
+    gap: 4px;
+  }
+
+  .occupiedPosition,
+  .emptyPosition {
+    min-height: 36px;
+  }
+
+  .playerInfo strong {
+    font-size: 8px;
+  }
+
+  .playerInfo span,
+  .emptyLabel {
+    font-size: 7px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
 }

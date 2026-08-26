@@ -1,9 +1,14 @@
 import PropTypes from "prop-types";
 import styles from "./Layout.module.css";
 
-export default function Layout({ children }) {
+export default function Layout({
+  children,
+  className = "",
+}) {
   return (
-    <main className={styles.layout}>
+    <main
+      className={`${styles.layout} ${className}`}
+    >
       {children}
     </main>
   );
@@ -11,4 +16,6 @@ export default function Layout({ children }) {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
+
+  className: PropTypes.string,
 };

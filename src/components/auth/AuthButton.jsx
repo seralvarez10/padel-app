@@ -11,7 +11,17 @@ export default function AuthButton({
       disabled={loading}
       {...props}
     >
-      {loading ? "Cargando..." : children}
+      <span>
+        {loading
+          ? "Cargando..."
+          : children}
+      </span>
+
+      {!loading && (
+        <span className={styles.arrow}>
+          →
+        </span>
+      )}
     </button>
   );
 }

@@ -15,6 +15,11 @@ import EditMatchPage from "./pages/EditMatchPage/EditMatchPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import MatchChatPage from "./pages/MatchChatPage/MatchChatPage";
 import FriendsPage from "./pages/Friends/Friends";
+import SettingsPage from "./pages/Settings/SettingsPage";
+import ProfilePhotoPage from "./pages/ProfilePhotoPage/ProfilePhotoPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage/ChangePasswordPage";
+import PrivacyPage from "./pages/PrivacyPage/PrivacyPage";
+import NotificationsPage from "./pages/NotificationsPage/NotificationsPage";
 
 function App() {
   return (
@@ -101,6 +106,35 @@ function App() {
           <Route
             path="/friends"
             element={<FriendsPage />}
+          />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route
+            path="/profile/photo"
+            element={<ProfilePhotoPage />}
+          />
+          <Route
+            path="/settings/password"
+            element={
+              <ProtectedRoute>
+                <ChangePasswordPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <ProtectedRoute>
+                <PrivacyPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <NotificationsPage />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </BrowserRouter>

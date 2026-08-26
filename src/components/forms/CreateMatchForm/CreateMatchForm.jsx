@@ -13,6 +13,9 @@ import {
   Calendar,
   Clock3,
   MapPin,
+  Settings2,
+  Hand,
+  FileText,
 } from "lucide-react";
 
 export default function CreateMatchForm() {
@@ -66,7 +69,10 @@ export default function CreateMatchForm() {
 
       {/* INFORMACIÓN BÁSICA */}
 
-      <FormSection title="📝 Información básica">
+      <FormSection
+        title="Información básica"
+        icon={Type}
+      >
 
         <Input
           label="Título"
@@ -90,7 +96,10 @@ export default function CreateMatchForm() {
 
       {/* FECHA */}
 
-      <FormSection title="📅 Fecha y hora">
+      <FormSection
+        title="Fecha y hora"
+        icon={Calendar}
+      >
 
         <div className={styles.row}>
 
@@ -120,7 +129,7 @@ export default function CreateMatchForm() {
 
       {/* UBICACIÓN */}
 
-      <FormSection title="📍 Ubicación">
+      <FormSection title="📍 Ubicación" icon={MapPin}>
 
         <Input
           label="Ciudad"
@@ -135,7 +144,10 @@ export default function CreateMatchForm() {
 
       {/* DETALLES */}
 
-      <FormSection title="⚙️ Detalles">
+      <FormSection
+        title="Detalles"
+        icon={Settings2}
+      >
 
         <div className={styles.group}>
 
@@ -143,18 +155,17 @@ export default function CreateMatchForm() {
             Tipo de pista
           </label>
 
-          <div className={styles.options}>
+          <div className={`${styles.options} ${styles.positionOptions}`}>
 
             {["Indoor", "Outdoor"].map(
               (court) => (
                 <button
                   key={court}
                   type="button"
-                  className={`${styles.option} ${
-                    form.court_type === court
-                      ? styles.active
-                      : ""
-                  }`}
+                  className={`${styles.option} ${form.court_type === court
+                    ? styles.active
+                    : ""
+                    }`}
                   onClick={() =>
                     handleChange({
                       target: {
@@ -223,7 +234,7 @@ export default function CreateMatchForm() {
 
       {/* POSICIÓN */}
 
-      <FormSection title="🎾 Tu posición">
+      <FormSection title="🎾 Tu posición" icon={Hand}>
 
         <div className={styles.group}>
 
@@ -231,15 +242,14 @@ export default function CreateMatchForm() {
             ¿Dónde prefieres jugar?
           </label>
 
-          <div className={styles.options}>
+          <div className={`${styles.options} ${styles.positionOptions}`}>
 
             <button
               type="button"
-              className={`${styles.option} ${
-                form.position === "TEAM_A_LEFT"
-                  ? styles.active
-                  : ""
-              }`}
+              className={`${styles.option} ${form.position === "TEAM_A_LEFT"
+                ? styles.active
+                : ""
+                }`}
               onClick={() =>
                 handleChange({
                   target: {
@@ -254,11 +264,10 @@ export default function CreateMatchForm() {
 
             <button
               type="button"
-              className={`${styles.option} ${
-                form.position === "TEAM_A_RIGHT"
-                  ? styles.active
-                  : ""
-              }`}
+              className={`${styles.option} ${form.position === "TEAM_A_RIGHT"
+                ? styles.active
+                : ""
+                }`}
               onClick={() =>
                 handleChange({
                   target: {
@@ -273,11 +282,10 @@ export default function CreateMatchForm() {
 
             <button
               type="button"
-              className={`${styles.option} ${
-                form.position === "ANY"
-                  ? styles.active
-                  : ""
-              }`}
+              className={`${styles.option} ${form.position === "ANY"
+                ? styles.active
+                : ""
+                }`}
               onClick={() =>
                 handleChange({
                   target: {
@@ -303,7 +311,10 @@ export default function CreateMatchForm() {
 
       {/* DESCRIPCIÓN */}
 
-      <FormSection title="📝 Descripción">
+      <FormSection
+        title="Descripción"
+        icon={FileText}
+      >
 
         <textarea
           className={styles.textarea}

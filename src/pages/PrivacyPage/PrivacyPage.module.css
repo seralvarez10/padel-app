@@ -1,0 +1,376 @@
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 110px;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-bottom: 34px;
+}
+
+.header h1 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: var(--color-text);
+}
+
+.header p {
+  margin: 4px 0 0;
+
+  font-size: 13px;
+
+  color: var(--color-text-secondary);
+}
+
+.backButton {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.backButton:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  margin: 0 0 12px 4px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: var(--color-text-secondary);
+
+  letter-spacing: 0.03em;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.card {
+  overflow: hidden;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* =========================================
+   OPTION
+========================================= */
+
+.option,
+.infoRow,
+.infoRowButton {
+  min-height: 94px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 18px 20px;
+
+  box-sizing: border-box;
+}
+
+.option + .option,
+.infoRow + .infoRow,
+.infoRowButton + .infoRowButton {
+  border-top: 1px solid var(--color-border);
+}
+
+/* =========================================
+   ICON
+========================================= */
+
+.icon {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e8f9ef;
+
+  color: var(--color-primary);
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.content {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.content strong {
+  font-size: 16px;
+  font-weight: 600;
+
+  color: var(--color-text);
+}
+
+.content span {
+  font-size: 13px;
+  line-height: 1.45;
+
+  color: var(--color-text-secondary);
+}
+
+/* =========================================
+   SWITCH
+========================================= */
+
+.switch {
+  position: relative;
+
+  width: 54px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #e2e5e9;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.switch span {
+  position: absolute;
+
+  top: 4px;
+  left: 4px;
+
+  width: 24px;
+  height: 24px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.2);
+
+  transition: var(--transition);
+}
+
+.switchOn {
+  background: var(--color-primary);
+}
+
+.switchOn span {
+  transform: translateX(22px);
+}
+
+.switch:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   PRIVATE
+========================================= */
+
+.private {
+  flex-shrink: 0;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: var(--color-text-secondary);
+}
+
+/* =========================================
+   BLOCKED
+========================================= */
+
+.infoRowButton {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.infoRowButton:hover {
+  background: var(--color-background);
+}
+
+.blockedCount {
+  flex-shrink: 0;
+
+  font-size: 14px;
+
+  color: var(--color-text-secondary);
+}
+
+/* =========================================
+   NOTICE
+========================================= */
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 14px;
+
+  padding: 20px;
+
+  border: 1px solid #c9f0d7;
+  border-radius: 18px;
+
+  background: #f1fcf5;
+
+  color: var(--color-primary);
+}
+
+.notice svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+}
+
+.notice p {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.55;
+
+  color: var(--color-text-secondary);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .container {
+    padding: 20px 12px 100px;
+  }
+
+  .header {
+    margin-bottom: 28px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .section {
+    margin-bottom: 24px;
+  }
+
+  .option,
+  .infoRow,
+  .infoRowButton {
+    min-height: 88px;
+
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .content strong {
+    font-size: 14px;
+  }
+
+  .content span {
+    font-size: 12px;
+  }
+
+  .switch {
+    width: 50px;
+    height: 30px;
+  }
+
+  .switch span {
+    width: 22px;
+    height: 22px;
+  }
+
+  .switchOn span {
+    transform: translateX(20px);
+  }
+
+  .private,
+  .blockedCount {
+    font-size: 12px;
+  }
+
+  .notice {
+    padding: 16px;
+  }
+
+  .notice p {
+    font-size: 12px;
+  }
+}
