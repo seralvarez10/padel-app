@@ -25,60 +25,70 @@ export default function ProfileInfo({
     };
 
     return (
-        <section className={styles.card}>
+        <section className={styles.container}>
 
             <h2>Información</h2>
 
             {showGameInfo && (
-                <>
-                    <div className={styles.item}>
+                <div className={styles.gameInfo}>
 
-                        <Hand size={18} />
+                    {/* MANO DOMINANTE */}
+                    <div className={styles.gameItem}>
 
-                        <div>
+                        <div className={styles.iconBox}>
+                            <Hand size={14} />
+                        </div>
+
+                        <div className={styles.itemContent}>
                             <strong>
                                 Mano dominante
                             </strong>
 
                             <span>
                                 {profile.dominant_hand
-                                    ? HANDS[
-                                    profile.dominant_hand
-                                    ]
+                                    ? HANDS[profile.dominant_hand]
                                     : "No especificada"}
                             </span>
                         </div>
 
                     </div>
 
-                    <div className={styles.item}>
 
-                        <MoveHorizontal size={18} />
+                    {/* LADO FAVORITO */}
+                    <div className={styles.gameItem}>
 
-                        <div>
+                        <div className={styles.iconBox}>
+                            <MoveHorizontal size={14} />
+                        </div>
+
+                        <div className={styles.itemContent}>
                             <strong>
                                 Lado favorito
                             </strong>
 
                             <span>
                                 {profile.preferred_side
-                                    ? SIDES[
-                                    profile.preferred_side
-                                    ]
+                                    ? SIDES[profile.preferred_side]
                                     : "No especificado"}
                             </span>
                         </div>
 
                     </div>
-                </>
+
+                </div>
             )}
 
+
+            {/* SOBRE MÍ */}
             {showBio && (
-                <div className={styles.item}>
+                <div className={styles.bioItem}>
 
-                    <FileText size={18} />
+                    <div className={styles.bioIcon}>
+                        <FileText size={14} />
+                    </div>
 
-                    <div>
+                    <div className={styles.itemContent}>
+
                         <strong>
                             Sobre mí
                         </strong>
@@ -87,6 +97,7 @@ export default function ProfileInfo({
                             {profile.bio ||
                                 "Todavía no hay biografía."}
                         </span>
+
                     </div>
 
                 </div>

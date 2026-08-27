@@ -3,14 +3,16 @@ import PropTypes from "prop-types";
 
 import Avatar from "../../common/Avatar";
 import Badge from "../../ui/Badge";
+
 import { useNavigate } from "react-router-dom";
 
 import {
   MapPin,
-  Users,
-  UserRoundCheck,
   Settings,
   X,
+  ArrowLeft,
+  Users,
+  UserRoundCheck,
 } from "lucide-react";
 
 import { useAuth } from "../../../contexts/AuthContext";
@@ -79,9 +81,6 @@ export default function ProfileHeader({
 
   /*
    * PRIVACIDAD
-   *
-   * En nuestro propio perfil mostramos todo.
-   * En perfiles ajenos respetamos la configuración.
    */
 
   const showCity =
@@ -96,15 +95,33 @@ export default function ProfileHeader({
     <>
       <section className={styles.header}>
 
+        {/* =================================
+            LÍNEAS DE PISTA
+        ================================= */}
+
+        <div
+          className={styles.courtLines}
+          aria-hidden="true"
+        />
+
+        {/* =================================
+            VOLVER
+        ================================= */}
+
         {!isOwnProfile && (
           <button
             type="button"
             className={styles.backButton}
-            onClick={() => window.history.back()}
+            onClick={() => navigate(-1)}
+            aria-label="Volver"
           >
-            ← Volver
+            <ArrowLeft size={17} />
           </button>
         )}
+
+        {/* =================================
+            AJUSTES
+        ================================= */}
 
         {isOwnProfile && (
           <button
@@ -113,80 +130,104 @@ export default function ProfileHeader({
             onClick={() => navigate("/settings")}
             aria-label="Configuración"
           >
-            <Settings size={20} />
+            <Settings size={18} />
           </button>
         )}
 
-        <Avatar
-          className={styles.avatar}
-          src={profile.avatar_url}
-          name={profile.display_name}
-          size="xl"
-        />
+        {/* =================================
+            CONTENIDO DEL PERFIL
+        ================================= */}
 
-        <h1>{profile.display_name}</h1>
+        <div className={styles.profileContent}>
 
-        <div className={styles.info}>
+          <Avatar
+            className={styles.avatar}
+            src={profile.avatar_url}
+            name={profile.display_name}
+            size="xl"
+          />
 
-          <Badge
-            className={styles.level}
-            variant="success"
-          >
-            🎾 Nivel {profile.level_current}
-          </Badge>
+          <h1>
+            {profile.display_name}
+          </h1>
 
-          {showCity && (
-            <span className={styles.city}>
-              <MapPin size={16} />
+          <div className={styles.info}>
 
-              {profile.city ||
-                "Ciudad no especificada"}
+            <span className={styles.level}>
+              🎾 Nivel {profile.level_current}
             </span>
+
+            {showCity && (
+              <span className={styles.city}>
+                <MapPin size={13} />
+
+                {profile.city ||
+                  "Ciudad no especificada"}
+              </span>
+            )}
+
+          </div>
+
+          {/* =================================
+              RED DE CONFIANZA
+
+              Se mantiene para perfiles
+              ajenos, pero fuera de la
+              cabecera visual del propio perfil.
+          ================================= */}
+
+          {showNetwork && !isOwnProfile && (
+            <div className={styles.network}>
+
+              <button
+                type="button"
+                className={styles.networkItem}
+                onClick={() =>
+                  openNetwork("friends")
+                }
+              >
+                <Users size={14} />
+
+                <span>
+                  <strong>
+                    {friendsCount}
+                  </strong>{" "}
+                  amigos
+                </span>
+              </button>
+
+              <span
+                className={styles.networkDivider}
+              />
+
+              <button
+                type="button"
+                className={styles.networkItem}
+                onClick={() =>
+                  openNetwork("mutual")
+                }
+              >
+                <UserRoundCheck size={14} />
+
+                <span>
+                  <strong>
+                    {mutualFriendsCount}
+                  </strong>{" "}
+                  en común
+                </span>
+              </button>
+
+            </div>
           )}
 
         </div>
 
-        {showNetwork && !isOwnProfile && (
-          <div className={styles.network}>
-
-            <button
-              type="button"
-              className={styles.networkItem}
-              onClick={() =>
-                openNetwork("friends")
-              }
-            >
-              <Users size={16} />
-
-              <span>
-                <strong>
-                  {friendsCount}
-                </strong>{" "}
-                amigos
-              </span>
-            </button>
-
-            <button
-              type="button"
-              className={styles.networkItem}
-              onClick={() =>
-                openNetwork("mutual")
-              }
-            >
-              <UserRoundCheck size={16} />
-
-              <span>
-                <strong>
-                  {mutualFriendsCount}
-                </strong>{" "}
-                en común
-              </span>
-            </button>
-
-          </div>
-        )}
-
       </section>
+
+
+      {/* =================================
+          MODAL DE AMIGOS
+      ================================= */}
 
       {modalType && (
         <div
@@ -202,7 +243,9 @@ export default function ProfileHeader({
 
             <div className={styles.modalHeader}>
 
-              <h2>{modalTitle}</h2>
+              <h2>
+                {modalTitle}
+              </h2>
 
               <button
                 type="button"
@@ -210,7 +253,7 @@ export default function ProfileHeader({
                 onClick={closeNetwork}
                 aria-label="Cerrar"
               >
-                <X size={20} />
+                <X size={19} />
               </button>
 
             </div>
@@ -266,7 +309,6 @@ export default function ProfileHeader({
           </div>
         </div>
       )}
-
     </>
   );
 }

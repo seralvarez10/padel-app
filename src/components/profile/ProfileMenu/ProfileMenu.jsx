@@ -1,7 +1,4 @@
-import {
-  ChevronRight,
-  LogOut,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import styles from "./ProfileMenu.module.css";
 import { useNavigate } from "react-router-dom";
@@ -24,11 +21,9 @@ export default function ProfileMenu() {
         className={`${styles.item} ${styles.danger}`}
       >
         <div className={styles.left}>
-          <LogOut size={20} />
+          <LogOut size={14} />
           <span>Cerrar sesión</span>
         </div>
-
-        <ChevronRight size={18} />
       </button>
     </section>
   );
